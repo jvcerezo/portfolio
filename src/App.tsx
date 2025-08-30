@@ -444,38 +444,38 @@ function App() {
           <div className="grid lg:grid-cols-2 gap-8">
             {[
               {
-                title: 'SNPSeek - Genomic Analysis Platform',
+                title: 'SNP-MERN',
                 description: 'Full-stack bioinformatics web application for genetic variant analysis and interpretation with advanced filtering capabilities.',
-                link: 'https://snpseek.onrender.com/',
+                link: 'https://snpseek-mern.vercel.app',
                 tech: ['React', 'Node.js', 'PostgreSQL', 'TypeScript'],
                 features: ['Genetic variant analysis', 'Interactive charts', 'Advanced filtering', 'Data visualization'],
                 status: 'Live Production',
                 image: '🧬'
               },
               {
-                title: 'SOSC3 Course Application',
-                description: 'Educational platform for Social Science course management with quiz system and content delivery for students and instructors.',
-                link: 'https://sosc3-final-ui.onrender.com/',
+                title: 'SOSC3 Final Project',
+                description: 'Social advocacy web application promoting community engagement and social awareness campaigns.',
+                link: 'https://sosc3-advocacy-app.vercel.app',
                 tech: ['React', 'Express.js', 'MongoDB', 'Node.js'],
-                features: ['Course management', 'Quiz system', 'Content delivery', 'Student tracking'],
+                features: ['Campaign management', 'User engagement', 'Social sharing', 'Community features'],
                 status: 'Live Production',
                 image: '🏛️'
               },
               {
                 title: 'Diet Plan Calculator',
                 description: 'Health and nutrition application for creating personalized diet plans with calorie tracking and meal recommendations.',
-                link: 'https://jettimothy.github.io/diet-plan-calculator/',
+                link: 'https://diet-plan-calculator.vercel.app',
                 tech: ['JavaScript', 'HTML/CSS', 'Bootstrap', 'APIs'],
                 features: ['Nutrition calculation', 'Meal planning', 'Calorie tracking', 'Personalized recommendations'],
                 status: 'Live Production',
                 image: '🍎'
               },
               {
-                title: 'MDCAS - Medical Data System',
-                description: 'Medical Data Collection and Analysis System for healthcare data management with secure patient record handling.',
-                link: 'https://mdcas-ui.onrender.com/',
+                title: 'Maralit Dental Clinic Appointment System',
+                description: 'Comprehensive dental clinic management system with appointment scheduling and patient record management.',
+                link: 'https://mdcas-fe.vercel.app',
                 tech: ['React', 'Node.js', 'Express', 'Database'],
-                features: ['Patient management', 'Data security', 'Medical records', 'Analytics dashboard'],
+                features: ['Appointment scheduling', 'Patient management', 'Medical records', 'Clinic administration'],
                 status: 'Live Production',
                 image: '🏥'
               }
