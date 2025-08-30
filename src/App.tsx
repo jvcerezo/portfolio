@@ -5,7 +5,6 @@ import { Button } from './components/ui/button';
 import { Badge } from './components/ui/badge';
 import { Separator } from './components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from './components/ui/avatar';
-import { Progress } from './components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
 
 function App() {
@@ -112,13 +111,13 @@ function App() {
                     </CardContent>
                   </Card>
                   
-                  <Card className="absolute -bottom-8 -left-6 bg-black/80 border-white/20 backdrop-blur-sm">
+                  <Card className="absolute -bottom-8 -left-6 bg-black/90 border-white/20 backdrop-blur-sm">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3">
                         <Code className="w-5 h-5 text-blue-400" />
                         <div>
-                          <p className="text-white text-sm font-medium">5+ Years</p>
-                          <p className="text-gray-400 text-xs">Experience</p>
+                          <p className="text-white text-sm font-medium">1 Year</p>
+                          <p className="text-gray-300 text-xs">Experience</p>
                         </div>
                       </div>
                     </CardContent>
@@ -131,13 +130,13 @@ function App() {
             <div className="space-y-8 order-1 lg:order-2">
               <div className="space-y-6">
                 <div className="flex items-center gap-3">
-                  <Badge variant="outline" className="border-white/30 text-white">
+                  <Badge variant="outline" className="border-white/30 text-white bg-white/5">
                     <MapPin className="w-3 h-3 mr-1" />
-                    Philippines
+                    University of the Philippines Los Baños Graduate
                   </Badge>
-                  <Badge variant="outline" className="border-white/30 text-white">
+                  <Badge variant="outline" className="border-white/30 text-white bg-white/5">
                     <Award className="w-3 h-3 mr-1" />
-                    Senior Developer
+                    Full-Stack Developer
                   </Badge>
                 </div>
                 
@@ -148,12 +147,11 @@ function App() {
                 
                 <div className="space-y-4">
                   <h2 className="text-2xl lg:text-3xl font-light text-gray-300">
-                    Full Stack Developer & UI/UX Enthusiast
+                    Full-Stack Developer (MERN Stack Specialist)
                   </h2>
                   <p className="text-lg text-gray-400 leading-relaxed max-w-xl">
-                    Crafting exceptional digital experiences with modern technologies. 
-                    Specialized in React, Node.js, and creating seamless user interfaces 
-                    that bridge design and functionality.
+                    Recent Computer Science graduate from University of the Philippines Los Baños. 
+                    Passionate about building scalable web applications using MongoDB, Express.js, React, and Node.js.
                   </p>
                 </div>
               </div>
@@ -162,20 +160,20 @@ function App() {
               <div className="grid grid-cols-3 gap-4">
                 <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
                   <CardContent className="p-4 text-center">
-                    <div className="text-2xl font-bold text-white mb-1">50+</div>
-                    <div className="text-xs text-gray-400">Projects</div>
+                    <div className="text-2xl font-bold text-white mb-1">4</div>
+                    <div className="text-xs text-gray-300">Projects</div>
                   </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
                   <CardContent className="p-4 text-center">
-                    <div className="text-2xl font-bold text-white mb-1">5+</div>
-                    <div className="text-xs text-gray-400">Years</div>
+                    <div className="text-2xl font-bold text-white mb-1">1</div>
+                    <div className="text-xs text-gray-300">Year Exp</div>
                   </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
                   <CardContent className="p-4 text-center">
-                    <div className="text-2xl font-bold text-white mb-1">100%</div>
-                    <div className="text-xs text-gray-400">Satisfaction</div>
+                    <div className="text-2xl font-bold text-white mb-1">MERN</div>
+                    <div className="text-xs text-gray-300">Stack</div>
                   </CardContent>
                 </Card>
               </div>
@@ -230,14 +228,14 @@ function App() {
           </div>
 
           <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 mb-12 bg-white/5 border border-white/20">
-              <TabsTrigger value="overview" className="text-white data-[state=active]:bg-white data-[state=active]:text-black">
+            <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 mb-12 bg-white/10 border border-white/20">
+              <TabsTrigger value="overview" className="text-white data-[state=active]:bg-white data-[state=active]:text-black font-medium">
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="skills" className="text-white data-[state=active]:bg-white data-[state=active]:text-black">
+              <TabsTrigger value="skills" className="text-white data-[state=active]:bg-white data-[state=active]:text-black font-medium">
                 Skills
               </TabsTrigger>
-              <TabsTrigger value="experience" className="text-white data-[state=active]:bg-white data-[state=active]:text-black">
+              <TabsTrigger value="experience" className="text-white data-[state=active]:bg-white data-[state=active]:text-black font-medium">
                 Experience
               </TabsTrigger>
             </TabsList>
@@ -249,14 +247,14 @@ function App() {
                     <CardHeader>
                       <CardTitle className="text-white flex items-center gap-3">
                         <Palette className="w-6 h-6" />
-                        My Philosophy
+                        My Journey
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <p className="text-gray-300 leading-relaxed">
-                        I believe in creating digital experiences that are not just functional, 
-                        but truly meaningful. Every line of code I write is crafted with purpose, 
-                        user experience in mind, and a commitment to excellence.
+                        Fresh Computer Science graduate from University of the Philippines Los Baños, 
+                        passionate about full-stack development with the MERN stack. I believe in writing 
+                        clean, efficient code that creates meaningful digital experiences.
                       </p>
                     </CardContent>
                   </Card>
@@ -270,9 +268,9 @@ function App() {
                     </CardHeader>
                     <CardContent>
                       <p className="text-gray-300 leading-relaxed">
-                        The intersection of technology and human needs fascinates me. I'm driven 
-                        by the challenge of solving complex problems with elegant solutions that 
-                        users actually enjoy using.
+                        I'm passionate about building scalable web applications that solve real-world problems. 
+                        The MERN stack excites me because it allows for full-stack development with JavaScript, 
+                        creating seamless experiences from database to user interface.
                       </p>
                     </CardContent>
                   </Card>
@@ -288,16 +286,20 @@ function App() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="flex items-center justify-between">
-                        <span className="text-gray-300">Projects Completed</span>
-                        <Badge variant="secondary">50+</Badge>
+                        <span className="text-gray-300">University Projects</span>
+                        <Badge variant="secondary" className="bg-white/10 text-white">4+</Badge>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-gray-300">Client Satisfaction</span>
-                        <Badge variant="secondary">100%</Badge>
+                        <span className="text-gray-300">Years Experience</span>
+                        <Badge variant="secondary" className="bg-white/10 text-white">1 Year</Badge>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-gray-300">Years of Experience</span>
-                        <Badge variant="secondary">5+</Badge>
+                        <span className="text-gray-300">MERN Stack Projects</span>
+                        <Badge variant="secondary" className="bg-white/10 text-white">4+</Badge>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-300">University of the Philippines Los Baños Graduate</span>
+                        <Badge variant="secondary" className="bg-white/10 text-white">2024</Badge>
                       </div>
                     </CardContent>
                   </Card>
@@ -323,9 +325,9 @@ function App() {
             <TabsContent value="skills" className="space-y-12">
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[
-                  { category: 'Frontend', icon: Code, skills: ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Vue.js'], level: 95 },
-                  { category: 'Backend', icon: Server, skills: ['Node.js', 'Express', 'Python', 'MongoDB', 'PostgreSQL'], level: 90 },
-                  { category: 'Tools & DevOps', icon: Database, skills: ['Git', 'Docker', 'AWS', 'Vercel', 'CI/CD'], level: 85 },
+                  { category: 'Backend', icon: Server, skills: ['Node.js', 'Express', 'MongoDB', 'PostgreSQL', 'RESTful APIs'], level: 90, color: 'bg-blue-500' },
+                  { category: 'Frontend', icon: Code, skills: ['React', 'JavaScript', 'TypeScript', 'HTML/CSS', 'Tailwind CSS'], level: 85, color: 'bg-green-500' },
+                  { category: 'Tools & DevOps', icon: Database, skills: ['Git', 'GitHub', 'Render', 'Vercel', 'CI/CD'], level: 80, color: 'bg-purple-500' },
                 ].map((skillGroup, index) => (
                   <Card key={index} className="bg-white/5 border-white/20 backdrop-blur-sm">
                     <CardHeader>
@@ -340,7 +342,12 @@ function App() {
                           <span className="text-gray-300">Proficiency</span>
                           <span className="text-white">{skillGroup.level}%</span>
                         </div>
-                        <Progress value={skillGroup.level} className="bg-white/10" />
+                        <div className="w-full bg-white/10 rounded-full h-2">
+                          <div 
+                            className={`h-2 rounded-full ${skillGroup.color} transition-all duration-1000 ease-out`}
+                            style={{ width: `${skillGroup.level}%` }}
+                          ></div>
+                        </div>
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {skillGroup.skills.map((skill, skillIndex) => (
@@ -359,25 +366,32 @@ function App() {
               <div className="space-y-8">
                 {[
                   {
-                    role: 'Senior Full Stack Developer',
-                    company: 'Freelance',
-                    period: '2022 - Present',
-                    description: 'Leading development of modern web applications using React, Node.js, and cloud technologies.',
-                    achievements: ['Built 20+ production applications', 'Improved client efficiency by 40%', 'Mentored junior developers']
+                    role: 'Bachelor of Science in Computer Science',
+                    company: 'University of the Philippines Los Baños',
+                    period: '2020 - 2024',
+                    description: 'Completed comprehensive computer science education with focus on software engineering, data structures, algorithms, and web development.',
+                    achievements: ['Graduated Honor Roll', 'College Scholar and Honor Roll for multiple semesters', 'Capstone project in bioinformatics', 'Active member of UPLB Computer Science Society']
                   },
                   {
-                    role: 'Frontend Developer',
-                    company: 'Tech Startup',
-                    period: '2020 - 2022',
-                    description: 'Specialized in creating responsive, user-friendly interfaces with modern JavaScript frameworks.',
-                    achievements: ['Redesigned main product UI', 'Reduced load times by 60%', 'Implemented design system']
+                    role: 'Hackathon Winner',
+                    company: 'University Programming Competition',
+                    period: '2023',
+                    description: 'Won first place in university-wide hackathon developing innovative web application solution under time constraints.',
+                    achievements: ['Led team of 4 developers', 'Implemented full-stack MERN solution', 'Presented to panel of industry experts', 'Received recognition for technical excellence']
                   },
                   {
-                    role: 'Web Developer',
-                    company: 'Digital Agency',
-                    period: '2019 - 2020',
-                    description: 'Developed custom websites and web applications for various clients across different industries.',
-                    achievements: ['Delivered 15+ client projects', 'Maintained 99% uptime', 'Built reusable component library']
+                    role: 'Freelance Web Developer',
+                    company: 'Independent Projects',
+                    period: '2023 - Present',
+                    description: 'Developing web applications and gaining practical experience in full-stack development using modern technologies.',
+                    achievements: ['Built 4+ production web applications', 'Experience with MERN stack development', 'Client communication and project management', 'Continuous learning of new technologies']
+                  },
+                  {
+                    role: 'Teaching Assistant',
+                    company: 'UPLB Computer Science Department',
+                    period: '2023 - 2024',
+                    description: 'Assisted in teaching introductory programming courses and helped students with coding fundamentals.',
+                    achievements: ['Mentored 20+ students in programming', 'Led laboratory sessions', 'Developed supplementary learning materials', 'Improved student understanding of core concepts']
                   }
                 ].map((job, index) => (
                   <Card key={index} className="bg-white/5 border-white/20 backdrop-blur-sm">
@@ -431,45 +445,48 @@ function App() {
           <div className="grid lg:grid-cols-2 gap-8">
             {[
               {
-                title: 'Task Manager App',
-                description: 'A comprehensive task management application with real-time updates and collaborative features.',
-                link: 'https://task-manager-jet-cerezo.vercel.app/',
-                tech: ['React', 'Node.js', 'MongoDB', 'Socket.io'],
-                features: ['Real-time collaboration', 'Task prioritization', 'Team management', 'Progress tracking'],
+                title: 'SNPSeek - Genomic Analysis Platform',
+                description: 'Full-stack bioinformatics web application for genetic variant analysis and interpretation with advanced filtering capabilities.',
+                link: 'https://snpseek.onrender.com/',
+                tech: ['React', 'Node.js', 'PostgreSQL', 'TypeScript'],
+                features: ['Genetic variant analysis', 'Interactive charts', 'Advanced filtering', 'Data visualization'],
                 status: 'Live Production',
-                image: '/api/placeholder/600/400'
+                image: '🧬'
               },
               {
-                title: 'Budget Tracker',
-                description: 'Personal finance management tool with expense tracking and budget planning capabilities.',
-                link: 'https://budget-tracker-jet-cerezo.vercel.app/',
-                tech: ['Next.js', 'TypeScript', 'Chart.js', 'Prisma'],
-                features: ['Expense categorization', 'Budget alerts', 'Financial insights', 'Data export'],
+                title: 'SOSC3 Course Application',
+                description: 'Educational platform for Social Science course management with quiz system and content delivery for students and instructors.',
+                link: 'https://sosc3-final-ui.onrender.com/',
+                tech: ['React', 'Express.js', 'MongoDB', 'Node.js'],
+                features: ['Course management', 'Quiz system', 'Content delivery', 'Student tracking'],
                 status: 'Live Production',
-                image: '/api/placeholder/600/400'
+                image: '🏛️'
               },
               {
-                title: 'Portfolio Website',
-                description: 'A responsive portfolio website showcasing projects and professional experience.',
-                link: 'https://portfolio-jet-cerezo.vercel.app/',
-                tech: ['React', 'Tailwind CSS', 'Framer Motion', 'Vite'],
-                features: ['Responsive design', 'Smooth animations', 'SEO optimized', 'Fast loading'],
+                title: 'Diet Plan Calculator',
+                description: 'Health and nutrition application for creating personalized diet plans with calorie tracking and meal recommendations.',
+                link: 'https://jettimothy.github.io/diet-plan-calculator/',
+                tech: ['JavaScript', 'HTML/CSS', 'Bootstrap', 'APIs'],
+                features: ['Nutrition calculation', 'Meal planning', 'Calorie tracking', 'Personalized recommendations'],
                 status: 'Live Production',
-                image: '/api/placeholder/600/400'
+                image: '🍎'
               },
               {
-                title: 'E-commerce Platform',
-                description: 'Full-featured e-commerce solution with payment integration and admin dashboard.',
-                link: 'https://ecommerce-jet-cerezo.vercel.app/',
-                tech: ['Next.js', 'Stripe', 'PostgreSQL', 'Tailwind'],
-                features: ['Payment processing', 'Inventory management', 'Order tracking', 'Admin dashboard'],
+                title: 'MDCAS - Medical Data System',
+                description: 'Medical Data Collection and Analysis System for healthcare data management with secure patient record handling.',
+                link: 'https://mdcas-ui.onrender.com/',
+                tech: ['React', 'Node.js', 'Express', 'Database'],
+                features: ['Patient management', 'Data security', 'Medical records', 'Analytics dashboard'],
                 status: 'Live Production',
-                image: '/api/placeholder/600/400'
+                image: '🏥'
               }
             ].map((project, index) => (
               <Card key={index} className="bg-black/50 border-white/20 backdrop-blur-sm overflow-hidden group hover:border-white/40 transition-all duration-500">
                 <div className="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20"></div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-8xl opacity-50">{project.image}</div>
+                  </div>
                   <div className="absolute top-4 right-4">
                     <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
                       {project.status}
@@ -478,12 +495,12 @@ function App() {
                   <div className="absolute bottom-4 left-4 right-4">
                     <div className="flex flex-wrap gap-2">
                       {project.tech.slice(0, 3).map((tech, techIndex) => (
-                        <Badge key={techIndex} variant="outline" className="border-white/30 text-white text-xs bg-black/50">
+                        <Badge key={techIndex} variant="outline" className="border-white/30 text-white text-xs bg-black/70 backdrop-blur-sm">
                           {tech}
                         </Badge>
                       ))}
                       {project.tech.length > 3 && (
-                        <Badge variant="outline" className="border-white/30 text-white text-xs bg-black/50">
+                        <Badge variant="outline" className="border-white/30 text-white text-xs bg-black/70 backdrop-blur-sm">
                           +{project.tech.length - 3}
                         </Badge>
                       )}
