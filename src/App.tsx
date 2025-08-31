@@ -370,22 +370,22 @@ function App() {
                   {
                     role: 'Bachelor of Science in Computer Science',
                     company: 'University of the Philippines Los Baños',
-                    period: '2021 - 2025',
+                    period: 'September 2021 - July 2025',
                     description: 'Completed comprehensive computer science education with focus on software engineering, data structures, algorithms, and web development.',
-                    achievements: ['Graduated Honor Roll', 'College Scholar and Honor Roll for multiple semesters', 'Capstone project in bioinformatics in collaboration with International Rice Research Institute(IRRI)', 'Active member of UPLB Computer Science Society']
+                    achievements: ['Graduated Honor Roll', 'College Scholar and Honor Roll for multiple semesters', 'Special problem in bioinformatics in collaboration with International Rice Research Institute(IRRI)', 'Active member of UPLB Computer Science Society']
                   },
                   {
                     role: 'Codebreak 2.0 Champion',
                     company: 'Tenext.ai Codebreak 2.0 Hackathon',
-                    period: '2025',
-                    description: 'Won first place in Tenext.ai Codebreak 2.0 Hackathon for developing an innovative AI agent in under 24 hours.',
+                    period: 'May 2025',
+                    description: 'Won as Champion in Tenext.ai Codebreak 2.0 Hackathon for developing an innovative AI agent in under 24 hours.',
                     achievements: ['Developed an MVP with AI Integration', 'Implemented real-time QA analytics for voice calls', 'Full audio support and real-time script generation during calls', 'Received recognition for technical excellence']
                   },
                   {
                     role: 'Bioinformatics Software Development Intern',
                     company: 'International Rice Research Institute (IRRI)',
-                    period: '2024 - 2025',
-                    description: 'Created a authentication module from scratch using Drupal and Docker, and redeveloped IRRI\'s SNPSeek into SNP-MERN, utilizing modern web technologies and microservices architecture',
+                    period: 'July 2024 - May 2025',
+                    description: 'Created an authentication module from scratch using Drupal and Docker, and redeveloped IRRI\'s SNPSeek into SNP-MERN, utilizing modern web technologies and microservices architecture',
                     achievements: ['Learned Drupal and Dockerization', 'Developed SNPSeek and its core functionalities into a new tech stack (MERN) in under 5 months', 'Successfully converted SNPSeek monolithic architecture to microservices', 'Deployed SNP-MERN completely free using my own laptop as a server XD']
                   },
                   {
@@ -419,7 +419,7 @@ function App() {
                   {
                     role: '41st CS Week Code Wars Co-Head / Team Lead / Project Manager',
                     company: 'UPLB Computer Science Society',
-                    period: '2023 - 2025',
+                    period: 'January 2025 - March 2025',
                     description: 'Led the web development of the organization\'s flagship event. Managed a team of developers to create a seamless online experience for participants and judges.',
                     achievements: ['AWS Deployment', 'Shipped 8 features in 2 months', 'Successfully launched the app used by 20 teams and 4 judges without any downtimes', 'Leadership']
                   },
