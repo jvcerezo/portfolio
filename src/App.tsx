@@ -298,7 +298,7 @@ function App() {
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-gray-300">University of the Philippines Los Baños Graduate</span>
-                        <Badge variant="secondary" className="bg-white/10 text-white">2024</Badge>
+                        <Badge variant="secondary" className="bg-white/10 text-white">2025</Badge>
                       </div>
                     </CardContent>
                   </Card>
@@ -367,30 +367,30 @@ function App() {
                   {
                     role: 'Bachelor of Science in Computer Science',
                     company: 'University of the Philippines Los Baños',
-                    period: '2020 - 2024',
+                    period: '2021 - 2025',
                     description: 'Completed comprehensive computer science education with focus on software engineering, data structures, algorithms, and web development.',
-                    achievements: ['Graduated Honor Roll', 'College Scholar and Honor Roll for multiple semesters', 'Capstone project in bioinformatics', 'Active member of UPLB Computer Science Society']
+                    achievements: ['Graduated Honor Roll', 'College Scholar and Honor Roll for multiple semesters', 'Capstone project in bioinformatics in collaboration with International Rice Research Institute(IRRI)', 'Active member of UPLB Computer Science Society']
                   },
                   {
-                    role: 'Hackathon Winner',
-                    company: 'University Programming Competition',
-                    period: '2023',
-                    description: 'Won first place in university-wide hackathon developing innovative web application solution under time constraints.',
+                    role: 'Codebreak 2.0 Champion',
+                    company: 'Tenext.ai Codebreak 2.0 Hackathon',
+                    period: '2021 - 2025',
+                    description: 'Won first place in Tenext.ai Codebreak 2.0 Hackathon for developing an innovative AI agent in under 24 hours.',
                     achievements: ['Led team of 4 developers', 'Implemented full-stack MERN solution', 'Presented to panel of industry experts', 'Received recognition for technical excellence']
                   },
                   {
-                    role: 'Freelance Web Developer',
-                    company: 'Independent Projects',
-                    period: '2023 - Present',
-                    description: 'Developing web applications and gaining practical experience in full-stack development using modern technologies.',
-                    achievements: ['Built 4+ production web applications', 'Experience with MERN stack development', 'Client communication and project management', 'Continuous learning of new technologies']
+                    role: '41st CS Week Code Wars Co-Head / Team Lead / Project Manager',
+                    company: 'UPLB Computer Science Society',
+                    period: '2023 - 2025',
+                    description: 'Led the web development of the organization\'s flagship event. Managed a team of developers to create a seamless online experience for participants and judges.',
+                    achievements: ['AWS Deployment', 'Shipped 8 features in 2 months', 'Successfully launched the app used by 20 teams and 4 judges without any downtimes', 'Leadership']
                   },
                   {
-                    role: 'Teaching Assistant',
-                    company: 'UPLB Computer Science Department',
-                    period: '2023 - 2024',
-                    description: 'Assisted in teaching introductory programming courses and helped students with coding fundamentals.',
-                    achievements: ['Mentored 20+ students in programming', 'Led laboratory sessions', 'Developed supplementary learning materials', 'Improved student understanding of core concepts']
+                    role: 'Bioinformatics Software Development Intern',
+                    company: 'International Rice Research Institute (IRRI)',
+                    period: '2024 - 2025',
+                    description: 'Created a authentication module from scratch using Drupal and Docker, and redeveloped IRRI\'s SNPSeek into SNP-MERN, utilizing modern web technologies and microservices architecture',
+                    achievements: ['Learned Drupal and Dockerization', 'Developed SNPSeek and its core functionalities into a new tech stack (MERN) in under 5 months', 'Successfully converted SNPSeek monolithic architecture to microservices', 'Deployed SNP-MERN completely free using my own laptop as a server XD']
                   }
                 ].map((job, index) => (
                   <Card key={index} className="bg-white/5 border-white/20 backdrop-blur-sm">
@@ -447,7 +447,7 @@ function App() {
                 title: 'SNP-MERN',
                 description: 'Full-stack bioinformatics web application for genetic variant analysis and interpretation with advanced filtering capabilities.',
                 link: 'https://snpseek-mern.vercel.app',
-                tech: ['React', 'Node.js', 'PostgreSQL', 'TypeScript'],
+                tech: ['React', 'Node.js', 'Express.js', 'MongoDB'],
                 features: ['Genetic variant analysis', 'Interactive charts', 'Advanced filtering', 'Data visualization'],
                 status: 'Live Production',
                 image: '🧬'
@@ -456,8 +456,8 @@ function App() {
                 title: 'SOSC3 Final Project',
                 description: 'Social advocacy web application promoting community engagement and social awareness campaigns.',
                 link: 'https://sosc3-advocacy-app.vercel.app',
-                tech: ['React', 'Express.js', 'MongoDB', 'Node.js'],
-                features: ['Campaign management', 'User engagement', 'Social sharing', 'Community features'],
+                tech: ['React', 'Tailwind CSS', 'HTML', 'Vercel'],
+                features: ['Advocacy campaigns', 'Research', 'Social sharing', 'Community features'],
                 status: 'Live Production',
                 image: '🏛️'
               },
@@ -465,7 +465,7 @@ function App() {
                 title: 'Diet Plan Calculator',
                 description: 'Health and nutrition application for creating personalized diet plans with calorie tracking and meal recommendations.',
                 link: 'https://diet-plan-calculator.vercel.app',
-                tech: ['JavaScript', 'HTML/CSS', 'Bootstrap', 'APIs'],
+                tech: ['React', 'Node.js', 'Express.js', 'MongoDB', 'Tailwind CSS'],
                 features: ['Nutrition calculation', 'Meal planning', 'Calorie tracking', 'Personalized recommendations'],
                 status: 'Live Production',
                 image: '🍎'
@@ -474,7 +474,7 @@ function App() {
                 title: 'Maralit Dental Clinic Appointment System',
                 description: 'Comprehensive dental clinic management system with appointment scheduling and patient record management.',
                 link: 'https://mdcas-fe.vercel.app',
-                tech: ['React', 'Node.js', 'Express', 'Database'],
+                tech: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS'],
                 features: ['Appointment scheduling', 'Patient management', 'Medical records', 'Clinic administration'],
                 status: 'Live Production',
                 image: '🏥'
