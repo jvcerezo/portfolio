@@ -374,9 +374,9 @@ function App() {
                   {
                     role: 'Codebreak 2.0 Champion',
                     company: 'Tenext.ai Codebreak 2.0 Hackathon',
-                    period: '2021 - 2025',
+                    period: '2025',
                     description: 'Won first place in Tenext.ai Codebreak 2.0 Hackathon for developing an innovative AI agent in under 24 hours.',
-                    achievements: ['Led team of 4 developers', 'Implemented full-stack MERN solution', 'Presented to panel of industry experts', 'Received recognition for technical excellence']
+                    achievements: ['Developed an MVP with AI Integration', 'Implemented real-time QA analytics for voice calls', 'Full audio support and real-time script generation during calls', 'Received recognition for technical excellence']
                   },
                   {
                     role: '41st CS Week Code Wars Co-Head / Team Lead / Project Manager',
