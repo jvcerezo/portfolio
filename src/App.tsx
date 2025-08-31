@@ -146,10 +146,10 @@ function App() {
                 
                 <div className="space-y-4">
                   <h2 className="text-2xl lg:text-3xl font-light text-gray-300">
-                    Full-Stack Developer (MERN Stack Specialist)
+                    Full-Stack Developer
                   </h2>
                   <p className="text-lg text-gray-400 leading-relaxed max-w-xl">
-                    Recent Computer Science graduate from University of the Philippines Los Baños. 
+                    Computer Science graduate from University of the Philippines Los Baños batch 2025. 
                     Passionate about building scalable web applications using MongoDB, Express.js, React, and Node.js.
                   </p>
                 </div>
@@ -159,7 +159,7 @@ function App() {
               <div className="grid grid-cols-3 gap-4">
                 <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
                   <CardContent className="p-4 text-center">
-                    <div className="text-2xl font-bold text-white mb-1">4</div>
+                    <div className="text-2xl font-bold text-white mb-1">7</div>
                     <div className="text-xs text-gray-300">Projects</div>
                   </CardContent>
                 </Card>
@@ -254,8 +254,8 @@ function App() {
                     </CardHeader>
                     <CardContent>
                       <p className="text-gray-300 leading-relaxed">
-                        Fresh Computer Science graduate from University of the Philippines Los Baños, 
-                        passionate about full-stack development with the MERN stack. I believe in writing 
+                        I am a fresh Computer Science graduate from University of the Philippines Los Baños, 
+                        I love everything about full-stack development, from concept making to deployment. I believe in writing 
                         clean, efficient code that creates meaningful digital experiences.
                       </p>
                     </CardContent>
@@ -270,8 +270,8 @@ function App() {
                     </CardHeader>
                     <CardContent>
                       <p className="text-gray-300 leading-relaxed">
-                        I'm passionate about building scalable web applications that solve real-world problems. 
-                        The MERN stack excites me because it allows for full-stack development with JavaScript, 
+                        I consider coding solutions that work toward building scalable web applications that solve real-world problems as a hobby. From Junior year until now
+                        the MERN stack excites me because it allows for full-stack development with JavaScript, 
                         creating seamless experiences from database to user interface.
                       </p>
                     </CardContent>
@@ -382,19 +382,47 @@ function App() {
                     achievements: ['Developed an MVP with AI Integration', 'Implemented real-time QA analytics for voice calls', 'Full audio support and real-time script generation during calls', 'Received recognition for technical excellence']
                   },
                   {
+                    role: 'Bioinformatics Software Development Intern',
+                    company: 'International Rice Research Institute (IRRI)',
+                    period: '2024 - 2025',
+                    description: 'Created a authentication module from scratch using Drupal and Docker, and redeveloped IRRI\'s SNPSeek into SNP-MERN, utilizing modern web technologies and microservices architecture',
+                    achievements: ['Learned Drupal and Dockerization', 'Developed SNPSeek and its core functionalities into a new tech stack (MERN) in under 5 months', 'Successfully converted SNPSeek monolithic architecture to microservices', 'Deployed SNP-MERN completely free using my own laptop as a server XD']
+                  },
+                  {
+                    role: '2 Weeks - Full Stack Developer',
+                    company: 'Client Project',
+                    period: 'August 2024',
+                    description: 'Created a responsive story game using ReactJS and Vercel with 2 members for a client in a span of 3 weeks.',
+                    achievements: ['Built responsive story game interface', 'Collaborated with team of 3 developers', 'Delivered project within 3-week timeline', 'Deployed using Vercel platform']
+                  },
+                  {
+                    role: 'eLBigayan - Team Lead',
+                    company: 'Flutter Development Project',
+                    period: 'May 2024 - June 2024',
+                    description: 'Led a team of 2 members in developing a Flutter and Dart donation system.',
+                    achievements: ['Led team of 3 developers', 'Integrated 4 Firebase services', 'Created secure and scalable backend', 'Delivered fully functional donation platform']
+                  },
+                  {
+                    role: 'Fire Nation Invasion - Game Developer',
+                    company: 'Game Development Project',
+                    period: 'April 2024 - June 2024',
+                    description: 'Worked with 2 members to develop key features, including character abilities and game mechanics.',
+                    achievements: ['Developed character abilities and game mechanics', 'Implemented multiplayer feature for up to 4 players', 'Enabled cross-computer connectivity', 'Collaborated in 3-member development team']
+                  },
+                  {
+                    role: 'PICSEL - Backend Developer',
+                    company: 'Reservation System Development',
+                    period: 'February 2024 - June 2024',
+                    description: 'Developed backend components for a reservation system with PostgreSQL, Express.js, Node.js, and React, contributing 94 commits and 12 merged pull requests to 7 features in a 20-developer team over 5 months.',
+                    achievements: ['Successfully integrated Google authentication', 'Enhanced security and streamlined user login process', '94 commits and 12 merged pull requests', 'Contributed to 7 features in 20-developer team']
+                  },
+                  {
                     role: '41st CS Week Code Wars Co-Head / Team Lead / Project Manager',
                     company: 'UPLB Computer Science Society',
                     period: '2023 - 2025',
                     description: 'Led the web development of the organization\'s flagship event. Managed a team of developers to create a seamless online experience for participants and judges.',
                     achievements: ['AWS Deployment', 'Shipped 8 features in 2 months', 'Successfully launched the app used by 20 teams and 4 judges without any downtimes', 'Leadership']
                   },
-                  {
-                    role: 'Bioinformatics Software Development Intern',
-                    company: 'International Rice Research Institute (IRRI)',
-                    period: '2024 - 2025',
-                    description: 'Created a authentication module from scratch using Drupal and Docker, and redeveloped IRRI\'s SNPSeek into SNP-MERN, utilizing modern web technologies and microservices architecture',
-                    achievements: ['Learned Drupal and Dockerization', 'Developed SNPSeek and its core functionalities into a new tech stack (MERN) in under 5 months', 'Successfully converted SNPSeek monolithic architecture to microservices', 'Deployed SNP-MERN completely free using my own laptop as a server XD']
-                  }
                 ].map((job, index) => (
                   <Card key={index} className="bg-white/5 border-white/20 backdrop-blur-sm">
                     <CardHeader>
@@ -407,7 +435,7 @@ function App() {
                         </div>
                         <Badge variant="outline" className="border-white/30 text-white">
                           <Calendar className="w-3 h-3 mr-1" />
-                          {job.period.split(' - ')[1]}
+                          {job.period.includes(' - ') ? job.period.split(' - ')[1] : job.period}
                         </Badge>
                       </div>
                     </CardHeader>
@@ -700,9 +728,12 @@ function App() {
                     <Button 
                       size="lg" 
                       className="w-full bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-black transition-all"
+                      asChild
                     >
-                      <Download className="w-5 h-5 mr-2" />
-                      Download Resume
+                      <a href="/CEREZO_RESUME.pdf" download="Jet_Timothy_Cerezo_Resume.pdf" target="_blank" rel="noopener noreferrer">
+                        <Download className="w-5 h-5 mr-2" />
+                        Download Resume
+                      </a>
                     </Button>
                   </div>
                 </CardContent>
