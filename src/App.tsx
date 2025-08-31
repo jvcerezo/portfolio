@@ -189,8 +189,7 @@ function App() {
                 </Button>
                 <Button 
                   size="lg" 
-                  variant="outline" 
-                  className="border-white/30 text-white hover:bg-white/10"
+                  className="bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-black transition-all"
                   onClick={() => scrollToSection('contact')}
                 >
                   <Mail className="w-4 h-4 mr-2" />
@@ -202,11 +201,15 @@ function App() {
               <div className="flex items-center gap-4 pt-4">
                 <span className="text-sm text-gray-400">Follow me:</span>
                 <div className="flex gap-3">
-                  <Button size="sm" variant="ghost" className="text-white hover:text-gray-300">
-                    <Github className="w-4 h-4" />
+                  <Button size="sm" variant="ghost" className="text-white hover:text-gray-300 hover:bg-white/10" asChild>
+                    <a href="https://github.com/jvcerezo" target="_blank" rel="noopener noreferrer">
+                      <Github className="w-4 h-4" />
+                    </a>
                   </Button>
-                  <Button size="sm" variant="ghost" className="text-white hover:text-gray-300">
-                    <Linkedin className="w-4 h-4" />
+                  <Button size="sm" variant="ghost" className="text-white hover:text-gray-300 hover:bg-white/10" asChild>
+                    <a href="https://www.linkedin.com/in/jet-timothy-cerezo-126903254" target="_blank" rel="noopener noreferrer">
+                      <Linkedin className="w-4 h-4" />
+                    </a>
                   </Button>
                 </div>
               </div>
@@ -565,13 +568,6 @@ function App() {
               </Card>
             ))}
           </div>
-
-          <div className="text-center mt-16">
-            <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10">
-              View All Projects
-              <ChevronRight className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
         </div>
       </section>
 
@@ -603,7 +599,7 @@ function App() {
                     </div>
                     <div>
                       <h3 className="text-white font-medium">Email</h3>
-                      <p className="text-gray-400">jet.cerezo@example.com</p>
+                      <p className="text-gray-400">jetjetcerezo@gmail.com</p>
                     </div>
                   </div>
                   
@@ -613,7 +609,7 @@ function App() {
                     </div>
                     <div>
                       <h3 className="text-white font-medium">Phone</h3>
-                      <p className="text-gray-400">+63 (917) 123-4567</p>
+                      <p className="text-gray-400">+63 998 914 8907</p>
                     </div>
                   </div>
                   
@@ -641,22 +637,20 @@ function App() {
                   <div className="flex gap-4">
                     <Button 
                       size="lg" 
-                      variant="outline" 
-                      className="border-white/30 text-white hover:bg-white/10 flex-1"
+                      className="bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-black transition-all flex-1"
                       asChild
                     >
-                      <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer">
+                      <a href="https://github.com/jvcerezo" target="_blank" rel="noopener noreferrer">
                         <Github className="w-5 h-5 mr-2" />
                         GitHub
                       </a>
                     </Button>
                     <Button 
                       size="lg" 
-                      variant="outline" 
-                      className="border-white/30 text-white hover:bg-white/10 flex-1"
+                      className="bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-black transition-all flex-1"
                       asChild
                     >
-                      <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer">
+                      <a href="https://www.linkedin.com/in/jet-timothy-cerezo-126903254" target="_blank" rel="noopener noreferrer">
                         <Linkedin className="w-5 h-5 mr-2" />
                         LinkedIn
                       </a>
@@ -697,7 +691,7 @@ function App() {
                       className="w-full bg-white text-black hover:bg-gray-200 font-medium"
                       asChild
                     >
-                      <a href="mailto:jet.cerezo@example.com">
+                      <a href="mailto:jetjetcerezo@gmail.com">
                         <Mail className="w-5 h-5 mr-2" />
                         Send Message
                       </a>
@@ -705,8 +699,7 @@ function App() {
                     
                     <Button 
                       size="lg" 
-                      variant="outline" 
-                      className="w-full border-white/30 text-white hover:bg-white/10"
+                      className="w-full bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-black transition-all"
                     >
                       <Download className="w-5 h-5 mr-2" />
                       Download Resume
