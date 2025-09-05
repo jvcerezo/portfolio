@@ -603,10 +603,10 @@ function App() {
       <section id="contact" className="py-32 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-5xl lg:text-6xl font-light mb-6 tracking-wide">Let's Work Together</h2>
+            <h2 className="text-5xl lg:text-6xl font-light mb-6 tracking-wide">Let's Connect</h2>
             <Separator className="w-32 mx-auto bg-white/30" />
             <p className="text-xl text-gray-400 mt-6 max-w-2xl mx-auto">
-              Ready to bring your ideas to life? Let's create something amazing together.
+              Always open to connecting with fellow developers and exploring new opportunities.
             </p>
           </div>
 
@@ -617,7 +617,7 @@ function App() {
                 <CardHeader>
                   <CardTitle className="text-white text-2xl mb-4">Get In Touch</CardTitle>
                   <CardDescription className="text-gray-400 text-lg">
-                    I'm always open to discussing new opportunities, interesting projects, or just having a chat about technology.
+                    I'm always interested in connecting with fellow developers, discussing technology, and exploring potential collaboration opportunities.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -658,7 +658,7 @@ function App() {
                 <CardHeader>
                   <CardTitle className="text-white">Follow My Journey</CardTitle>
                   <CardDescription className="text-gray-400">
-                    Stay updated with my latest projects and insights
+                    Stay updated with my latest projects and professional growth
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -692,24 +692,24 @@ function App() {
             <div className="space-y-8">
               <Card className="bg-gradient-to-br from-white/10 to-white/5 border-white/30 backdrop-blur-sm">
                 <CardHeader>
-                  <CardTitle className="text-white text-2xl">Ready to Start a Project?</CardTitle>
+                  <CardTitle className="text-white text-2xl">Let's Network</CardTitle>
                   <CardDescription className="text-gray-400 text-lg">
-                    Let's discuss your ideas and turn them into reality
+                    Always open to connecting with fellow professionals and exploring opportunities
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="space-y-4">
                     <div className="flex items-center gap-3 text-gray-300">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span>Available for new projects</span>
+                      <span>Open to networking opportunities</span>
                     </div>
                     <div className="flex items-center gap-3 text-gray-300">
                       <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                      <span>Typically responds within 24 hours</span>
+                      <span>Interested in technology discussions</span>
                     </div>
                     <div className="flex items-center gap-3 text-gray-300">
                       <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                      <span>Free initial consultation</span>
+                      <span>Always learning and growing</span>
                     </div>
                   </div>
                   
@@ -741,22 +741,22 @@ function App() {
 
               <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
                 <CardHeader>
-                  <CardTitle className="text-white">Project Timeline</CardTitle>
+                  <CardTitle className="text-white">Professional Interests</CardTitle>
                   <CardDescription className="text-gray-400">
-                    Typical project phases and estimated duration
+                    Areas I'm passionate about and always eager to discuss
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {[
-                    { phase: 'Discovery & Planning', duration: '1-2 weeks' },
-                    { phase: 'Design & Prototyping', duration: '2-3 weeks' },
-                    { phase: 'Development & Testing', duration: '4-8 weeks' },
-                    { phase: 'Launch & Support', duration: 'Ongoing' }
+                    { interest: 'Full-Stack Development', focus: 'MERN Stack' },
+                    { interest: 'Software Architecture', focus: 'Scalable Systems' },
+                    { interest: 'Technology Innovation', focus: 'Emerging Trends' },
+                    { interest: 'Professional Growth', focus: 'Continuous Learning' }
                   ].map((item, index) => (
                     <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-white/5">
-                      <span className="text-gray-300">{item.phase}</span>
+                      <span className="text-gray-300">{item.interest}</span>
                       <Badge variant="outline" className="border-white/30 text-white">
-                        {item.duration}
+                        {item.focus}
                       </Badge>
                     </div>
                   ))}
