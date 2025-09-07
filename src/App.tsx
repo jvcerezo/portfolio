@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, ExternalLink, Mail, Phone, MapPin, Github, Linkedin, Download, Code, Palette, Database, Server, Award, Calendar, Users, Star, ChevronRight, ArrowRight } from 'lucide-react';
+import { Menu, X, ExternalLink, Mail, Phone, MapPin, Github, Linkedin, Download, Code, Palette, Database, Server, Award, Calendar, Users, Star, ChevronRight, ArrowRight, Eye } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card';
 import { Button } from './components/ui/button';
 import { Badge } from './components/ui/badge';
@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [visitorCount, setVisitorCount] = useState<number | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +17,33 @@ function App() {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Visitor Counter Effect
+  useEffect(() => {
+    const updateVisitorCount = async () => {
+      try {
+        // Using a simple approach with localStorage for demo
+        // In production, you'd want to use a proper analytics service
+        const visits = localStorage.getItem('portfolio-visits');
+        const today = new Date().toDateString();
+        const lastVisit = localStorage.getItem('portfolio-last-visit');
+        
+        if (lastVisit !== today) {
+          const newCount = visits ? parseInt(visits) + 1 : 1;
+          localStorage.setItem('portfolio-visits', newCount.toString());
+          localStorage.setItem('portfolio-last-visit', today);
+          setVisitorCount(newCount);
+        } else {
+          setVisitorCount(visits ? parseInt(visits) : 1);
+        }
+      } catch (error) {
+        console.log('Visitor counter error:', error);
+        setVisitorCount(1);
+      }
+    };
+
+    updateVisitorCount();
   }, []);
 
   const scrollToSection = (sectionId: string) => {
@@ -769,10 +797,29 @@ function App() {
 
       {/* Footer */}
       <footer className="py-12 px-6 border-t border-white/20">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="text-gray-400 font-light">
-            © 2025 Jet Timothy Cerezo. All rights reserved.
-          </p>
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-gray-400 font-light">
+              © 2025 Jet Timothy Cerezo. All rights reserved.
+            </p>
+            
+            {/* Visitor Counter */}
+            <div className="flex items-center gap-3 text-gray-400">
+              <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10">
+                <Eye className="w-4 h-4 text-blue-400" />
+                <span className="text-sm font-medium">
+                  {visitorCount !== null ? (
+                    <>
+                      <span className="text-white">{visitorCount.toLocaleString()}</span>
+                      <span className="ml-1">visitors</span>
+                    </>
+                  ) : (
+                    <span>Loading...</span>
+                  )}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
