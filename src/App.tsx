@@ -19,12 +19,17 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Visitor Counter Effect
+  // Visitor Counter Effect using free API
   useEffect(() => {
     const updateVisitorCount = async () => {
       try {
-        // Using a simple approach with localStorage for demo
-        // In production, you'd want to use a proper analytics service
+        // Using CountAPI.xyz - a free visitor counter service
+        const response = await fetch('https://api.countapi.xyz/hit/jvcerezo-portfolio/visits');
+        const data = await response.json();
+        setVisitorCount(data.value);
+      } catch (error) {
+        console.log('Visitor counter error:', error);
+        // Fallback to localStorage if API fails
         const visits = localStorage.getItem('portfolio-visits');
         const today = new Date().toDateString();
         const lastVisit = localStorage.getItem('portfolio-last-visit');
@@ -37,9 +42,6 @@ function App() {
         } else {
           setVisitorCount(visits ? parseInt(visits) : 1);
         }
-      } catch (error) {
-        console.log('Visitor counter error:', error);
-        setVisitorCount(1);
       }
     };
 
