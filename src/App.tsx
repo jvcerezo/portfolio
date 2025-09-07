@@ -137,6 +137,10 @@ function App() {
                     <Award className="w-3 h-3 mr-1" />
                     Full-Stack Developer
                   </Badge>
+                  <Badge variant="outline" className="border-white/30 text-white bg-white/5">
+                    <Award className="w-3 h-3 mr-1" />
+                    Junior Test Automation Engineer
+                  </Badge>
                 </div>
                 
                 <h1 className="text-6xl lg:text-8xl font-light tracking-tight">
@@ -146,11 +150,12 @@ function App() {
                 
                 <div className="space-y-4">
                   <h2 className="text-2xl lg:text-3xl font-light text-gray-300">
-                    Full-Stack Developer
+                    Full-Stack Developer | Junior Test Automation Engineer
                   </h2>
                   <p className="text-lg text-gray-400 leading-relaxed max-w-xl">
-                    Computer Science graduate from University of the Philippines Los Baños batch 2025. 
+                    Computer Science graduate from University of the Philippines Los Baños Batch 2025. 
                     Passionate about building scalable web applications using MongoDB, Express.js, React, and Node.js.
+                    Currently a Junior Test Automation Engineer at Billease.
                   </p>
                 </div>
               </div>
@@ -367,6 +372,13 @@ function App() {
             <TabsContent value="experience" className="space-y-8">
               <div className="space-y-8">
                 {[
+                  {
+                    role: 'Junior Test Automation Engineer',
+                    company: 'Billease',
+                    period: 'April 2025 - Present',
+                    description: 'Develop and maintain comprehensive test automation frameworks to streamline quality assurance processes. Lead initiatives in automated testing strategies across multiple platforms and environments to ensure robust software delivery.',
+                    achievements: ['Develop automated testing scripts to optimize testing workflows', 'Execute regression testing, API testing, performance testing, and UI testing protocols', 'Implement cross-browser and cross-platform testing solutions using BrowserStack', 'Configure mobile automation frameworks with Appium for Android', 'Integrate CI/CD pipelines using GitLab for continuous testing and deployment']
+                  },
                   {
                     role: 'Bachelor of Science in Computer Science',
                     company: 'University of the Philippines Los Baños',
