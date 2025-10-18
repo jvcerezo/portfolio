@@ -115,7 +115,7 @@ function App() {
                       <div className="flex items-center gap-3">
                         <Code className="w-5 h-5 text-blue-400" />
                         <div>
-                          <p className="text-white text-sm font-medium">1 Year</p>
+                          <p className="text-white text-sm font-medium">3 Years</p>
                           <p className="text-gray-300 text-xs">Experience</p>
                         </div>
                       </div>
@@ -137,10 +137,6 @@ function App() {
                     <Award className="w-3 h-3 mr-1" />
                     Full-Stack Developer
                   </Badge>
-                  <Badge variant="outline" className="border-white/30 text-white bg-white/5">
-                    <Award className="w-3 h-3 mr-1" />
-                    Junior Test Automation Engineer
-                  </Badge>
                 </div>
                 
                 <h1 className="text-6xl lg:text-8xl font-light tracking-tight">
@@ -150,12 +146,11 @@ function App() {
                 
                 <div className="space-y-4">
                   <h2 className="text-2xl lg:text-3xl font-light text-gray-300">
-                    Full-Stack Developer | Junior Test Automation Engineer
+                    Full-Stack Developer
                   </h2>
                   <p className="text-lg text-gray-400 leading-relaxed max-w-xl">
                     Computer Science graduate from University of the Philippines Los Baños Batch 2025. 
                     Passionate about building scalable web applications using MongoDB, Express.js, React, and Node.js.
-                    Currently a Junior Test Automation Engineer at Billease.
                   </p>
                 </div>
               </div>
@@ -164,14 +159,14 @@ function App() {
               <div className="grid grid-cols-3 gap-4">
                 <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
                   <CardContent className="p-4 text-center">
-                    <div className="text-2xl font-bold text-white mb-1">7</div>
+                    <div className="text-2xl font-bold text-white mb-1">11</div>
                     <div className="text-xs text-gray-300">Projects</div>
                   </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
                   <CardContent className="p-4 text-center">
-                    <div className="text-2xl font-bold text-white mb-1">1</div>
-                    <div className="text-xs text-gray-300">Year Exp</div>
+                    <div className="text-2xl font-bold text-white mb-1">3</div>
+                    <div className="text-xs text-gray-300">Years Exp</div>
                   </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
@@ -298,7 +293,7 @@ function App() {
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-gray-300">Years Experience</span>
-                        <Badge variant="secondary" className="bg-white/10 text-white">1 Year</Badge>
+                        <Badge variant="secondary" className="bg-white/10 text-white">3 Years</Badge>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-gray-300">MERN Stack Projects</span>
@@ -332,9 +327,36 @@ function App() {
             <TabsContent value="skills" className="space-y-12">
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[
-                  { category: 'Backend', icon: Server, skills: ['Node.js', 'Express', 'MongoDB', 'PostgreSQL', 'RESTful APIs'], level: 90, color: 'bg-blue-500' },
-                  { category: 'Frontend', icon: Code, skills: ['React', 'JavaScript', 'TypeScript', 'HTML/CSS', 'Tailwind CSS'], level: 85, color: 'bg-green-500' },
-                  { category: 'Tools & DevOps', icon: Database, skills: ['Git', 'GitHub', 'Render', 'Vercel', 'CI/CD'], level: 80, color: 'bg-purple-500' },
+                  { 
+                    category: 'Backend Development', 
+                    icon: Server, 
+                    skills: ['Node.js', 'Express.js', 'MongoDB', 'PostgreSQL', 'RESTful APIs', 'Supabase', 'Firebase', 'Drupal']
+                  },
+                  { 
+                    category: 'Frontend Development', 
+                    icon: Code, 
+                    skills: ['React', 'JavaScript', 'TypeScript', 'HTML/CSS', 'Tailwind CSS', 'Bootstrap', 'Vite', 'Flutter', 'Dart']
+                  },
+                  { 
+                    category: 'Tools & DevOps', 
+                    icon: Database, 
+                    skills: ['Git', 'GitHub', 'GitLab CI/CD', 'Vercel', 'AWS', 'Docker', 'Render']
+                  },
+                  { 
+                    category: 'AI & APIs', 
+                    icon: Star, 
+                    skills: ['Gemini API', 'API Integration', 'Data Visualization', 'Machine Learning']
+                  },
+                  { 
+                    category: 'Mobile & Game Dev', 
+                    icon: Palette, 
+                    skills: ['Flutter', 'Dart', 'Unity', 'C#', 'Mobile Apps', 'Game Mechanics']
+                  },
+                  { 
+                    category: 'Database & Cloud', 
+                    icon: Database, 
+                    skills: ['MongoDB', 'PostgreSQL', 'Firebase', 'Supabase', 'Cloud Firestore', 'AWS']
+                  },
                 ].map((skillGroup, index) => (
                   <Card key={index} className="bg-white/5 border-white/20 backdrop-blur-sm">
                     <CardHeader>
@@ -343,19 +365,7 @@ function App() {
                         {skillGroup.category}
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-300">Proficiency</span>
-                          <span className="text-white">{skillGroup.level}%</span>
-                        </div>
-                        <div className="w-full bg-white/10 rounded-full h-2">
-                          <div 
-                            className={`h-2 rounded-full ${skillGroup.color} transition-all duration-1000 ease-out`}
-                            style={{ width: `${skillGroup.level}%` }}
-                          ></div>
-                        </div>
-                      </div>
+                    <CardContent>
                       <div className="flex flex-wrap gap-2">
                         {skillGroup.skills.map((skill, skillIndex) => (
                           <Badge key={skillIndex} variant="outline" className="border-white/30 text-white text-xs">
@@ -373,13 +383,6 @@ function App() {
               <div className="space-y-8">
                 {[
                   {
-                    role: 'Junior Test Automation Engineer',
-                    company: 'Billease',
-                    period: 'April 2025 - Present',
-                    description: 'Develop and maintain comprehensive test automation frameworks to streamline quality assurance processes. Lead initiatives in automated testing strategies across multiple platforms and environments to ensure robust software delivery.',
-                    achievements: ['Develop automated testing scripts to optimize testing workflows', 'Execute regression testing, API testing, performance testing, and UI testing protocols', 'Implement cross-browser and cross-platform testing solutions using BrowserStack', 'Configure mobile automation frameworks with Appium for Android', 'Integrate CI/CD pipelines using GitLab for continuous testing and deployment']
-                  },
-                  {
                     role: 'Bachelor of Science in Computer Science',
                     company: 'University of the Philippines Los Baños',
                     period: 'September 2021 - July 2025',
@@ -392,6 +395,13 @@ function App() {
                     period: 'May 2025',
                     description: 'Won as Champion in Tenext.ai Codebreak 2.0 Hackathon for developing an innovative AI agent in under 24 hours.',
                     achievements: ['Developed an MVP with AI Integration', 'Implemented real-time QA analytics for voice calls', 'Full audio support and real-time script generation during calls', 'Received recognition for technical excellence']
+                  },
+                  {
+                    role: '41st CS Week Code Wars Co-Head / Team Lead / Project Manager',
+                    company: 'UPLB Computer Science Society',
+                    period: 'January 2025 - March 2025',
+                    description: 'Led the web development of the organization\'s flagship event. Managed a team of developers to create a seamless online experience for participants and judges.',
+                    achievements: ['AWS Deployment', 'Shipped 8 features in 2 months', 'Successfully launched the app used by 20 teams and 4 judges without any downtimes', 'Leadership']
                   },
                   {
                     role: 'Bioinformatics Software Development Intern',
@@ -427,13 +437,6 @@ function App() {
                     period: 'February 2024 - June 2024',
                     description: 'Developed backend components for a reservation system with PostgreSQL, Express.js, Node.js, and React, contributing 94 commits and 12 merged pull requests to 7 features in a 20-developer team over 5 months.',
                     achievements: ['Successfully integrated Google authentication', 'Enhanced security and streamlined user login process', '94 commits and 12 merged pull requests', 'Contributed to 7 features in 20-developer team']
-                  },
-                  {
-                    role: '41st CS Week Code Wars Co-Head / Team Lead / Project Manager',
-                    company: 'UPLB Computer Science Society',
-                    period: 'January 2025 - March 2025',
-                    description: 'Led the web development of the organization\'s flagship event. Managed a team of developers to create a seamless online experience for participants and judges.',
-                    achievements: ['AWS Deployment', 'Shipped 8 features in 2 months', 'Successfully launched the app used by 20 teams and 4 judges without any downtimes', 'Leadership']
                   },
                 ].map((job, index) => (
                   <Card key={index} className="bg-white/5 border-white/20 backdrop-blur-sm">
@@ -487,8 +490,26 @@ function App() {
           <div className="grid lg:grid-cols-2 gap-8">
             {[
               {
+                title: 'IskOS - Academic Management System',
+                description: 'Comprehensive academic system for students to manage their schedules, track absences, and calculate GWA. Features Google Calendar integration and subjects database.',
+                link: 'https://isk-os.vercel.app',
+                tech: ['React', 'TypeScript', 'Google Calendar API', 'Database'],
+                features: ['Schedule import', 'Google Calendar sync', 'Absence tracker', 'GWA Calculator', 'Subjects database'],
+                status: 'In Development',
+                image: '📚'
+              },
+              {
+                title: 'Ottodot Assessment',
+                description: 'Full-stack coding assessment project showcasing modern web development practices with AI integration. Built with TypeScript and Supabase backend.',
+                link: 'https://ottodot-coding-task-full-stack-eta.vercel.app',
+                tech: ['TypeScript', 'JavaScript', 'Supabase', 'Gemini API'],
+                features: ['AI integration', 'Database management', 'Modern TypeScript', 'Supabase backend'],
+                status: 'Live Production',
+                image: '🤖'
+              },
+              {
                 title: 'SNP-MERN',
-                description: 'Full-stack bioinformatics web application for genetic variant analysis and interpretation with advanced filtering capabilities.',
+                description: 'Full-stack bioinformatics web application for genetic variant analysis and interpretation with advanced filtering capabilities. Developed during IRRI internship.',
                 link: 'https://snpseek-mern.vercel.app',
                 tech: ['React', 'Node.js', 'Express.js', 'MongoDB'],
                 features: ['Genetic variant analysis', 'Interactive charts', 'Advanced filtering', 'Data visualization'],
@@ -496,7 +517,7 @@ function App() {
                 image: '🧬'
               },
               {
-                title: 'SOSC3 Final Project',
+                title: 'SOSC3 Advocacy App',
                 description: 'Social advocacy web application promoting community engagement and social awareness campaigns.',
                 link: 'https://sosc3-advocacy-app.vercel.app',
                 tech: ['React', 'Tailwind CSS', 'HTML', 'Vercel'],
@@ -510,7 +531,7 @@ function App() {
                 link: 'https://diet-plan-calculator.vercel.app',
                 tech: ['React', 'Node.js', 'Express.js', 'MongoDB', 'Tailwind CSS'],
                 features: ['Nutrition calculation', 'Meal planning', 'Calorie tracking', 'Personalized recommendations'],
-                status: 'Live Production',
+                status: 'MVP',
                 image: '🍎'
               },
               {
@@ -519,9 +540,9 @@ function App() {
                 link: 'https://mdcas-fe.vercel.app',
                 tech: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS'],
                 features: ['Appointment scheduling', 'Patient management', 'Medical records', 'Clinic administration'],
-                status: 'Live Production',
+                status: 'MVP',
                 image: '🏥'
-              }
+              },
             ].map((project, index) => (
               <Card key={index} className="bg-black/50 border-white/20 backdrop-blur-sm overflow-hidden group hover:border-white/40 transition-all duration-500">
                 <div className="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 relative overflow-hidden">
@@ -742,7 +763,7 @@ function App() {
                       className="w-full bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-black transition-all"
                       asChild
                     >
-                      <a href="/CEREZO_RESUME.pdf" download="Jet_Timothy_Cerezo_Resume.pdf" target="_blank" rel="noopener noreferrer">
+                      <a href="/JetCerezo_Resume.pdf" download="Jet_Timothy_Cerezo_Resume.pdf" target="_blank" rel="noopener noreferrer">
                         <Download className="w-5 h-5 mr-2" />
                         Download Resume
                       </a>
