@@ -4,7 +4,19 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/jtc-logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Jet Timothy Cerezo</title>
+    <title>Jet Timothy Cerezo — Software Developer</title>
+    <meta name="description" content="Software developer shipping full-stack web and mobile products. Currently at Billease and shipping Sandalan, live on Google Play." />
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = stored || (prefersDark ? 'dark' : 'dark');
+          if (theme === 'dark') document.documentElement.classList.add('dark');
+          document.documentElement.style.colorScheme = theme;
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

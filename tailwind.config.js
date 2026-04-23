@@ -8,6 +8,11 @@ export default {
   theme: {
   	extend: {
   		colors: {
+  			bg: 'rgb(var(--c-bg) / <alpha-value>)',
+  			fg: 'rgb(var(--c-fg) / <alpha-value>)',
+  			line: 'rgb(var(--c-line) / <alpha-value>)',
+  			mute: 'rgb(var(--c-fg) / <alpha-value>)',
+  			brand: 'rgb(var(--c-accent) / <alpha-value>)',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

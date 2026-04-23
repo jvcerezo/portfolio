@@ -3,7 +3,7 @@ import {
   Menu, X, Mail, Phone, MapPin, Github, Linkedin, Download,
   Code, Database, Server, ArrowUpRight,
   Smartphone, Shield, Sparkles, Globe, Zap, CheckCircle2, Palette,
-  Trophy, Leaf, Briefcase, Rocket, Terminal,
+  Trophy, Leaf, Briefcase, Rocket, Terminal, Sun, Moon,
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
 import { Button } from './components/ui/button';
@@ -23,6 +23,30 @@ const SANDALAN_SITE = 'https://exitplan-tau.vercel.app';
 // WordPress mshots — free, aggressively cached, loads fast
 const shot = (url: string) =>
   `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}?w=1600&h=1000`;
+
+type Theme = 'light' | 'dark';
+
+function useTheme(): [Theme, () => void] {
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window === 'undefined') return 'dark';
+    const stored = window.localStorage.getItem('theme') as Theme | null;
+    if (stored === 'light' || stored === 'dark') return stored;
+    return document.documentElement.classList.contains('dark') ? 'dark' : 'dark';
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'dark') root.classList.add('dark');
+    else root.classList.remove('dark');
+    root.style.colorScheme = theme;
+    try {
+      window.localStorage.setItem('theme', theme);
+    } catch {}
+  }, [theme]);
+
+  const toggle = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
+  return [theme, toggle];
+}
 
 function useScrollSpy(ids: string[]) {
   const [active, setActive] = useState<string>(ids[0]);
@@ -132,26 +156,26 @@ function ProjectCard({ p, idx }: { p: (typeof PROJECTS)[number]; idx: number }) 
       href={p.link}
       target="_blank"
       rel="noopener noreferrer"
-      className={`reveal delay-${(idx % 4) + 1} group relative border border-white/10 bg-white/[0.015] card-hover overflow-hidden block`}
+      className={`reveal delay-${(idx % 4) + 1} group relative border border-fg/10 bg-fg/[0.025] card-hover overflow-hidden block`}
     >
       {/* Browser chrome bar */}
-      <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/10 bg-white/[0.02]">
+      <div className="flex items-center gap-2 px-4 py-2.5 border-b border-fg/10 bg-fg/[0.035]">
         <div className="flex gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-white/15" />
-          <span className="w-2.5 h-2.5 rounded-full bg-white/15" />
-          <span className="w-2.5 h-2.5 rounded-full bg-white/15" />
+          <span className="w-2.5 h-2.5 rounded-full bg-fg/15" />
+          <span className="w-2.5 h-2.5 rounded-full bg-fg/15" />
+          <span className="w-2.5 h-2.5 rounded-full bg-fg/15" />
         </div>
         <div className="flex-1 flex justify-center">
-          <span className="font-mono text-[10px] tracking-[0.1em] text-white/45 truncate max-w-[70%]">
+          <span className="font-mono text-[10px] tracking-[0.1em] text-fg/45 truncate max-w-[70%]">
             {p.link.replace(/^https?:\/\//, '')}
           </span>
         </div>
-        <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/40">
+        <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/40">
           {p.status}
         </span>
       </div>
 
-      <div className="relative aspect-[16/10] overflow-hidden bg-[#0f0f0f]">
+      <div className="relative aspect-[16/10] overflow-hidden bg-fg/[0.04] dark:bg-fg/[0.03]">
         <div className="absolute inset-0 grid-bg-dense opacity-40" />
 
         {/* Fallback label shown while screenshot loads */}
@@ -160,10 +184,10 @@ function ProjectCard({ p, idx }: { p: (typeof PROJECTS)[number]; idx: number }) 
             loaded ? 'opacity-0' : 'opacity-100'
           }`}
         >
-          <div className="font-display text-6xl lg:text-7xl text-white/20 leading-none tracking-tight">
+          <div className="font-display text-6xl lg:text-7xl text-fg/20 leading-none tracking-tight">
             {p.title}
           </div>
-          <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/30 mt-4">
+          <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/30 mt-4">
             loading preview
           </div>
         </div>
@@ -181,7 +205,7 @@ function ProjectCard({ p, idx }: { p: (typeof PROJECTS)[number]; idx: number }) 
         {/* Subtle bottom gradient for legibility of the badge */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-80" />
 
-        <div className="absolute bottom-4 right-4 w-10 h-10 rounded-full border border-white/25 flex items-center justify-center bg-black/60 backdrop-blur-sm group-hover:bg-[var(--accent)] group-hover:text-black group-hover:border-[var(--accent)] transition-all">
+        <div className="absolute bottom-4 right-4 w-10 h-10 rounded-full border border-white/30 flex items-center justify-center bg-black/60 text-white backdrop-blur-sm group-hover:bg-brand group-hover:text-bg group-hover:border-brand transition-all">
           <ArrowUpRight className="w-4 h-4" />
         </div>
       </div>
@@ -190,26 +214,26 @@ function ProjectCard({ p, idx }: { p: (typeof PROJECTS)[number]; idx: number }) 
         <div className="flex items-start justify-between gap-4 mb-3">
           <div>
             <div className="flex items-baseline gap-3 mb-1">
-              <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/35">
+              <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/35">
                 {p.code}
               </span>
-              <h3 className="font-display text-2xl lg:text-[1.75rem] font-semibold tracking-tight text-white">
+              <h3 className="font-display text-2xl lg:text-[1.75rem] font-semibold tracking-tight text-fg">
                 {p.title}
               </h3>
             </div>
-            <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-white/50">
+            <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-fg/50">
               {p.subtitle}
             </div>
           </div>
         </div>
 
-        <p className="text-white/65 leading-relaxed mb-5 text-[14.5px]">{p.description}</p>
+        <p className="text-fg/65 leading-relaxed mb-5 text-[14.5px]">{p.description}</p>
 
         <div className="flex flex-wrap gap-2">
           {p.tech.map((t) => (
             <span
               key={t}
-              className="font-mono text-[10px] tracking-[0.15em] uppercase text-white/60 border border-white/15 px-2.5 py-1 rounded-full"
+              className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg/60 border border-fg/15 px-2.5 py-1 rounded-full"
             >
               {t}
             </span>
@@ -298,12 +322,20 @@ const EXPERIENCE = [
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [progress, setProgress] = useState(0);
   const active = useScrollSpy(NAV_ITEMS.map((n) => n.id));
+  const [theme, toggleTheme] = useTheme();
   useRevealOnScroll();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', onScroll);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 40);
+      const docH = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(docH > 0 ? (y / docH) * 100 : 0);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
@@ -318,11 +350,19 @@ function App() {
   const year = new Date().getFullYear();
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-white">
+    <div className="min-h-screen bg-bg text-fg">
+      {/* Scroll progress */}
+      <div className="fixed top-0 left-0 right-0 z-[60] h-[2px] bg-fg/5">
+        <div
+          className="h-full bg-brand transition-[width] duration-150 ease-out"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+
       {/* NAV */}
       <nav
         className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
-          scrolled ? 'bg-black/75 backdrop-blur-xl border-b border-white/10' : 'bg-transparent'
+          scrolled ? 'bg-bg/80 backdrop-blur-xl border-b border-fg/10' : 'bg-transparent'
         }`}
       >
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10 py-5">
@@ -331,23 +371,23 @@ function App() {
               onClick={() => scrollToSection('home')}
               className="flex items-center gap-2 group"
             >
-              <span className="w-7 h-7 rounded-md border border-white/20 flex items-center justify-center group-hover:border-[var(--accent)] transition-colors">
-                <Terminal className="w-3.5 h-3.5 text-[var(--accent)]" />
+              <span className="w-7 h-7 rounded-md border border-fg/20 flex items-center justify-center group-hover:border-brand transition-colors">
+                <Terminal className="w-3.5 h-3.5 text-brand" />
               </span>
               <span className="font-display text-[15px] font-semibold tracking-tight">
                 jvcerezo
               </span>
             </button>
 
-            <div className="hidden md:flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.03] p-1 backdrop-blur">
+            <div className="hidden md:flex items-center gap-1 rounded-full border border-fg/10 bg-fg/[0.04] p-1 backdrop-blur">
               {NAV_ITEMS.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
                   className={`relative px-4 py-1.5 text-[13px] transition-colors rounded-full flex items-center gap-2 ${
                     active === item.id
-                      ? 'bg-white text-black font-medium'
-                      : 'text-white/70 hover:text-white'
+                      ? 'bg-fg text-bg font-medium'
+                      : 'text-fg/70 hover:text-fg'
                   }`}
                 >
                   <span className="font-mono text-[10px] opacity-60">{item.num}</span>
@@ -356,10 +396,21 @@ function App() {
               ))}
             </div>
 
-            <div className="hidden md:block">
+            <div className="hidden md:flex items-center gap-2">
+              <button
+                onClick={toggleTheme}
+                aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                className="w-9 h-9 rounded-full border border-fg/15 flex items-center justify-center hover:border-fg/30 hover:bg-fg/5 transition-colors"
+              >
+                {theme === 'dark' ? (
+                  <Sun className="w-4 h-4 theme-icon" />
+                ) : (
+                  <Moon className="w-4 h-4 theme-icon" />
+                )}
+              </button>
               <Button
                 size="sm"
-                className="bg-[var(--accent)] text-black hover:bg-[var(--accent)]/90 rounded-full px-5 font-medium"
+                className="bg-brand text-bg hover:bg-brand/90 rounded-full px-5 font-medium"
                 asChild
               >
                 <a href="/JetCerezo_Resume.pdf" download>
@@ -370,7 +421,7 @@ function App() {
             </div>
 
             <button
-              className="md:hidden text-white"
+              className="md:hidden text-fg"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -379,23 +430,30 @@ function App() {
           </div>
 
           {isMenuOpen && (
-            <div className="md:hidden mt-5 pb-4 border-t border-white/10">
+            <div className="md:hidden mt-5 pb-4 border-t border-fg/10">
               <div className="flex flex-col space-y-1 mt-4">
                 {NAV_ITEMS.map((item) => (
                   <button
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
                     className={`text-left py-2.5 px-3 rounded-lg text-base transition-colors flex items-center gap-3 ${
-                      active === item.id ? 'bg-white/10 text-white' : 'text-white/70'
+                      active === item.id ? 'bg-fg/10 text-fg' : 'text-fg/70'
                     }`}
                   >
                     <span className="font-mono text-[11px] opacity-50">{item.num}</span>
                     {item.label}
                   </button>
                 ))}
+                <button
+                  onClick={toggleTheme}
+                  className="mt-3 flex items-center gap-3 py-2.5 px-3 rounded-lg text-base text-fg/70 hover:bg-fg/5 transition-colors"
+                >
+                  {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                  <span>Switch to {theme === 'dark' ? 'light' : 'dark'} mode</span>
+                </button>
                 <Button
                   size="sm"
-                  className="mt-3 bg-[var(--accent)] text-black hover:bg-[var(--accent)]/90 rounded-full font-medium"
+                  className="mt-2 bg-brand text-bg hover:bg-brand/90 rounded-full font-medium"
                   asChild
                 >
                   <a href="/JetCerezo_Resume.pdf" download>
@@ -412,38 +470,38 @@ function App() {
       {/* HERO */}
       <section id="home" className="relative min-h-[100vh] flex items-center overflow-hidden pt-28 pb-20">
         <div className="absolute inset-0 grid-bg opacity-60" />
-        <div className="absolute left-0 top-1/3 w-[60%] h-[40%] bg-gradient-to-r from-[var(--accent-dim)] to-transparent blur-3xl pointer-events-none opacity-40" />
+        <div className="absolute left-0 top-1/3 w-[60%] h-[40%] bg-gradient-to-r from-brand/15 to-transparent blur-3xl pointer-events-none opacity-40" />
 
         <div className="relative max-w-[1440px] w-full mx-auto px-6 lg:px-10">
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-8 space-y-10 animate-reveal">
               <div className="flex flex-wrap items-center gap-4">
-                <span className="flex items-center gap-2 font-mono text-[11px] tracking-[0.22em] uppercase text-white/70 border border-white/15 rounded-full pl-2 pr-3 py-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-dot" />
-                  <span className="text-[var(--accent)]">/</span> Available for work
+                <span className="flex items-center gap-2 font-mono text-[11px] tracking-[0.22em] uppercase text-fg/70 border border-fg/15 rounded-full pl-2 pr-3 py-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand animate-dot" />
+                  <span className="text-brand">/</span> Available for work
                 </span>
-                <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-white/45">
+                <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-fg/45">
                   Laguna, PH · UTC+8
                 </span>
               </div>
 
               <div>
-                <h1 className="font-display font-semibold leading-[0.9] tracking-[-0.045em] text-[clamp(3rem,9.5vw,9rem)] text-white">
+                <h1 className="font-display font-semibold leading-[0.9] tracking-[-0.045em] text-[clamp(3rem,9.5vw,9rem)] text-fg">
                   Jet Timothy<br />
-                  Cerezo<span className="text-[var(--accent)]">.</span>
+                  Cerezo<span className="text-brand">.</span>
                 </h1>
-                <p className="font-display text-2xl lg:text-4xl text-white/60 font-medium tracking-tight mt-4">
+                <p className="font-display text-2xl lg:text-4xl text-fg/60 font-medium tracking-tight mt-4">
                   Software developer shipping full-stack products.
                 </p>
               </div>
 
-              <p className="text-[17px] lg:text-lg text-white/70 max-w-2xl leading-relaxed">
+              <p className="text-[17px] lg:text-lg text-fg/70 max-w-2xl leading-relaxed">
                 I design and ship web and mobile products end-to-end, from database schema to
                 Play Store. Currently a Junior Test Automation Engineer at{' '}
-                <span className="text-white font-medium">Billease</span>, and shipping{' '}
+                <span className="text-fg font-medium">Billease</span>, and shipping{' '}
                 <button
                   onClick={() => scrollToSection('sandalan')}
-                  className="link-underline text-white font-medium"
+                  className="link-underline text-fg font-medium"
                 >
                   Sandalan
                 </button>
@@ -454,7 +512,7 @@ function App() {
               <div className="flex flex-wrap gap-3">
                 <Button
                   size="lg"
-                  className="bg-[var(--accent)] text-black hover:bg-[var(--accent)]/90 font-medium rounded-full px-7 h-12"
+                  className="bg-brand text-bg hover:bg-brand/90 font-medium rounded-full px-7 h-12"
                   onClick={() => scrollToSection('sandalan')}
                 >
                   See Sandalan <span className="ml-2">→</span>
@@ -462,7 +520,7 @@ function App() {
                 <Button
                   size="lg"
                   variant="ghost"
-                  className="border border-white/20 text-white hover:bg-white/10 rounded-full px-7 h-12"
+                  className="border border-fg/20 text-fg hover:bg-fg/10 rounded-full px-7 h-12"
                   onClick={() => scrollToSection('work')}
                 >
                   All Projects
@@ -470,7 +528,7 @@ function App() {
                 <Button
                   size="lg"
                   variant="ghost"
-                  className="border border-white/20 text-white hover:bg-white/10 rounded-full px-7 h-12"
+                  className="border border-fg/20 text-fg hover:bg-fg/10 rounded-full px-7 h-12"
                   asChild
                 >
                   <a href="mailto:jetjetcerezo@gmail.com">
@@ -492,7 +550,7 @@ function App() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.label}
-                    className="text-white/55 hover:text-[var(--accent)] transition-colors"
+                    className="text-fg/55 hover:text-brand transition-colors"
                   >
                     <s.icon className="w-5 h-5" />
                   </a>
@@ -502,7 +560,7 @@ function App() {
 
             <div className="lg:col-span-4 animate-reveal">
               <div className="relative">
-                <div className="aspect-[4/5] relative overflow-hidden rounded-2xl border border-white/15">
+                <div className="aspect-[4/5] relative overflow-hidden rounded-2xl border border-fg/15">
                   <img
                     src="/profile.jpg"
                     alt="Jet Timothy Cerezo"
@@ -511,13 +569,13 @@ function App() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
                   <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
-                    <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/80 bg-black/60 backdrop-blur-sm border border-white/15 px-2 py-1 rounded">
+                    <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/85 bg-black/60 backdrop-blur-sm border border-white/15 px-2 py-1 rounded">
                       ~/portrait.jpg
                     </div>
                   </div>
 
                   <div className="absolute bottom-5 left-5 right-5">
-                    <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/70 mb-1.5">
+                    <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/75 mb-1.5">
                       // CURRENTLY
                     </div>
                     <div className="text-white font-medium">
@@ -525,15 +583,15 @@ function App() {
                     </div>
                   </div>
                 </div>
-                <div className="mt-4 grid grid-cols-3 gap-px bg-white/10 border border-white/10">
+                <div className="mt-4 grid grid-cols-3 gap-px bg-fg/10 border border-fg/10">
                   {[
                     { v: '3y', l: 'Building' },
                     { v: '11+', l: 'Projects' },
                     { v: '1', l: 'On Play Store' },
                   ].map((m) => (
-                    <div key={m.l} className="bg-[var(--bg)] p-4 text-center">
+                    <div key={m.l} className="bg-bg p-4 text-center">
                       <div className="font-display text-2xl font-semibold">{m.v}</div>
-                      <div className="font-mono text-[9px] tracking-[0.22em] uppercase text-white/45 mt-0.5">
+                      <div className="font-mono text-[9px] tracking-[0.22em] uppercase text-fg/45 mt-0.5">
                         {m.l}
                       </div>
                     </div>
@@ -546,26 +604,26 @@ function App() {
       </section>
 
       {/* RECOGNITION STRIP */}
-      <section className="relative py-14 border-y border-white/10 bg-white/[0.015]">
+      <section className="relative py-14 border-y border-fg/10 bg-fg/[0.025]">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
           <div className="flex items-center gap-3 mb-8 reveal">
             <span className="section-label bracket">Recognition</span>
-            <span className="h-px flex-1 bg-white/10" />
+            <span className="h-px flex-1 bg-fg/10" />
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 border border-white/10 reveal">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-fg/10 border border-fg/10 reveal">
             {[
               { icon: Briefcase, title: 'Jr. Test Automation Engineer', meta: 'Billease · Apr 2025 · Present' },
               { icon: Rocket, title: 'Google Play Developer', meta: 'Sandalan · Live' },
               { icon: Leaf, title: 'Bioinformatics SWE Intern', meta: 'IRRI · 2024 — 2025' },
               { icon: Trophy, title: 'Codebreak 2.0 Champion', meta: 'Tenext.ai · 2025' },
             ].map((r) => (
-              <div key={r.title} className="bg-[var(--bg)] p-6 flex items-start gap-4">
-                <r.icon className="w-4 h-4 text-[var(--accent)] mt-1 shrink-0" />
+              <div key={r.title} className="bg-bg p-6 flex items-start gap-4">
+                <r.icon className="w-4 h-4 text-brand mt-1 shrink-0" />
                 <div>
-                  <div className="text-white font-medium text-[15px] leading-snug font-display">
+                  <div className="text-fg font-medium text-[15px] leading-snug font-display">
                     {r.title}
                   </div>
-                  <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/45 mt-1.5">
+                  <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/45 mt-1.5">
                     {r.meta}
                   </div>
                 </div>
@@ -576,22 +634,22 @@ function App() {
       </section>
 
       {/* SANDALAN */}
-      <section id="sandalan" className="relative py-28 lg:py-32 border-t border-white/10 overflow-hidden">
+      <section id="sandalan" className="relative py-28 lg:py-32 border-t border-fg/10 overflow-hidden">
         <div className="absolute inset-0 grid-bg opacity-30" />
 
         <div className="relative max-w-[1440px] mx-auto px-6 lg:px-10">
           <div className="flex items-center gap-3 mb-10 reveal">
-            <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-[var(--accent)]">
+            <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-brand">
               [01] Featured Case Study
             </span>
-            <span className="h-px flex-1 bg-white/10" />
-            <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-white/40">
+            <span className="h-px flex-1 bg-fg/10" />
+            <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-fg/40">
               Mar 2026 — present
             </span>
           </div>
 
           {/* Feature graphic */}
-          <div className="reveal relative aspect-[1024/500] w-full overflow-hidden rounded-2xl border border-white/15 mb-14">
+          <div className="reveal relative aspect-[1024/500] w-full overflow-hidden rounded-2xl border border-fg/15 mb-14">
             <img
               src="/sandalan/feature.png"
               alt="Sandalan feature graphic"
@@ -602,13 +660,13 @@ function App() {
               <div className="max-w-3xl">
                 <Badge
                   variant="outline"
-                  className="border-[var(--accent)]/40 text-[var(--accent)] bg-[var(--accent)]/10 rounded-full mb-4 font-mono text-[10px] tracking-[0.22em] uppercase"
+                  className="border-brand/40 text-brand bg-brand/10 rounded-full mb-4 font-mono text-[10px] tracking-[0.22em] uppercase"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] mr-2 animate-dot" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand mr-2 animate-dot" />
                   Live on Google Play
                 </Badge>
                 <div className="font-display font-semibold tracking-[-0.04em] text-5xl lg:text-8xl leading-[0.9] text-white">
-                  Sandalan<span className="text-[var(--accent)]">.</span>
+                  Sandalan<span className="text-brand">.</span>
                 </div>
                 <div className="font-display text-xl lg:text-3xl text-white/75 mt-2 max-w-2xl font-medium tracking-tight">
                   The adulting guide Filipinos wish they had at 22.
@@ -619,23 +677,23 @@ function App() {
 
           <div className="grid lg:grid-cols-12 gap-12 items-start">
             <div className="lg:col-span-7 space-y-8">
-              <p className="text-lg text-white/75 leading-relaxed reveal">
+              <p className="text-lg text-fg/75 leading-relaxed reveal">
                 A solo-built Filipino adulting and finance app. 15,000+ lines of Flutter across
                 13 synced database tables, 38+ bank integrations, OCR receipt scanning, a Taglish
                 AI chat assistant, government tax and contribution calculators, and Google Play
                 Billing. Works fully offline, syncs when online, zero trackers.
               </p>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 border border-white/10 reveal delay-1">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-fg/10 border border-fg/10 reveal delay-1">
                 {[
                   { k: '15K+', v: 'Lines of Flutter' },
                   { k: '13', v: 'Synced tables' },
                   { k: '38+', v: 'Bank integrations' },
                   { k: '1,000+', v: 'Gov offices' },
                 ].map((m) => (
-                  <div key={m.v} className="bg-[var(--bg)] p-5">
+                  <div key={m.v} className="bg-bg p-5">
                     <div className="font-display text-3xl font-semibold tracking-tight">{m.k}</div>
-                    <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/45 mt-1">
+                    <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/45 mt-1">
                       {m.v}
                     </div>
                   </div>
@@ -647,7 +705,7 @@ function App() {
                   (t) => (
                     <span
                       key={t}
-                      className="font-mono text-[10px] tracking-[0.15em] uppercase text-white/75 border border-white/20 bg-white/[0.02] rounded-full px-3 py-1.5"
+                      className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg/75 border border-fg/20 bg-fg/[0.035] rounded-full px-3 py-1.5"
                     >
                       {t}
                     </span>
@@ -658,7 +716,7 @@ function App() {
               <div className="flex flex-wrap gap-3 pt-2 reveal delay-3">
                 <Button
                   size="lg"
-                  className="bg-[var(--accent)] text-black hover:bg-[var(--accent)]/90 rounded-full px-6 font-medium h-12"
+                  className="bg-brand text-bg hover:bg-brand/90 rounded-full px-6 font-medium h-12"
                   asChild
                 >
                   <a href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer">
@@ -670,7 +728,7 @@ function App() {
                 <Button
                   size="lg"
                   variant="ghost"
-                  className="border border-white/20 text-white hover:bg-white/10 rounded-full px-6 h-12"
+                  className="border border-fg/20 text-fg hover:bg-fg/10 rounded-full px-6 h-12"
                   asChild
                 >
                   <a href={SANDALAN_SITE} target="_blank" rel="noopener noreferrer">
@@ -691,7 +749,7 @@ function App() {
                 ].map((p, i) => (
                   <div
                     key={i}
-                    className="absolute top-0 left-1/2 w-[60%] aspect-[9/19] overflow-hidden rounded-[2rem] border border-white/20 bg-black shadow-2xl shadow-black/50"
+                    className="absolute top-0 left-1/2 w-[60%] aspect-[9/19] overflow-hidden rounded-[2rem] border border-fg/20 bg-black shadow-2xl shadow-black/50"
                     style={{
                       transform: `translate(calc(-50% + ${p.tx}), ${p.ty}) rotate(${p.rotate})`,
                       zIndex: p.z,
@@ -705,7 +763,7 @@ function App() {
           </div>
 
           {/* Case study row */}
-          <div className="mt-28 grid lg:grid-cols-3 gap-px bg-white/10 border border-white/10 reveal">
+          <div className="mt-28 grid lg:grid-cols-3 gap-px bg-fg/10 border border-fg/10 reveal">
             {[
               {
                 label: '01 / The problem',
@@ -723,11 +781,11 @@ function App() {
                   '15,000+ line Flutter app live on Google Play. Every feature free, government tax and contribution calculators aligned with 2026 rates, Google Play Billing hooked up, zero trackers. Shipping updates weekly driven by in-app user feedback.',
               },
             ].map((c) => (
-              <div key={c.label} className="bg-[var(--bg)] p-8">
-                <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--accent)] mb-4">
+              <div key={c.label} className="bg-bg p-8">
+                <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-brand mb-4">
                   {c.label}
                 </div>
-                <p className="text-white/75 leading-relaxed text-[15px]">{c.body}</p>
+                <p className="text-fg/75 leading-relaxed text-[15px]">{c.body}</p>
               </div>
             ))}
           </div>
@@ -774,11 +832,11 @@ function App() {
             ].map((f, idx) => (
               <div
                 key={f.title}
-                className={`reveal delay-${(idx % 5) + 1} p-7 border border-white/10 bg-white/[0.015] card-hover`}
+                className={`reveal delay-${(idx % 5) + 1} p-7 border border-fg/10 bg-fg/[0.025] card-hover`}
               >
-                <f.icon className="w-5 h-5 text-[var(--accent)] mb-5" />
+                <f.icon className="w-5 h-5 text-brand mb-5" />
                 <h3 className="font-display text-xl font-semibold mb-2 tracking-tight">{f.title}</h3>
-                <p className="text-white/65 text-sm leading-relaxed">{f.body}</p>
+                <p className="text-fg/65 text-sm leading-relaxed">{f.body}</p>
               </div>
             ))}
           </div>
@@ -786,20 +844,20 @@ function App() {
       </section>
 
       {/* ABOUT */}
-      <section id="about" className="relative py-28 lg:py-32 px-6 lg:px-10 border-t border-white/10">
+      <section id="about" className="relative py-28 lg:py-32 px-6 lg:px-10 border-t border-fg/10">
         <div className="max-w-[1440px] mx-auto">
           <div className="grid lg:grid-cols-12 gap-12 mb-20">
             <div className="lg:col-span-5 reveal">
               <div className="flex items-center gap-3 mb-4">
                 <span className="section-label bracket">About</span>
-                <span className="w-8 h-px bg-white/30" />
+                <span className="w-8 h-px bg-fg/30" />
               </div>
               <h2 className="font-display text-5xl lg:text-7xl font-semibold tracking-[-0.035em] leading-[0.95]">
                 I ship<br />
-                <span className="text-white/45">end-to-end.</span>
+                <span className="text-fg/45">end-to-end.</span>
               </h2>
             </div>
-            <div className="lg:col-span-7 space-y-5 text-white/70 text-[17px] leading-relaxed reveal delay-1">
+            <div className="lg:col-span-7 space-y-5 text-fg/70 text-[17px] leading-relaxed reveal delay-1">
               <p>
                 Fresh Computer Science graduate from the University of the Philippines Los Baños
                 (Batch 2025). Over the last three years I've built web, mobile, and microservices
@@ -812,7 +870,7 @@ function App() {
                 morning after a release. I care about products that work for the market they're
                 actually built for.
               </p>
-              <p className="text-white font-medium">
+              <p className="text-fg font-medium">
                 Hiring a generalist who owns the full stack and gets work in front of real users?
                 Let's talk.
               </p>
@@ -820,16 +878,16 @@ function App() {
           </div>
 
           <Tabs defaultValue="skills" className="w-full">
-            <TabsList className="flex w-full max-w-lg mx-auto mb-12 bg-white/[0.04] border border-white/10 rounded-full p-1">
+            <TabsList className="flex w-full max-w-lg mx-auto mb-12 bg-fg/[0.055] border border-fg/10 rounded-full p-1">
               <TabsTrigger
                 value="skills"
-                className="flex-1 rounded-full text-white data-[state=active]:bg-white data-[state=active]:text-black font-medium"
+                className="flex-1 rounded-full text-fg data-[state=active]:bg-fg data-[state=active]:text-bg font-medium"
               >
                 Skills
               </TabsTrigger>
               <TabsTrigger
                 value="experience"
-                className="flex-1 rounded-full text-white data-[state=active]:bg-white data-[state=active]:text-black font-medium"
+                className="flex-1 rounded-full text-fg data-[state=active]:bg-fg data-[state=active]:text-bg font-medium"
               >
                 Experience
               </TabsTrigger>
@@ -871,11 +929,11 @@ function App() {
                 ].map((group) => (
                   <div
                     key={group.category}
-                    className="p-6 border border-white/10 bg-white/[0.015] card-hover"
+                    className="p-6 border border-fg/10 bg-fg/[0.025] card-hover"
                   >
                     <div className="flex items-center gap-3 mb-4">
-                      <group.icon className="w-4 h-4 text-[var(--accent)]" />
-                      <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-white/80">
+                      <group.icon className="w-4 h-4 text-brand" />
+                      <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-fg/80">
                         {group.category}
                       </span>
                     </div>
@@ -883,7 +941,7 @@ function App() {
                       {group.skills.map((s) => (
                         <span
                           key={s}
-                          className="text-[13px] text-white/85 border border-white/15 rounded-full px-3 py-1"
+                          className="text-[13px] text-fg/85 border border-fg/15 rounded-full px-3 py-1"
                         >
                           {s}
                         </span>
@@ -896,36 +954,36 @@ function App() {
 
             <TabsContent value="experience">
               <div className="relative">
-                <div className="absolute left-0 md:left-[140px] top-0 bottom-0 w-px bg-white/10" />
+                <div className="absolute left-0 md:left-[140px] top-0 bottom-0 w-px bg-fg/10" />
                 <div className="space-y-2">
                   {EXPERIENCE.map((job, index) => (
                     <div
                       key={job.role + index}
-                      className="relative grid md:grid-cols-[140px_1fr] gap-6 md:gap-10 py-6 border-b border-white/5 last:border-b-0"
+                      className="relative grid md:grid-cols-[140px_1fr] gap-6 md:gap-10 py-6 border-b border-fg/5 last:border-b-0"
                     >
                       <div className="md:pr-6 relative">
-                        <span className="absolute -left-[3px] md:left-[134px] top-1 w-2 h-2 rounded-full bg-[var(--accent)]" />
+                        <span className="absolute -left-[3px] md:left-[134px] top-1 w-2 h-2 rounded-full bg-brand" />
                         <div className="pl-6 md:pl-0 md:text-right">
-                          <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/50">
+                          <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/50">
                             {job.period}
                           </div>
                         </div>
                       </div>
                       <div className="pl-6 md:pl-10">
-                        <h3 className="font-display text-xl lg:text-2xl font-semibold text-white tracking-tight">
+                        <h3 className="font-display text-xl lg:text-2xl font-semibold text-fg tracking-tight">
                           {job.role}
                         </h3>
-                        <div className="text-white/55 text-sm mt-1 font-mono tracking-[0.05em]">
+                        <div className="text-fg/55 text-sm mt-1 font-mono tracking-[0.05em]">
                           {job.company}
                         </div>
-                        <p className="text-white/70 leading-relaxed mt-3 text-[15px]">
+                        <p className="text-fg/70 leading-relaxed mt-3 text-[15px]">
                           {job.description}
                         </p>
                         <div className="flex flex-wrap gap-2 mt-4">
                           {job.tags.map((t) => (
                             <span
                               key={t}
-                              className="font-mono text-[10px] tracking-[0.15em] uppercase text-white/55 border border-white/15 px-2.5 py-1 rounded-full"
+                              className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg/55 border border-fg/15 px-2.5 py-1 rounded-full"
                             >
                               {t}
                             </span>
@@ -942,24 +1000,24 @@ function App() {
       </section>
 
       {/* WORK */}
-      <section id="work" className="relative py-28 lg:py-32 px-6 lg:px-10 border-t border-white/10">
+      <section id="work" className="relative py-28 lg:py-32 px-6 lg:px-10 border-t border-fg/10">
         <div className="max-w-[1440px] mx-auto">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16 reveal">
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <span className="section-label bracket">Selected Work</span>
-                <span className="w-8 h-px bg-white/30" />
+                <span className="w-8 h-px bg-fg/30" />
               </div>
               <h2 className="font-display text-5xl lg:text-7xl font-semibold tracking-[-0.035em] leading-[0.95]">
                 Other things<br />
-                <span className="text-white/45">I've shipped.</span>
+                <span className="text-fg/45">I've shipped.</span>
               </h2>
             </div>
             <a
               href="https://github.com/jvcerezo"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 font-mono text-xs tracking-[0.22em] uppercase text-white/60 hover:text-[var(--accent)] link-underline"
+              className="flex items-center gap-2 font-mono text-xs tracking-[0.22em] uppercase text-fg/60 hover:text-brand link-underline"
             >
               All on GitHub <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
@@ -974,24 +1032,24 @@ function App() {
       </section>
 
       {/* CONTACT */}
-      <section id="contact" className="relative py-28 lg:py-32 px-6 lg:px-10 border-t border-white/10 overflow-hidden">
+      <section id="contact" className="relative py-28 lg:py-32 px-6 lg:px-10 border-t border-fg/10 overflow-hidden">
         <div className="absolute inset-0 grid-bg opacity-40" />
         <div className="relative max-w-[1440px] mx-auto">
           <div className="text-center mb-14 reveal">
-            <div className="font-mono text-[11px] tracking-[0.22em] uppercase text-[var(--accent)] mb-6">
+            <div className="font-mono text-[11px] tracking-[0.22em] uppercase text-brand mb-6">
               [04] Contact
             </div>
             <h2 className="font-display font-semibold text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-[-0.04em]">
               Got a project?<br />
-              <span className="text-white/45">Let's build it.</span>
+              <span className="text-fg/45">Let's build it.</span>
             </h2>
-            <p className="text-lg text-white/65 mt-8 max-w-2xl mx-auto">
+            <p className="text-lg text-fg/65 mt-8 max-w-2xl mx-auto">
               Open to full-time roles, contract work, and partnerships. Happy to chat about
               Flutter apps, React products, or the Filipino market specifically.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-px bg-white/10 border border-white/10 max-w-4xl mx-auto mb-12 reveal">
+          <div className="grid md:grid-cols-3 gap-px bg-fg/10 border border-fg/10 max-w-4xl mx-auto mb-12 reveal">
             {[
               { icon: Mail, label: 'Email', value: 'jetjetcerezo@gmail.com', href: 'mailto:jetjetcerezo@gmail.com' },
               { icon: Phone, label: 'Phone', value: '+63 998 914 8907', href: 'tel:+639989148907' },
@@ -999,23 +1057,23 @@ function App() {
             ].map((c) => {
               const content = (
                 <>
-                  <c.icon className="w-4 h-4 text-[var(--accent)] mb-4" />
-                  <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/45 mb-2">
+                  <c.icon className="w-4 h-4 text-brand mb-4" />
+                  <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/45 mb-2">
                     {c.label}
                   </div>
-                  <div className="text-white font-medium">{c.value}</div>
+                  <div className="text-fg font-medium">{c.value}</div>
                 </>
               );
               return c.href ? (
                 <a
                   key={c.label}
                   href={c.href}
-                  className="bg-[var(--bg)] p-8 hover:bg-white/[0.04] transition-colors"
+                  className="bg-bg p-8 hover:bg-fg/[0.055] transition-colors"
                 >
                   {content}
                 </a>
               ) : (
-                <div key={c.label} className="bg-[var(--bg)] p-8">
+                <div key={c.label} className="bg-bg p-8">
                   {content}
                 </div>
               );
@@ -1025,7 +1083,7 @@ function App() {
           <div className="flex flex-wrap items-center justify-center gap-3 reveal delay-2">
             <Button
               size="lg"
-              className="bg-[var(--accent)] text-black hover:bg-[var(--accent)]/90 rounded-full px-7 font-medium h-12"
+              className="bg-brand text-bg hover:bg-brand/90 rounded-full px-7 font-medium h-12"
               asChild
             >
               <a href="mailto:jetjetcerezo@gmail.com">
@@ -1036,7 +1094,7 @@ function App() {
             <Button
               size="lg"
               variant="ghost"
-              className="border border-white/20 text-white hover:bg-white/10 rounded-full px-6 h-12"
+              className="border border-fg/20 text-fg hover:bg-fg/10 rounded-full px-6 h-12"
               asChild
             >
               <a href="https://github.com/jvcerezo" target="_blank" rel="noopener noreferrer">
@@ -1047,7 +1105,7 @@ function App() {
             <Button
               size="lg"
               variant="ghost"
-              className="border border-white/20 text-white hover:bg-white/10 rounded-full px-6 h-12"
+              className="border border-fg/20 text-fg hover:bg-fg/10 rounded-full px-6 h-12"
               asChild
             >
               <a
@@ -1062,7 +1120,7 @@ function App() {
             <Button
               size="lg"
               variant="ghost"
-              className="border border-white/20 text-white hover:bg-white/10 rounded-full px-6 h-12"
+              className="border border-fg/20 text-fg hover:bg-fg/10 rounded-full px-6 h-12"
               asChild
             >
               <a href="/JetCerezo_Resume.pdf" download>
@@ -1075,22 +1133,22 @@ function App() {
       </section>
 
       {/* FOOTER */}
-      <footer className="relative py-12 px-6 lg:px-10 border-t border-white/10">
+      <footer className="relative py-12 px-6 lg:px-10 border-t border-fg/10">
         <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <span className="w-6 h-6 rounded-md border border-white/20 flex items-center justify-center">
-              <Terminal className="w-3 h-3 text-[var(--accent)]" />
+            <span className="w-6 h-6 rounded-md border border-fg/20 flex items-center justify-center">
+              <Terminal className="w-3 h-3 text-brand" />
             </span>
             <span className="font-display text-[15px] font-semibold tracking-tight">
               Jet Timothy Cerezo
             </span>
-            <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/40">
+            <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/40">
               © {year}
             </span>
           </div>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[10px] tracking-[0.22em] uppercase text-white/50">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[10px] tracking-[0.22em] uppercase text-fg/50">
             <span>Built with React · Vite · Tailwind</span>
-            <button onClick={() => scrollToSection('home')} className="hover:text-[var(--accent)]">
+            <button onClick={() => scrollToSection('home')} className="hover:text-brand">
               Back to top ↑
             </button>
           </div>
