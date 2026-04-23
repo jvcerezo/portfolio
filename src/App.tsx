@@ -402,7 +402,7 @@ function branchAccent(branch: string): string {
 
 function ExperienceGitLog() {
   return (
-    <div className="reveal">
+    <div>
       {/* Header chrome — like a terminal showing "git log --graph --oneline" */}
       <div className="border border-fg/10 bg-fg/[0.025] rounded-md overflow-hidden">
         <div className="flex items-center gap-2 px-4 py-2.5 border-b border-fg/10 bg-fg/[0.02]">
