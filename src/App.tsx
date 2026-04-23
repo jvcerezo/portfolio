@@ -384,6 +384,7 @@ function App() {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
+                  aria-current={active === item.id ? 'page' : undefined}
                   className={`relative px-4 py-1.5 text-[13px] transition-colors rounded-full flex items-center gap-2 ${
                     active === item.id
                       ? 'bg-fg text-bg font-medium'
@@ -467,8 +468,9 @@ function App() {
         </div>
       </nav>
 
+      <main>
       {/* HERO */}
-      <section id="home" className="relative min-h-[100vh] flex items-center overflow-hidden pt-28 pb-20">
+      <section id="home" aria-label="Introduction" className="relative min-h-[100vh] flex items-center overflow-hidden pt-28 pb-20">
         <div className="absolute inset-0 grid-bg opacity-60" />
         <div className="absolute left-0 top-1/3 w-[60%] h-[40%] bg-gradient-to-r from-brand/15 to-transparent blur-3xl pointer-events-none opacity-40" />
 
@@ -563,7 +565,9 @@ function App() {
                 <div className="aspect-[4/5] relative overflow-hidden rounded-2xl border border-fg/15">
                   <img
                     src="/profile.jpg"
-                    alt="Jet Timothy Cerezo"
+                    alt="Jet Timothy Cerezo, Filipino full-stack software developer"
+                    width="800"
+                    height="1000"
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
@@ -652,7 +656,10 @@ function App() {
           <div className="reveal relative aspect-[1024/500] w-full overflow-hidden rounded-2xl border border-fg/15 mb-14">
             <img
               src="/sandalan/feature.png"
-              alt="Sandalan feature graphic"
+              alt="Sandalan app feature graphic — Filipino adulting and finance companion"
+              width="1024"
+              height="500"
+              loading="lazy"
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
@@ -665,12 +672,12 @@ function App() {
                   <span className="w-1.5 h-1.5 rounded-full bg-brand mr-2 animate-dot" />
                   Live on Google Play
                 </Badge>
-                <div className="font-display font-semibold tracking-[-0.04em] text-5xl lg:text-8xl leading-[0.9] text-white">
+                <h2 className="font-display font-semibold tracking-[-0.04em] text-5xl lg:text-8xl leading-[0.9] text-white">
                   Sandalan<span className="text-brand">.</span>
-                </div>
-                <div className="font-display text-xl lg:text-3xl text-white/75 mt-2 max-w-2xl font-medium tracking-tight">
+                </h2>
+                <p className="font-display text-xl lg:text-3xl text-white/75 mt-2 max-w-2xl font-medium tracking-tight">
                   The adulting guide Filipinos wish they had at 22.
-                </div>
+                </p>
               </div>
             </div>
           </div>
@@ -755,7 +762,7 @@ function App() {
                       zIndex: p.z,
                     }}
                   >
-                    <img src={p.src} alt="Sandalan screen" className="w-full h-full object-cover" />
+                    <img src={p.src} alt="Sandalan Android app screenshot" loading="lazy" className="w-full h-full object-cover" />
                   </div>
                 ))}
               </div>
@@ -1131,6 +1138,7 @@ function App() {
           </div>
         </div>
       </section>
+      </main>
 
       {/* FOOTER */}
       <footer className="relative py-12 px-6 lg:px-10 border-t border-fg/10">
