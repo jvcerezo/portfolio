@@ -12,8 +12,8 @@ import { Badge } from './components/ui/badge';
 const NAV_ITEMS = [
   { id: 'home', label: 'Home', num: '00' },
   { id: 'sandalan', label: 'Sandalan', num: '01' },
-  { id: 'work', label: 'Work', num: '02' },
-  { id: 'about', label: 'About', num: '03' },
+  { id: 'about', label: 'About', num: '02' },
+  { id: 'work', label: 'Work', num: '03' },
   { id: 'contact', label: 'Contact', num: '04' },
 ];
 
@@ -785,38 +785,6 @@ function App() {
         </div>
       </section>
 
-      {/* WORK */}
-      <section id="work" className="relative py-28 lg:py-32 px-6 lg:px-10 border-t border-white/10">
-        <div className="max-w-[1440px] mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16 reveal">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="section-label bracket">Selected Work</span>
-                <span className="w-8 h-px bg-white/30" />
-              </div>
-              <h2 className="font-display text-5xl lg:text-7xl font-semibold tracking-[-0.035em] leading-[0.95]">
-                Other things<br />
-                <span className="text-white/45">I've shipped.</span>
-              </h2>
-            </div>
-            <a
-              href="https://github.com/jvcerezo"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 font-mono text-xs tracking-[0.22em] uppercase text-white/60 hover:text-[var(--accent)] link-underline"
-            >
-              All on GitHub <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-            {PROJECTS.map((p, idx) => (
-              <ProjectCard key={p.title} p={p} idx={idx} />
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ABOUT */}
       <section id="about" className="relative py-28 lg:py-32 px-6 lg:px-10 border-t border-white/10">
         <div className="max-w-[1440px] mx-auto">
@@ -970,6 +938,38 @@ function App() {
               </div>
             </TabsContent>
           </Tabs>
+        </div>
+      </section>
+
+      {/* WORK */}
+      <section id="work" className="relative py-28 lg:py-32 px-6 lg:px-10 border-t border-white/10">
+        <div className="max-w-[1440px] mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16 reveal">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="section-label bracket">Selected Work</span>
+                <span className="w-8 h-px bg-white/30" />
+              </div>
+              <h2 className="font-display text-5xl lg:text-7xl font-semibold tracking-[-0.035em] leading-[0.95]">
+                Other things<br />
+                <span className="text-white/45">I've shipped.</span>
+              </h2>
+            </div>
+            <a
+              href="https://github.com/jvcerezo"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 font-mono text-xs tracking-[0.22em] uppercase text-white/60 hover:text-[var(--accent)] link-underline"
+            >
+              All on GitHub <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+            {PROJECTS.map((p, idx) => (
+              <ProjectCard key={p.title} p={p} idx={idx} />
+            ))}
+          </div>
         </div>
       </section>
 
