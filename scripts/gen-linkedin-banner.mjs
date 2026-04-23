@@ -6,9 +6,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const outPath = resolve(__dirname, '..', 'public', 'linkedin-banner.png');
 
 // LinkedIn banner = 1584 × 396 (4:1).
-// Render at 2x = 3168 × 792 for HD/retina-quality display.
-// Safe zone note: LinkedIn overlays the profile photo at roughly bottom-left.
-// At 2x, avoid x=0-680, y=620-792 for important content.
+// Render at 2× = 3168 × 792 for HD.
+//
+// LinkedIn UI overlays on the banner:
+//  - Profile photo circle: bottom-left, roughly x=320–820, y=520–792 (unsafe zone)
+//  - Edit pencil icon:     top-right,   roughly x=2950–3100, y=50–160   (unsafe zone)
+// Keep critical content inside the safe envelope:
+//  - Left content above y≈440
+//  - Right-corner text away from the top-right pencil
 
 const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="3168" height="792" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3168 792">
@@ -16,14 +21,14 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
     <pattern id="grid" width="128" height="128" patternUnits="userSpaceOnUse">
       <path d="M 128 0 L 0 0 0 128" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1.5"/>
     </pattern>
-    <radialGradient id="spot" cx="20%" cy="45%" r="55%">
+    <radialGradient id="spot" cx="22%" cy="38%" r="55%">
       <stop offset="0%" stop-color="#bef264" stop-opacity="0.16"/>
       <stop offset="55%" stop-color="#bef264" stop-opacity="0.03"/>
       <stop offset="100%" stop-color="#bef264" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="rightFade" x1="60%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#0a0a0a" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#0a0a0a" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#0a0a0a" stop-opacity="0.35"/>
     </linearGradient>
   </defs>
 
@@ -33,32 +38,32 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
   <rect width="3168" height="792" fill="url(#spot)"/>
   <rect width="3168" height="792" fill="url(#rightFade)"/>
 
-  <!-- Top status pill -->
-  <g transform="translate(160, 130)">
-    <rect width="740" height="60" rx="30" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.22" stroke-width="2"/>
-    <circle cx="36" cy="30" r="7" fill="#bef264"/>
-    <text x="60" y="40" fill="#ffffff" fill-opacity="0.8" font-size="22" font-family="ui-monospace,'SF Mono','Menlo','Consolas','Courier New',monospace" letter-spacing="4.5">AVAILABLE FOR WORK  ·  LAGUNA, PH</text>
+  <!-- Top-left status pill -->
+  <g transform="translate(160, 90)">
+    <rect width="740" height="58" rx="29" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.22" stroke-width="2"/>
+    <circle cx="34" cy="29" r="6" fill="#bef264"/>
+    <text x="56" y="38" fill="#ffffff" fill-opacity="0.8" font-size="21" font-family="ui-monospace,'SF Mono','Menlo','Consolas','Courier New',monospace" letter-spacing="4.5">AVAILABLE FOR WORK  ·  LAGUNA, PH</text>
   </g>
 
-  <!-- Main title (single line) -->
-  <g font-family="'Arial Black','Helvetica Neue Bold',Arial,sans-serif" font-weight="900" fill="#ffffff" letter-spacing="-8">
-    <text x="160" y="450" font-size="200">I ship software<tspan fill="#bef264">.</tspan></text>
+  <!-- Main title (fits entirely above profile-photo safe zone) -->
+  <g font-family="'Arial Black','Helvetica Neue Bold',Arial,sans-serif" font-weight="900" fill="#ffffff" letter-spacing="-7">
+    <text x="160" y="330" font-size="180">I ship software<tspan fill="#bef264">.</tspan></text>
   </g>
 
-  <!-- Subtitle -->
-  <text x="160" y="540" font-size="50" font-family="'Helvetica Neue',Arial,sans-serif" font-weight="500" fill="#ffffff" fill-opacity="0.66" letter-spacing="-1">Full-stack  ·  Flutter  ·  React  ·  Philippines</text>
+  <!-- Subtitle (kept above the profile photo overlap) -->
+  <text x="160" y="410" font-size="44" font-family="'Helvetica Neue',Arial,sans-serif" font-weight="500" fill="#ffffff" fill-opacity="0.66" letter-spacing="-0.5">Full-stack  ·  Flutter  ·  React  ·  Philippines</text>
 
-  <!-- Right: brand mark and meta stack -->
+  <!-- Right widget: brand mark + currently + shipping -->
   <g transform="translate(2500, 140)">
     <rect width="510" height="520" rx="22" fill="#ffffff" fill-opacity="0.025" stroke="#ffffff" stroke-opacity="0.18" stroke-width="2"/>
 
-    <!-- Inner terminal mark -->
+    <!-- Terminal mark -->
     <g transform="translate(40, 40)">
       <rect width="160" height="160" rx="26" fill="#ffffff" fill-opacity="0.04" stroke="#ffffff" stroke-opacity="0.3" stroke-width="2"/>
       <text x="80" y="115" fill="#bef264" font-size="80" text-anchor="middle" font-family="ui-monospace,'SF Mono','Menlo','Consolas','Courier New',monospace" font-weight="700">&gt;_</text>
     </g>
 
-    <!-- Meta rows -->
+    <!-- Currently -->
     <g font-family="ui-monospace,'SF Mono','Menlo','Consolas','Courier New',monospace">
       <text x="40" y="260" font-size="18" fill="#ffffff" fill-opacity="0.45" letter-spacing="4">// CURRENTLY</text>
       <text x="40" y="300" font-size="28" font-family="'Helvetica Neue',Arial,sans-serif" font-weight="700" fill="#ffffff">Jr. Test Automation Engineer</text>
@@ -70,14 +75,14 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
     </g>
   </g>
 
-  <!-- Bottom-right corner footer (safe zone — right side) -->
-  <g transform="translate(1360, 700)" font-family="ui-monospace,'SF Mono','Menlo','Consolas','Courier New',monospace">
+  <!-- Bottom-center credentials (clears the profile photo horizontally) -->
+  <g transform="translate(1360, 720)" font-family="ui-monospace,'SF Mono','Menlo','Consolas','Courier New',monospace">
     <text font-size="20" fill="#ffffff" fill-opacity="0.35" letter-spacing="4">[ UPLB CS 2025  ·  IRRI  ·  CODEBREAK 2.0 CHAMPION ]</text>
   </g>
 
-  <!-- Top-right: domain -->
-  <g transform="translate(3000, 130)" text-anchor="end" font-family="ui-monospace,'SF Mono','Menlo','Consolas','Courier New',monospace">
-    <text font-size="22" fill="#ffffff" fill-opacity="0.45" letter-spacing="4">JETTIMOTHYCEREZO.DEV</text>
+  <!-- Bottom-right domain (moved from top-right to avoid LinkedIn's edit pencil) -->
+  <g transform="translate(3000, 760)" text-anchor="end" font-family="ui-monospace,'SF Mono','Menlo','Consolas','Courier New',monospace">
+    <text font-size="22" fill="#ffffff" fill-opacity="0.48" letter-spacing="4">JETTIMOTHYCEREZO.DEV</text>
   </g>
 </svg>`;
 
