@@ -554,10 +554,10 @@ function App() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 border border-white/10 reveal">
             {[
-              { icon: Trophy, title: 'Codebreak 2.0 Champion', meta: 'Tenext.ai · 2025' },
               { icon: Briefcase, title: 'Jr. Test Automation Engineer', meta: 'Billease · Apr 2025 · Present' },
-              { icon: Leaf, title: 'Bioinformatics SWE Intern', meta: 'IRRI · 2024 — 2025' },
               { icon: Rocket, title: 'Google Play Developer', meta: 'Sandalan · Live' },
+              { icon: Leaf, title: 'Bioinformatics SWE Intern', meta: 'IRRI · 2024 — 2025' },
+              { icon: Trophy, title: 'Codebreak 2.0 Champion', meta: 'Tenext.ai · 2025' },
             ].map((r) => (
               <div key={r.title} className="bg-[var(--bg)] p-6 flex items-start gap-4">
                 <r.icon className="w-4 h-4 text-[var(--accent)] mt-1 shrink-0" />
