@@ -803,7 +803,7 @@ function App() {
               <p>
                 Fresh Computer Science graduate from the University of the Philippines Los Baños
                 (Batch 2025). Over the last three years I've built web, mobile, and microservices
-                apps, won a national AI hackathon, interned on bioinformatics software for IRRI,
+                apps, won the Codebreak 2.0 AI hackathon, interned on bioinformatics software for IRRI,
                 and led teams for academic flagship events.
               </p>
               <p>
