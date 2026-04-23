@@ -244,311 +244,81 @@ function ProjectCard({ p, idx }: { p: (typeof PROJECTS)[number]; idx: number }) 
   );
 }
 
-type Commit = {
-  hash: string;
-  branch: string;
-  branchKind: 'main' | 'school' | 'side' | 'merge';
-  date: string;
-  commitTitle: string;
-  role: string;
-  company: string;
-  description: string;
-  tags: string[];
-};
-
-const EXPERIENCE: Commit[] = [
+const EXPERIENCE = [
   {
-    hash: 'd79b654',
-    branch: 'main',
-    branchKind: 'main',
-    date: 'Apr 2025 — Present',
-    commitTitle: 'feat(career): joined billease as junior test automation engineer',
     role: 'Junior Test Automation Engineer',
     company: 'Billease',
+    period: 'Apr 2025 — Present',
     description:
       'Build and maintain Android test automation with Appium and BrowserStack. Surfaced 20+ critical bugs and shipped 40+ merge requests improving app stability across release cycles. Authored regression suites and spec files integrated into CI/CD for rapid pre-production issue resolution.',
     tags: ['Appium', 'BrowserStack', 'Android', 'CI/CD', 'Regression'],
   },
   {
-    hash: '4880e6d',
-    branch: 'school/uplb',
-    branchKind: 'merge',
-    date: 'Jul 2025',
-    commitTitle: "merge: school/uplb → main · graduated bs computer science",
-    role: 'BS Computer Science',
-    company: 'University of the Philippines Los Baños',
-    description:
-      'Honor Roll. Iskolar ng Laguna and UP SLAS scholar. Relevant coursework: Operating Systems (CMSC 125), Computer Networks (CMSC 137), Cybersecurity, Data Structures & Algorithms. Thesis affiliate with IRRI on bioinformatics tooling.',
-    tags: ['UPLB CS', 'Honor Roll', 'Iskolar ng Laguna', 'UP SLAS'],
-  },
-  {
-    hash: '952c26e',
-    branch: 'hackathon/codebreak',
-    branchKind: 'side',
-    date: 'May 2025',
-    commitTitle: 'ship(hackathon): won codebreak 2.0 with rag-based ai voice-qa agent',
     role: 'Codebreak 2.0 Champion',
     company: 'Tenext.ai Hackathon',
+    period: 'May 2025',
     description:
       'Won 1st place building a RAG-based AI platform for customer support agents. The assistant generated live call scripts from past and current tickets and ran automated QA analytics after calls. Handled APIs, microservices, deployment, and AI integration to ship an MVP in under 24 hours.',
     tags: ['AI', 'RAG', 'Microservices', 'Real-time'],
   },
   {
-    hash: 'f6ccf19',
-    branch: 'event/cs-week',
-    branchKind: 'side',
-    date: 'Oct 2023 — Jul 2025',
-    commitTitle: 'pm(uplb-coss): led 7-dev team for code wars at 41st cs week',
-    role: 'Code Wars Co-Head · Project Manager',
-    company: 'UPLB CS Society · 41st CS Week',
+    role: 'BS Computer Science',
+    company: 'University of the Philippines Los Baños',
+    period: 'Sep 2021 — Jul 2025',
     description:
-      'Led a 7-member dev team enhancing the competitive programming event platform. Oversaw feature development, bug tracking, testing, and deployment. Supported 20 teams, 3 judges, and 3 continuous hours of live service with zero downtime.',
-    tags: ['Leadership', 'Deploy', 'Ship'],
+      'Honor Roll. Iskolar ng Laguna and UP SLAS scholar. Relevant coursework: Operating Systems (CMSC 125), Computer Networks (CMSC 137), Cybersecurity, Data Structures & Algorithms. Thesis affiliate with IRRI on bioinformatics tooling.',
+    tags: ['UPLB CS', 'Honor Roll', 'Iskolar ng Laguna', 'UP SLAS'],
   },
   {
-    hash: '5671b8f',
-    branch: 'intern/irri',
-    branchKind: 'side',
-    date: 'Jul 2024 — May 2025',
-    commitTitle: 'intern(irri): rewrote snpseek as mern microservices',
     role: 'Bioinformatics SWE Intern · Thesis Affiliate',
     company: 'International Rice Research Institute (IRRI)',
+    period: 'Jul 2024 — May 2025',
     description:
       'Implemented a custom OAuth authentication flow for SNPseek in a Dockerized Drupal environment to improve secure user access and system integration. Designed and developed a MERN-based SNPseek platform using a microservices architecture for scalability, usability, and faster data processing.',
     tags: ['MERN', 'Drupal', 'Docker', 'OAuth', 'Microservices'],
   },
   {
-    hash: 'a3e635c',
-    branch: 'freelance/2-weeks',
-    branchKind: 'side',
-    date: 'Aug 2024 — Oct 2024',
-    commitTitle: 'freelance(client): shipped mern story-game in 3 weeks with 3-dev team',
+    role: 'Code Wars Co-Head · Project Manager',
+    company: 'UPLB CS Society · 41st CS Week',
+    period: 'Oct 2023 — Jul 2025',
+    description:
+      'Led a 7-member dev team enhancing the competitive programming event platform. Oversaw feature development, bug tracking, testing, and deployment. Supported 20 teams, 3 judges, and 3 continuous hours of live service with zero downtime.',
+    tags: ['Leadership', 'Deploy', 'Ship'],
+  },
+  {
     role: 'Freelance Full-Stack Developer',
     company: '2 Weeks · Project-based',
+    period: 'Aug 2024 — Oct 2024',
     description:
       'Built a story-based interactive game with a 3-person team using the MERN stack. Handled frontend, backend, and UI/UX to ensure client satisfaction.',
     tags: ['MERN', 'Client work'],
   },
   {
-    hash: 'b1ce7a9',
-    branch: 'lead/elbigayan',
-    branchKind: 'side',
-    date: 'May 2024 — Jun 2024',
-    commitTitle: 'lead(team): built flutter donation platform with 4 firebase services',
     role: 'eLBigayan · Team Lead',
     company: 'Flutter Donation Platform',
+    period: 'May 2024 — Jun 2024',
     description:
       'Led a 2-member team building a donation system. Used Flutter and Dart with 4 Firebase services to create a secure, scalable backend.',
     tags: ['Flutter', 'Firebase', 'Team Lead'],
   },
   {
-    hash: 'c4d2f15',
-    branch: 'game/fire-nation',
-    branchKind: 'side',
-    date: 'Apr 2024 — Jun 2024',
-    commitTitle: 'dev(game): built 4-player networked multiplayer in unity',
     role: 'Fire Nation Invasion · Game Developer',
     company: 'Unity Multiplayer Game',
+    period: 'Apr 2024 — Jun 2024',
     description:
       'Worked with 2 teammates on character abilities and game mechanics. Implemented networked multiplayer for up to 4 players across different computers.',
     tags: ['Unity', 'C#', 'Multiplayer'],
   },
   {
-    hash: '0f4a201',
-    branch: 'backend/picsel',
-    branchKind: 'side',
-    date: 'Feb 2024 — Jun 2024',
-    commitTitle: 'backend(picsel): integrated google auth + 7 features in 20-dev team',
     role: 'PICSEL · Backend Developer',
     company: 'Reservation System · 20-dev team',
+    period: 'Feb 2024 — Jun 2024',
     description:
       '9 commits, 12 merged PRs across 7 features in a 20-developer team over 5 months. Integrated Google authentication to enhance security and streamline the login process.',
     tags: ['Node.js', 'PostgreSQL', 'Auth'],
   },
-  {
-    hash: '00init',
-    branch: 'school/uplb',
-    branchKind: 'school',
-    date: 'Sep 2021',
-    commitTitle: "init: enrolled in bs computer science at uplb",
-    role: 'BS Computer Science',
-    company: 'University of the Philippines Los Baños',
-    description: 'Initial commit. The branch begins.',
-    tags: [],
-  },
 ];
 
-function branchAccent(branch: string): string {
-  if (branch === 'main') return 'rgb(var(--c-accent))';
-  const palette = [
-    '#7dd3fc', '#fcd34d', '#f9a8d4', '#86efac',
-    '#c4b5fd', '#fda4af', '#fde68a', '#a5f3fc',
-  ];
-  let h = 0;
-  for (let i = 0; i < branch.length; i++) h = (h * 31 + branch.charCodeAt(i)) >>> 0;
-  return palette[h % palette.length];
-}
-
-function ExperienceTree() {
-  return (
-    <div className="border border-fg/10 bg-fg/[0.025] rounded-md overflow-hidden">
-      {/* Terminal chrome */}
-      <div className="flex items-center gap-2 px-4 py-2.5 border-b border-fg/10 bg-fg/[0.02]">
-        <div className="flex gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-fg/15" />
-          <span className="w-2.5 h-2.5 rounded-full bg-fg/15" />
-          <span className="w-2.5 h-2.5 rounded-full bg-fg/15" />
-        </div>
-        <div className="flex-1 flex justify-center">
-          <span className="font-mono text-[10px] tracking-[0.1em] text-fg/45 truncate">
-            ~/jet — git log --graph --oneline --all
-          </span>
-        </div>
-        <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/40">
-          HEAD → main
-        </span>
-      </div>
-
-      <ol className="px-4 sm:px-6 py-6">
-        {EXPERIENCE.map((c, i) => (
-          <ExperienceRow
-            key={c.hash + i}
-            commit={c}
-            isLast={i === EXPERIENCE.length - 1}
-          />
-        ))}
-      </ol>
-
-      {/* Footer prompt */}
-      <div className="px-4 sm:px-6 pb-5 pt-2 border-t border-fg/5">
-        <div className="font-mono text-[12px] text-fg/55 flex items-center gap-2 flex-wrap">
-          <span className="text-brand">jet@cerezo</span>
-          <span className="text-fg/40">~/career</span>
-          <span className="text-fg/40">$</span>
-          <span className="text-fg/70">git status</span>
-        </div>
-        <div className="font-mono text-[12px] text-fg/55 mt-2 pl-4">
-          On branch <span className="text-brand">main</span>. Working tree clean.
-          <br />
-          <span className="text-fg/40">// open to collaboration. fork the repo.</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ExperienceRow({
-  commit,
-  isLast,
-}: {
-  commit: Commit;
-  isLast: boolean;
-}) {
-  const accent = branchAccent(commit.branch);
-  const isMain = commit.branchKind === 'main';
-  const isMerge = commit.branchKind === 'merge';
-  const isInit = commit.hash === '00init';
-
-  return (
-    <li className="relative grid grid-cols-[28px_1fr] gap-3 sm:gap-5 pb-7 last:pb-0">
-      {/* Graph gutter: vertical line + commit dot */}
-      <div className="relative flex justify-center">
-        {!isLast && (
-          <span
-            aria-hidden
-            className="absolute top-3 bottom-[-28px] w-px"
-            style={{ background: 'rgb(var(--c-fg) / 0.12)' }}
-          />
-        )}
-        {isMerge ? (
-          <span
-            aria-hidden
-            className="relative z-10 w-3.5 h-3.5 rounded-full border-2 mt-1.5"
-            style={{
-              borderColor: accent,
-              background: 'rgb(var(--c-bg))',
-              boxShadow: `0 0 0 2px rgb(var(--c-bg))`,
-            }}
-            title="merge commit"
-          />
-        ) : (
-          <span
-            aria-hidden
-            className="relative z-10 w-2.5 h-2.5 rounded-full mt-2"
-            style={{
-              background: accent,
-              boxShadow: `0 0 0 3px rgb(var(--c-bg))`,
-            }}
-          />
-        )}
-      </div>
-
-      {/* Content — git metadata header + recruiter-readable body */}
-      <div className="min-w-0">
-        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <span className="font-mono text-[12px] text-fg/45 tabular-nums">
-            {commit.hash}
-          </span>
-          <span
-            className="font-mono text-[10px] tracking-[0.05em] px-2 py-0.5 rounded-full border"
-            style={{
-              color: accent,
-              borderColor: `${accent}55`,
-              background: `${accent}12`,
-            }}
-          >
-            {commit.branch}
-          </span>
-          {isMain && (
-            <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-brand">
-              HEAD
-            </span>
-          )}
-          {isMerge && (
-            <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-brand border border-brand/40 px-2 py-0.5 rounded-full">
-              merge
-            </span>
-          )}
-          <span className="font-mono text-[11px] text-fg/45 ml-auto">
-            {commit.date}
-          </span>
-        </div>
-
-        <h3 className="font-display text-xl lg:text-2xl font-semibold text-fg tracking-tight mt-2 leading-tight">
-          {commit.role}
-        </h3>
-        <div className="text-fg/55 text-sm mt-1 font-mono tracking-[0.05em]">
-          {commit.company}
-        </div>
-
-        {!isInit && (
-          <>
-            <div className="mt-2 font-mono text-[11px] text-fg/55">
-              <span className="text-fg/40">Author:</span> Jet Cerezo &lt;jetjetcerezo@gmail.com&gt;
-            </div>
-
-            <p className="text-fg/70 leading-relaxed mt-3 text-[15px] pl-3 border-l-2 border-fg/10 sm:max-w-[58rem]">
-              {commit.description}
-            </p>
-          </>
-        )}
-
-        {commit.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-3">
-            {commit.tags.map((t) => (
-              <span
-                key={t}
-                className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg/55 border border-fg/15 px-2.5 py-1 rounded-full"
-              >
-                #{t}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
-    </li>
-  );
-}
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -1191,7 +961,47 @@ function App() {
             </TabsContent>
 
             <TabsContent value="experience">
-              <ExperienceTree />
+              <div className="relative">
+                <div className="absolute left-0 md:left-[140px] top-0 bottom-0 w-px bg-fg/10" />
+                <div className="space-y-2">
+                  {EXPERIENCE.map((job, index) => (
+                    <div
+                      key={job.role + index}
+                      className="relative grid md:grid-cols-[140px_1fr] gap-6 md:gap-10 py-6 border-b border-fg/5 last:border-b-0"
+                    >
+                      <div className="md:pr-6 relative">
+                        <span className="absolute -left-[3px] md:left-[134px] top-1 w-2 h-2 rounded-full bg-brand" />
+                        <div className="pl-6 md:pl-0 md:text-right">
+                          <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/50">
+                            {job.period}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="pl-6 md:pl-10">
+                        <h3 className="font-display text-xl lg:text-2xl font-semibold text-fg tracking-tight">
+                          {job.role}
+                        </h3>
+                        <div className="text-fg/55 text-sm mt-1 font-mono tracking-[0.05em]">
+                          {job.company}
+                        </div>
+                        <p className="text-fg/70 leading-relaxed mt-3 text-[15px]">
+                          {job.description}
+                        </p>
+                        <div className="flex flex-wrap gap-2 mt-4">
+                          {job.tags.map((t) => (
+                            <span
+                              key={t}
+                              className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg/55 border border-fg/15 px-2.5 py-1 rounded-full"
+                            >
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </TabsContent>
           </Tabs>
         </div>
