@@ -378,113 +378,169 @@ const EXPERIENCE: Commit[] = [
   },
 ];
 
+function branchAccent(branch: string): string {
+  if (branch === 'main') return 'rgb(var(--c-accent))';
+  const palette = [
+    '#7dd3fc', '#fcd34d', '#f9a8d4', '#86efac',
+    '#c4b5fd', '#fda4af', '#fde68a', '#a5f3fc',
+  ];
+  let h = 0;
+  for (let i = 0; i < branch.length; i++) h = (h * 31 + branch.charCodeAt(i)) >>> 0;
+  return palette[h % palette.length];
+}
+
 function ExperienceTree() {
   return (
-    <ol className="relative">
-      {EXPERIENCE.map((c, i) => (
-        <ExperienceRow
-          key={c.hash + i}
-          commit={c}
-          isFirst={i === 0}
-          isLast={i === EXPERIENCE.length - 1}
-        />
-      ))}
-    </ol>
+    <div className="border border-fg/10 bg-fg/[0.025] rounded-md overflow-hidden">
+      {/* Terminal chrome */}
+      <div className="flex items-center gap-2 px-4 py-2.5 border-b border-fg/10 bg-fg/[0.02]">
+        <div className="flex gap-1.5">
+          <span className="w-2.5 h-2.5 rounded-full bg-fg/15" />
+          <span className="w-2.5 h-2.5 rounded-full bg-fg/15" />
+          <span className="w-2.5 h-2.5 rounded-full bg-fg/15" />
+        </div>
+        <div className="flex-1 flex justify-center">
+          <span className="font-mono text-[10px] tracking-[0.1em] text-fg/45 truncate">
+            ~/jet — git log --graph --oneline --all
+          </span>
+        </div>
+        <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/40">
+          HEAD → main
+        </span>
+      </div>
+
+      <ol className="px-4 sm:px-6 py-6">
+        {EXPERIENCE.map((c, i) => (
+          <ExperienceRow
+            key={c.hash + i}
+            commit={c}
+            isLast={i === EXPERIENCE.length - 1}
+          />
+        ))}
+      </ol>
+
+      {/* Footer prompt */}
+      <div className="px-4 sm:px-6 pb-5 pt-2 border-t border-fg/5">
+        <div className="font-mono text-[12px] text-fg/55 flex items-center gap-2 flex-wrap">
+          <span className="text-brand">jet@cerezo</span>
+          <span className="text-fg/40">~/career</span>
+          <span className="text-fg/40">$</span>
+          <span className="text-fg/70">git status</span>
+        </div>
+        <div className="font-mono text-[12px] text-fg/55 mt-2 pl-4">
+          On branch <span className="text-brand">main</span>. Working tree clean.
+          <br />
+          <span className="text-fg/40">// open to collaboration. fork the repo.</span>
+        </div>
+      </div>
+    </div>
   );
 }
 
 function ExperienceRow({
   commit,
-  isFirst,
   isLast,
 }: {
   commit: Commit;
-  isFirst: boolean;
   isLast: boolean;
 }) {
-  const isMerge = commit.branchKind === 'merge';
+  const accent = branchAccent(commit.branch);
   const isMain = commit.branchKind === 'main';
+  const isMerge = commit.branchKind === 'merge';
   const isInit = commit.hash === '00init';
-  const isSide = commit.branchKind === 'side';
 
   return (
-    <li className="relative grid grid-cols-[40px_1fr] sm:grid-cols-[56px_1fr] gap-4 sm:gap-6 py-6 first:pt-2">
-      {/* Gutter: vertical line + commit dot */}
-      <div className="relative">
-        <span
-          aria-hidden
-          className="absolute w-[2px] bg-brand/80"
-          style={{
-            left: '19px',
-            top: isFirst ? '24px' : 0,
-            bottom: isLast ? 'calc(100% - 24px)' : 0,
-          }}
-        />
+    <li className="relative grid grid-cols-[28px_1fr] gap-3 sm:gap-5 pb-7 last:pb-0">
+      {/* Graph gutter: vertical line + commit dot */}
+      <div className="relative flex justify-center">
+        {!isLast && (
+          <span
+            aria-hidden
+            className="absolute top-3 bottom-[-28px] w-px"
+            style={{ background: 'rgb(var(--c-fg) / 0.12)' }}
+          />
+        )}
         {isMerge ? (
           <span
             aria-hidden
-            className="absolute w-3.5 h-3.5 rounded-full border-[2px] border-brand bg-bg"
-            style={{ left: '13px', top: '17px' }}
+            className="relative z-10 w-3.5 h-3.5 rounded-full border-2 mt-1.5"
+            style={{
+              borderColor: accent,
+              background: 'rgb(var(--c-bg))',
+              boxShadow: `0 0 0 2px rgb(var(--c-bg))`,
+            }}
+            title="merge commit"
           />
         ) : (
           <span
             aria-hidden
-            className="absolute w-3 h-3 rounded-full bg-brand"
-            style={{ left: '14px', top: '18px' }}
+            className="relative z-10 w-2.5 h-2.5 rounded-full mt-2"
+            style={{
+              background: accent,
+              boxShadow: `0 0 0 3px rgb(var(--c-bg))`,
+            }}
           />
         )}
       </div>
 
-      {/* Content — git metadata header + recruiter-friendly body */}
+      {/* Content — git metadata header + recruiter-readable body */}
       <div className="min-w-0">
-        {/* Metadata header: hash + branch ref + HEAD/merge tag + date */}
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] text-fg/55 tabular-nums">
-          <span className="text-fg/45">{commit.hash}</span>
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <span className="font-mono text-[12px] text-fg/45 tabular-nums">
+            {commit.hash}
+          </span>
           <span
-            className="px-2 py-0.5 rounded-full border border-fg/15 text-fg/65 text-[10px] tracking-[0.05em]"
+            className="font-mono text-[10px] tracking-[0.05em] px-2 py-0.5 rounded-full border"
+            style={{
+              color: accent,
+              borderColor: `${accent}55`,
+              background: `${accent}12`,
+            }}
           >
             {commit.branch}
           </span>
           {isMain && (
-            <span className="text-[10px] tracking-[0.18em] uppercase text-brand">
+            <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-brand">
               HEAD
             </span>
           )}
           {isMerge && (
-            <span className="text-[10px] tracking-[0.15em] uppercase text-brand border border-brand/40 px-2 py-0.5 rounded-full">
+            <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-brand border border-brand/40 px-2 py-0.5 rounded-full">
               merge
             </span>
           )}
-          {isSide && (
-            <span className="text-[10px] tracking-[0.15em] uppercase text-fg/45">
-              side branch
-            </span>
-          )}
-          <span className="text-fg/55 ml-auto">{commit.date}</span>
+          <span className="font-mono text-[11px] text-fg/45 ml-auto">
+            {commit.date}
+          </span>
         </div>
 
-        {/* Recruiter-readable body */}
         <h3 className="font-display text-xl lg:text-2xl font-semibold text-fg tracking-tight mt-2 leading-tight">
           {commit.role}
         </h3>
-        <div className="text-fg/55 text-sm font-mono tracking-[0.05em] mt-1">
+        <div className="text-fg/55 text-sm mt-1 font-mono tracking-[0.05em]">
           {commit.company}
         </div>
 
         {!isInit && (
-          <p className="text-fg/70 leading-relaxed mt-3 text-[15px]">
-            {commit.description}
-          </p>
+          <>
+            <div className="mt-2 font-mono text-[11px] text-fg/55">
+              <span className="text-fg/40">Author:</span> Jet Cerezo &lt;jetjetcerezo@gmail.com&gt;
+            </div>
+
+            <p className="text-fg/70 leading-relaxed mt-3 text-[15px] pl-3 border-l-2 border-fg/10 sm:max-w-[58rem]">
+              {commit.description}
+            </p>
+          </>
         )}
 
         {commit.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-4">
+          <div className="flex flex-wrap gap-2 mt-3">
             {commit.tags.map((t) => (
               <span
                 key={t}
                 className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg/55 border border-fg/15 px-2.5 py-1 rounded-full"
               >
-                {t}
+                #{t}
               </span>
             ))}
           </div>
