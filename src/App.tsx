@@ -378,70 +378,18 @@ const EXPERIENCE: Commit[] = [
   },
 ];
 
-// Multi-lane graph definition. One lane per branch, each with its own color.
-// Lane index determines x position in the gutter; order is left-to-right.
-const LANES: Record<
-  string,
-  { idx: number; color: string }
-> = {
-  'main': { idx: 0, color: 'rgb(var(--c-accent))' },
-  'school/uplb': { idx: 1, color: '#60a5fa' },         // blue
-  'event/cs-week': { idx: 2, color: '#a78bfa' },       // violet
-  'intern/irri': { idx: 3, color: '#f59e0b' },         // amber
-  'freelance/2-weeks': { idx: 4, color: '#fb7185' },   // rose
-  'hackathon/codebreak': { idx: 5, color: '#facc15' }, // yellow
-  'lead/elbigayan': { idx: 6, color: '#34d399' },      // emerald
-  'game/fire-nation': { idx: 7, color: '#22d3ee' },    // cyan
-  'backend/picsel': { idx: 8, color: '#f472b6' },      // pink
-};
-
-const LANE_X_OFFSET = 14;
-const LANE_GAP = 18;
-const NUM_LANES = Object.keys(LANES).length;
-const GUTTER_WIDTH = LANE_X_OFFSET * 2 + (NUM_LANES - 1) * LANE_GAP;
-
-function laneXFromIdx(idx: number): number {
-  return LANE_X_OFFSET + idx * LANE_GAP;
-}
-
 function ExperienceTree() {
   return (
-    <div>
-      {/* Header row — like SourceTree column headers */}
-      <div
-        className="hidden md:grid items-center text-fg/45 font-mono text-[10px] tracking-[0.22em] uppercase pb-3 border-b border-fg/10"
-        style={{
-          gridTemplateColumns: `${GUTTER_WIDTH}px 1fr 130px 80px`,
-          columnGap: '1.25rem',
-        }}
-      >
-        <div className="px-2">Graph</div>
-        <div>Description</div>
-        <div>Date</div>
-        <div>Commit</div>
-      </div>
-
-      <ol>
-        {EXPERIENCE.map((c, i) => (
-          <ExperienceRow
-            key={c.hash + i}
-            commit={c}
-            isFirst={i === 0}
-            isLast={i === EXPERIENCE.length - 1}
-          />
-        ))}
-      </ol>
-
-      {/* Branch legend — keys to the colored lanes above. */}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-8 pt-5 border-t border-fg/10 font-mono text-[10px] tracking-[0.18em] uppercase">
-        {Object.entries(LANES).map(([branch, lane]) => (
-          <span key={branch} className="flex items-center gap-2 text-fg/55">
-            <span className="w-2 h-2 rounded-full" style={{ background: lane.color }} />
-            {branch}
-          </span>
-        ))}
-      </div>
-    </div>
+    <ol className="relative">
+      {EXPERIENCE.map((c, i) => (
+        <ExperienceRow
+          key={c.hash + i}
+          commit={c}
+          isFirst={i === 0}
+          isLast={i === EXPERIENCE.length - 1}
+        />
+      ))}
+    </ol>
   );
 }
 
@@ -457,111 +405,80 @@ function ExperienceRow({
   const isMerge = commit.branchKind === 'merge';
   const isMain = commit.branchKind === 'main';
   const isInit = commit.hash === '00init';
-  const branchLane = LANES[commit.branch] ?? LANES['main'];
+  const isSide = commit.branchKind === 'side';
 
   return (
-    <li
-      className="grid items-stretch py-5 border-t border-fg/5 first:border-t-0 hover:bg-fg/[0.025] transition-colors"
-      style={{
-        gridTemplateColumns: `${GUTTER_WIDTH}px 1fr 130px 80px`,
-        columnGap: '1.25rem',
-      }}
-    >
-      {/* Graph lane */}
-      <div className="relative" style={{ minHeight: 64 }}>
-        <svg
+    <li className="relative grid grid-cols-[40px_1fr] sm:grid-cols-[56px_1fr] gap-4 sm:gap-6 py-6 first:pt-2">
+      {/* Gutter: vertical line + commit dot */}
+      <div className="relative">
+        <span
           aria-hidden
-          width={GUTTER_WIDTH}
-          height="100%"
-          preserveAspectRatio="none"
-          className="absolute inset-0"
-        >
-          {/* Draw every lane line so the graph reads as a barcode of
-              parallel branches running through the timeline. */}
-          {Object.values(LANES).map((lane) => {
-            const x = laneXFromIdx(lane.idx);
-            const y1 = isFirst ? '24' : '0';
-            const y2 = isLast ? '24' : '100%';
-            return (
-              <line
-                key={lane.idx}
-                x1={x}
-                x2={x}
-                y1={y1}
-                y2={y2}
-                stroke={lane.color}
-                strokeWidth={2}
-                strokeOpacity={lane.idx === branchLane.idx ? 0.95 : 0.55}
-                strokeLinecap="round"
-              />
-            );
-          })}
-
-          {/* The commit dot sits on its branch's lane. */}
-          {isMerge ? (
-            <circle
-              cx={laneXFromIdx(branchLane.idx)}
-              cy={24}
-              r={6}
-              fill="rgb(var(--c-bg))"
-              stroke={branchLane.color}
-              strokeWidth={2.5}
-            />
-          ) : (
-            <circle
-              cx={laneXFromIdx(branchLane.idx)}
-              cy={24}
-              r={5.5}
-              fill={branchLane.color}
-              stroke="rgb(var(--c-bg))"
-              strokeWidth={3}
-            />
-          )}
-        </svg>
+          className="absolute w-[2px] bg-brand/80"
+          style={{
+            left: '19px',
+            top: isFirst ? '24px' : 0,
+            bottom: isLast ? 'calc(100% - 24px)' : 0,
+          }}
+        />
+        {isMerge ? (
+          <span
+            aria-hidden
+            className="absolute w-3.5 h-3.5 rounded-full border-[2px] border-brand bg-bg"
+            style={{ left: '13px', top: '17px' }}
+          />
+        ) : (
+          <span
+            aria-hidden
+            className="absolute w-3 h-3 rounded-full bg-brand"
+            style={{ left: '14px', top: '18px' }}
+          />
+        )}
       </div>
 
-      {/* Description */}
+      {/* Content — git metadata header + recruiter-friendly body */}
       <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-          {/* Branch ref pill (always shown so the row's lane is identifiable) */}
+        {/* Metadata header: hash + branch ref + HEAD/merge tag + date */}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] text-fg/55 tabular-nums">
+          <span className="text-fg/45">{commit.hash}</span>
           <span
-            className="font-mono text-[10px] tracking-[0.05em] px-2 py-0.5 rounded-full border"
-            style={{
-              color: branchLane.color,
-              borderColor: `${branchLane.color}55`,
-              background: `${branchLane.color}14`,
-            }}
+            className="px-2 py-0.5 rounded-full border border-fg/15 text-fg/65 text-[10px] tracking-[0.05em]"
           >
             {commit.branch}
           </span>
-          {isMerge && (
-            <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-brand border border-brand/40 px-2 py-0.5 rounded-full">
-              merge
-            </span>
-          )}
           {isMain && (
-            <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-brand">
+            <span className="text-[10px] tracking-[0.18em] uppercase text-brand">
               HEAD
             </span>
           )}
-          <span className="md:hidden font-mono text-[10px] tracking-[0.22em] uppercase text-fg/45 ml-auto">
-            {commit.date}
-          </span>
+          {isMerge && (
+            <span className="text-[10px] tracking-[0.15em] uppercase text-brand border border-brand/40 px-2 py-0.5 rounded-full">
+              merge
+            </span>
+          )}
+          {isSide && (
+            <span className="text-[10px] tracking-[0.15em] uppercase text-fg/45">
+              side branch
+            </span>
+          )}
+          <span className="text-fg/55 ml-auto">{commit.date}</span>
         </div>
 
-        <h3 className="font-display text-lg lg:text-xl font-semibold text-fg tracking-tight mt-1.5 leading-tight">
+        {/* Recruiter-readable body */}
+        <h3 className="font-display text-xl lg:text-2xl font-semibold text-fg tracking-tight mt-2 leading-tight">
           {commit.role}
         </h3>
-        <div className="text-fg/55 text-sm font-mono tracking-[0.05em] mt-0.5">
+        <div className="text-fg/55 text-sm font-mono tracking-[0.05em] mt-1">
           {commit.company}
         </div>
+
         {!isInit && (
-          <p className="text-fg/70 leading-relaxed mt-2.5 text-[14.5px]">
+          <p className="text-fg/70 leading-relaxed mt-3 text-[15px]">
             {commit.description}
           </p>
         )}
+
         {commit.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-3">
+          <div className="flex flex-wrap gap-2 mt-4">
             {commit.tags.map((t) => (
               <span
                 key={t}
@@ -572,16 +489,6 @@ function ExperienceRow({
             ))}
           </div>
         )}
-      </div>
-
-      {/* Date — only shown on md+ so mobile uses inline date */}
-      <div className="hidden md:block font-mono text-[11px] text-fg/55 tabular-nums whitespace-nowrap pt-1">
-        {commit.date}
-      </div>
-
-      {/* Commit hash */}
-      <div className="hidden md:block font-mono text-[11px] text-fg/45 tabular-nums pt-1">
-        {commit.hash}
       </div>
     </li>
   );
