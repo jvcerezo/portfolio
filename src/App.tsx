@@ -378,174 +378,188 @@ const EXPERIENCE: Commit[] = [
   },
 ];
 
-/**
- * Branch ref color so the eye can track a single thread of work
- * across the timeline. Stable per-branch.
- */
-function branchAccent(branch: string): string {
-  if (branch === 'main') return 'rgb(var(--c-accent))';
-  // Deterministic-ish hue per branch name, biased toward muted dev-coded palette.
-  const palette = [
-    '#7dd3fc', // sky-300
-    '#fcd34d', // amber-300
-    '#f9a8d4', // pink-300
-    '#86efac', // green-300
-    '#c4b5fd', // violet-300
-    '#fda4af', // rose-300
-    '#fde68a', // yellow-200
-    '#a5f3fc', // cyan-200
-  ];
-  let h = 0;
-  for (let i = 0; i < branch.length; i++) h = (h * 31 + branch.charCodeAt(i)) >>> 0;
-  return palette[h % palette.length];
-}
-
-function ExperienceGitLog() {
+function ExperienceTree() {
   return (
-    <div>
-      {/* Header chrome — like a terminal showing "git log --graph --oneline" */}
-      <div className="border border-fg/10 bg-fg/[0.025] rounded-md overflow-hidden">
-        <div className="flex items-center gap-2 px-4 py-2.5 border-b border-fg/10 bg-fg/[0.02]">
-          <div className="flex gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-fg/15" />
-            <span className="w-2.5 h-2.5 rounded-full bg-fg/15" />
-            <span className="w-2.5 h-2.5 rounded-full bg-fg/15" />
-          </div>
-          <div className="flex-1 flex justify-center">
-            <span className="font-mono text-[10px] tracking-[0.1em] text-fg/45 truncate">
-              ~/jet — git log --graph --oneline --all
-            </span>
-          </div>
-          <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/40">
-            HEAD → main
-          </span>
-        </div>
-
-        <div className="px-4 sm:px-6 py-6">
-          <ol className="relative">
-            {EXPERIENCE.map((c, idx) => (
-              <CommitRow
-                key={c.hash + idx}
-                commit={c}
-                isLast={idx === EXPERIENCE.length - 1}
-              />
-            ))}
-          </ol>
-        </div>
-
-        {/* Footer — fake prompt line */}
-        <div className="px-4 sm:px-6 pb-5 pt-2 border-t border-fg/5">
-          <div className="font-mono text-[12px] text-fg/55 flex items-center gap-2">
-            <span className="text-brand">jet@cerezo</span>
-            <span className="text-fg/40">~/career</span>
-            <span className="text-fg/40">$</span>
-            <span className="text-fg/70">git status</span>
-          </div>
-          <div className="font-mono text-[12px] text-fg/55 mt-2 pl-4">
-            On branch <span className="text-brand">main</span>. Working tree clean.
-            <br />
-            <span className="text-fg/40">// open to collaboration. fork the repo.</span>
-          </div>
-        </div>
+    <div className="relative">
+      {/* Branch legend */}
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-8 font-mono text-[10px] tracking-[0.22em] uppercase">
+        <span className="flex items-center gap-2 text-fg/65">
+          <span className="w-2.5 h-2.5 rounded-full bg-brand" />
+          main
+        </span>
+        <span className="flex items-center gap-2 text-fg/55">
+          <span className="w-2.5 h-2.5 rounded-full border-2 border-brand bg-bg" />
+          merge
+        </span>
+        <span className="flex items-center gap-2 text-fg/55">
+          <span className="w-2 h-2 rounded-full bg-fg/55" />
+          side branch
+        </span>
       </div>
+
+      <ol className="relative">
+        {EXPERIENCE.map((c, i) => (
+          <ExperienceRow
+            key={c.hash + i}
+            commit={c}
+            isFirst={i === 0}
+            isLast={i === EXPERIENCE.length - 1}
+          />
+        ))}
+      </ol>
     </div>
   );
 }
 
-function CommitRow({ commit, isLast }: { commit: Commit; isLast: boolean }) {
-  const accent = branchAccent(commit.branch);
-  const isMain = commit.branchKind === 'main';
+function ExperienceRow({
+  commit,
+  isFirst,
+  isLast,
+}: {
+  commit: Commit;
+  isFirst: boolean;
+  isLast: boolean;
+}) {
+  const isSide = commit.branchKind === 'side';
   const isMerge = commit.branchKind === 'merge';
-  const isInit = commit.branchKind === 'school' && commit.hash === '00init';
+  const isInit = commit.hash === '00init';
+
+  // Gutter geometry — keep these in sync with the SVG below.
+  // Lane 1 = main (x=20), lane 2 = side branch (x=58).
+  const mainX = 20;
+  const sideX = 58;
 
   return (
-    <li className="relative grid grid-cols-[28px_1fr] gap-3 sm:gap-5 pb-7 last:pb-0">
-      {/* Graph gutter: vertical line + commit dot */}
-      <div className="relative flex justify-center">
-        {!isLast && (
-          <span
-            aria-hidden
-            className="absolute top-3 bottom-[-28px] w-px"
-            style={{ background: 'rgb(var(--c-fg) / 0.12)' }}
-          />
-        )}
+    <li className="relative grid grid-cols-[80px_1fr] gap-4 sm:gap-6 py-5 first:pt-0 last:pb-0">
+      {/* Gutter: SVG draws the main line + (for side rows) the diverge-merge curve */}
+      <div className="relative">
+        <svg
+          aria-hidden
+          className="absolute inset-0 w-full h-full overflow-visible"
+          preserveAspectRatio="none"
+        >
+          {/* Main vertical line — runs through every row except the very top half
+              of row 0 and the bottom half of the last row. */}
+          {!isFirst && (
+            <line
+              x1={mainX}
+              y1={0}
+              x2={mainX}
+              y2="50%"
+              stroke="rgb(var(--c-accent))"
+              strokeWidth={2}
+              strokeOpacity={isInit ? 0.85 : 0.85}
+            />
+          )}
+          {!isLast && (
+            <line
+              x1={mainX}
+              y1="50%"
+              x2={mainX}
+              y2="100%"
+              stroke="rgb(var(--c-accent))"
+              strokeWidth={2}
+              strokeOpacity={0.85}
+            />
+          )}
+
+          {/* Side-branch loop: diverge from main → dot → merge back */}
+          {isSide && (
+            <>
+              <path
+                d={`M ${mainX} 28 C ${mainX} 38, ${sideX} 38, ${sideX} 50`}
+                fill="none"
+                stroke="rgb(var(--c-fg) / 0.45)"
+                strokeWidth={1.5}
+              />
+              <path
+                d={`M ${sideX} 50 C ${sideX} 62, ${mainX} 62, ${mainX} 72`}
+                fill="none"
+                stroke="rgb(var(--c-fg) / 0.45)"
+                strokeWidth={1.5}
+              />
+            </>
+          )}
+        </svg>
+
+        {/* Commit dot */}
         {isMerge ? (
           <span
-            aria-hidden
-            className="relative z-10 w-3.5 h-3.5 rounded-full border-2 mt-1.5"
+            className="absolute w-3.5 h-3.5 rounded-full border-2"
             style={{
-              borderColor: accent,
+              left: mainX - 7,
+              top: 'calc(50% - 7px)',
+              borderColor: 'rgb(var(--c-accent))',
               background: 'rgb(var(--c-bg))',
-              boxShadow: `0 0 0 2px rgb(var(--c-bg))`,
             }}
-            title="merge commit"
+          />
+        ) : isSide ? (
+          <span
+            className="absolute w-2.5 h-2.5 rounded-full"
+            style={{
+              left: sideX - 5,
+              top: 'calc(50% - 5px)',
+              background: 'rgb(var(--c-fg) / 0.6)',
+              boxShadow: '0 0 0 3px rgb(var(--c-bg))',
+            }}
           />
         ) : (
           <span
-            aria-hidden
-            className="relative z-10 w-2.5 h-2.5 rounded-full mt-2"
+            className="absolute w-3 h-3 rounded-full"
             style={{
-              background: accent,
-              boxShadow: `0 0 0 3px rgb(var(--c-bg))`,
+              left: mainX - 6,
+              top: 'calc(50% - 6px)',
+              background: 'rgb(var(--c-accent))',
+              boxShadow: '0 0 0 3px rgb(var(--c-bg))',
             }}
           />
         )}
       </div>
 
-      {/* Commit content */}
+      {/* Content */}
       <div className="min-w-0">
-        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <span className="font-mono text-[12px] text-fg/45 tabular-nums">
-            {commit.hash}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/55">
+            {commit.date}
           </span>
-          <span
-            className="font-mono text-[10px] tracking-[0.05em] px-2 py-0.5 rounded-full border"
-            style={{
-              color: accent,
-              borderColor: `${accent}55`,
-              background: `${accent}12`,
-            }}
-          >
-            {commit.branch}
-          </span>
-          {isMain && (
-            <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-brand">
+          {isMerge && (
+            <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-brand border border-brand/40 px-2 py-0.5 rounded-full">
+              merge
+            </span>
+          )}
+          {isSide && (
+            <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg/55 border border-fg/15 px-2 py-0.5 rounded-full">
+              {commit.branch}
+            </span>
+          )}
+          {commit.branchKind === 'main' && (
+            <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-brand">
               HEAD
             </span>
           )}
-          <span className="font-mono text-[11px] text-fg/45 ml-auto">
-            {commit.date}
-          </span>
         </div>
 
-        <p className="font-mono text-[14px] sm:text-[15px] text-fg mt-1.5 leading-snug break-words">
-          {commit.commitTitle}
-        </p>
+        <h3 className="font-display text-xl lg:text-2xl font-semibold text-fg tracking-tight mt-1.5">
+          {commit.role}
+        </h3>
+        <div className="text-fg/55 text-sm font-mono tracking-[0.05em] mt-0.5">
+          {commit.company}
+        </div>
 
         {!isInit && (
-          <>
-            <div className="mt-1 font-mono text-[11px] text-fg/55">
-              <span className="text-fg/40">Author:</span> Jet Cerezo &lt;jetjetcerezo@gmail.com&gt;
-              <span className="hidden sm:inline">
-                {' · '}
-                <span className="text-fg/40">at</span> {commit.company}
-              </span>
-            </div>
-
-            <p className="text-fg/70 leading-relaxed mt-3 text-[14.5px] pl-3 border-l-2 border-fg/10 sm:max-w-[58rem]">
-              {commit.description}
-            </p>
-          </>
+          <p className="text-fg/70 leading-relaxed mt-3 text-[15px]">
+            {commit.description}
+          </p>
         )}
 
         {commit.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-3">
+          <div className="flex flex-wrap gap-2 mt-4">
             {commit.tags.map((t) => (
               <span
                 key={t}
                 className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg/55 border border-fg/15 px-2.5 py-1 rounded-full"
               >
-                #{t}
+                {t}
               </span>
             ))}
           </div>
@@ -1196,7 +1210,7 @@ function App() {
             </TabsContent>
 
             <TabsContent value="experience">
-              <ExperienceGitLog />
+              <ExperienceTree />
             </TabsContent>
           </Tabs>
         </div>
