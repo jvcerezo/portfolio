@@ -521,7 +521,7 @@ function App() {
                       // CURRENTLY
                     </div>
                     <div className="text-white font-medium">
-                      QA @ Billease · Shipping Sandalan
+                      Test Automation @ Billease
                     </div>
                   </div>
                 </div>
@@ -555,7 +555,7 @@ function App() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 border border-white/10 reveal">
             {[
               { icon: Trophy, title: 'Codebreak 2.0 Champion', meta: 'Tenext.ai · 2025' },
-              { icon: Briefcase, title: 'QA Automation @ Billease', meta: 'Apr 2025 · Present' },
+              { icon: Briefcase, title: 'Jr. Test Automation Engineer', meta: 'Billease · Apr 2025 · Present' },
               { icon: GraduationCap, title: 'Iskolar ng Laguna · UP SLAS', meta: 'UPLB CS · Batch 2025' },
               { icon: Rocket, title: 'Google Play Developer', meta: 'Sandalan · Live' },
             ].map((r) => (
@@ -891,9 +891,9 @@ function App() {
                     skills: ['Node.js', 'Express', 'Supabase', 'PostgreSQL', 'MongoDB', 'REST APIs'],
                   },
                   {
-                    category: 'QA & Automation',
+                    category: 'Test Automation',
                     icon: Shield,
-                    skills: ['Appium', 'BrowserStack', 'Regression suites', 'CI/CD', 'Bug triage'],
+                    skills: ['Appium', 'BrowserStack', 'Android E2E', 'Regression suites', 'CI/CD'],
                   },
                   {
                     category: 'Infra & AI',
