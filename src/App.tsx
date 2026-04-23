@@ -397,7 +397,7 @@ function ExperienceTree() {
         </span>
       </div>
 
-      <ol className="relative">
+      <ol>
         {EXPERIENCE.map((c, i) => (
           <ExperienceRow
             key={c.hash + i}
@@ -422,96 +422,59 @@ function ExperienceRow({
 }) {
   const isSide = commit.branchKind === 'side';
   const isMerge = commit.branchKind === 'merge';
+  const isMain = commit.branchKind === 'main';
   const isInit = commit.hash === '00init';
 
-  // Gutter geometry — keep these in sync with the SVG below.
-  // Lane 1 = main (x=20), lane 2 = side branch (x=58).
-  const mainX = 20;
-  const sideX = 58;
-
   return (
-    <li className="relative grid grid-cols-[80px_1fr] gap-4 sm:gap-6 py-5 first:pt-0 last:pb-0">
-      {/* Gutter: SVG draws the main line + (for side rows) the diverge-merge curve */}
+    <li className="relative grid grid-cols-[64px_1fr] sm:grid-cols-[88px_1fr] gap-4 sm:gap-6 py-6 first:pt-0">
+      {/* Gutter — pure CSS, no SVG. Uses absolute positioning anchored
+          to the row, so it always lines up regardless of content height. */}
       <div className="relative">
-        <svg
+        {/* The main vertical line. Trimmed half-way at the very first
+            and very last rows so it doesn't overshoot. */}
+        <span
           aria-hidden
-          className="absolute inset-0 w-full h-full overflow-visible"
-          preserveAspectRatio="none"
-        >
-          {/* Main vertical line — runs through every row except the very top half
-              of row 0 and the bottom half of the last row. */}
-          {!isFirst && (
-            <line
-              x1={mainX}
-              y1={0}
-              x2={mainX}
-              y2="50%"
-              stroke="rgb(var(--c-accent))"
-              strokeWidth={2}
-              strokeOpacity={isInit ? 0.85 : 0.85}
-            />
-          )}
-          {!isLast && (
-            <line
-              x1={mainX}
-              y1="50%"
-              x2={mainX}
-              y2="100%"
-              stroke="rgb(var(--c-accent))"
-              strokeWidth={2}
-              strokeOpacity={0.85}
-            />
-          )}
+          className="absolute w-[2px] bg-brand"
+          style={{
+            left: '19px',
+            top: isFirst ? '34px' : 0,
+            bottom: isLast ? 'calc(100% - 34px)' : 0,
+          }}
+        />
 
-          {/* Side-branch loop: diverge from main → dot → merge back */}
-          {isSide && (
-            <>
-              <path
-                d={`M ${mainX} 28 C ${mainX} 38, ${sideX} 38, ${sideX} 50`}
-                fill="none"
-                stroke="rgb(var(--c-fg) / 0.45)"
-                strokeWidth={1.5}
-              />
-              <path
-                d={`M ${sideX} 50 C ${sideX} 62, ${mainX} 62, ${mainX} 72`}
-                fill="none"
-                stroke="rgb(var(--c-fg) / 0.45)"
-                strokeWidth={1.5}
-              />
-            </>
-          )}
-        </svg>
+        {/* Side-branch tee — horizontal stub from main line out to the side dot. */}
+        {isSide && (
+          <span
+            aria-hidden
+            className="absolute h-[2px] bg-fg/35"
+            style={{
+              left: '20px',
+              right: '14px',
+              top: '33px',
+            }}
+          />
+        )}
 
-        {/* Commit dot */}
+        {/* Commit dot — pinned at y=20px from row top so it lines up
+            with the date label in the content column. */}
         {isMerge ? (
           <span
-            className="absolute w-3.5 h-3.5 rounded-full border-2"
-            style={{
-              left: mainX - 7,
-              top: 'calc(50% - 7px)',
-              borderColor: 'rgb(var(--c-accent))',
-              background: 'rgb(var(--c-bg))',
-            }}
+            aria-hidden
+            className="absolute w-3.5 h-3.5 rounded-full border-[2px] border-brand bg-bg"
+            style={{ left: '13px', top: '27px' }}
+            title="merge commit"
           />
         ) : isSide ? (
           <span
-            className="absolute w-2.5 h-2.5 rounded-full"
-            style={{
-              left: sideX - 5,
-              top: 'calc(50% - 5px)',
-              background: 'rgb(var(--c-fg) / 0.6)',
-              boxShadow: '0 0 0 3px rgb(var(--c-bg))',
-            }}
+            aria-hidden
+            className="absolute w-2.5 h-2.5 rounded-full bg-fg/65"
+            style={{ right: '10px', top: '29px' }}
           />
         ) : (
           <span
-            className="absolute w-3 h-3 rounded-full"
-            style={{
-              left: mainX - 6,
-              top: 'calc(50% - 6px)',
-              background: 'rgb(var(--c-accent))',
-              boxShadow: '0 0 0 3px rgb(var(--c-bg))',
-            }}
+            aria-hidden
+            className="absolute w-3 h-3 rounded-full bg-brand"
+            style={{ left: '14px', top: '28px' }}
           />
         )}
       </div>
@@ -532,7 +495,7 @@ function ExperienceRow({
               {commit.branch}
             </span>
           )}
-          {commit.branchKind === 'main' && (
+          {isMain && (
             <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-brand">
               HEAD
             </span>
