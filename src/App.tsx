@@ -3,7 +3,7 @@ import {
   Menu, X, Mail, Phone, MapPin, Github, Linkedin, Download,
   Code, Database, Server, ArrowUpRight,
   Smartphone, Shield, Sparkles, Globe, Zap, CheckCircle2, Palette,
-  Trophy, GraduationCap, Briefcase, Rocket, Terminal,
+  Trophy, Leaf, Briefcase, Rocket, Terminal,
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
 import { Button } from './components/ui/button';
@@ -556,7 +556,7 @@ function App() {
             {[
               { icon: Trophy, title: 'Codebreak 2.0 Champion', meta: 'Tenext.ai · 2025' },
               { icon: Briefcase, title: 'Jr. Test Automation Engineer', meta: 'Billease · Apr 2025 · Present' },
-              { icon: GraduationCap, title: 'Iskolar ng Laguna · UP SLAS', meta: 'UPLB CS · Batch 2025' },
+              { icon: Leaf, title: 'Bioinformatics SWE Intern', meta: 'IRRI · 2024 — 2025' },
               { icon: Rocket, title: 'Google Play Developer', meta: 'Sandalan · Live' },
             ].map((r) => (
               <div key={r.title} className="bg-[var(--bg)] p-6 flex items-start gap-4">
