@@ -1,216 +1,543 @@
-import { useState, useEffect } from 'react';
-import { Menu, X, ExternalLink, Mail, Phone, MapPin, Github, Linkedin, Download, Code, Palette, Database, Server, Award, Calendar, Users, Star, ChevronRight, ArrowRight } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card';
+import { useEffect, useState } from 'react';
+import {
+  Menu, X, Mail, Phone, MapPin, Github, Linkedin, Download,
+  Code, Database, Server, ArrowUpRight,
+  Smartphone, Shield, Sparkles, Globe, Zap, CheckCircle2, Palette,
+  Trophy, GraduationCap, Briefcase, Rocket, Terminal,
+} from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
 import { Button } from './components/ui/button';
 import { Badge } from './components/ui/badge';
-import { Separator } from './components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
+
+const NAV_ITEMS = [
+  { id: 'home', label: 'Home', num: '00' },
+  { id: 'sandalan', label: 'Sandalan', num: '01' },
+  { id: 'work', label: 'Work', num: '02' },
+  { id: 'about', label: 'About', num: '03' },
+  { id: 'contact', label: 'Contact', num: '04' },
+];
+
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.jvcerezo.exitplan';
+const SANDALAN_SITE = 'https://exitplan-tau.vercel.app';
+
+// WordPress mshots — free, aggressively cached, loads fast
+const shot = (url: string) =>
+  `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}?w=1600&h=1000`;
+
+function useScrollSpy(ids: string[]) {
+  const [active, setActive] = useState<string>(ids[0]);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(e.target.id);
+        });
+      },
+      { rootMargin: '-40% 0px -55% 0px', threshold: 0 }
+    );
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, [ids]);
+  return active;
+}
+
+function useRevealOnScroll() {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+    );
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+}
+
+const PROJECTS = [
+  {
+    code: '02',
+    title: 'IskOS',
+    subtitle: 'Academic OS for UPLB students',
+    description:
+      'Import class schedules, sync with Google Calendar, track absences, and compute GWA. Built for friends who kept missing deadlines.',
+    link: 'https://isk-os.vercel.app',
+    tech: ['React', 'TypeScript', 'Google Calendar API', 'Supabase'],
+    status: 'In Dev',
+  },
+  {
+    code: '03',
+    title: 'Ottodot',
+    subtitle: 'Full-stack technical assessment',
+    description:
+      'Gemini-powered math practice generator with session history. Submitted as a full-stack recruitment task.',
+    link: 'https://ottodot-coding-task-full-stack-eta.vercel.app',
+    tech: ['Next.js', 'TypeScript', 'Supabase', 'Gemini API'],
+    status: 'Live',
+  },
+  {
+    code: '04',
+    title: 'SNP-MERN',
+    subtitle: 'Genetic variant analysis · IRRI',
+    description:
+      'Rewrite of IRRI\'s legacy SNPSeek platform into a modern MERN microservices stack with advanced filtering and interactive charts.',
+    link: 'https://snpseek-mern.vercel.app',
+    tech: ['React', 'Node.js', 'Express', 'MongoDB'],
+    status: 'Live',
+  },
+  {
+    code: '05',
+    title: 'SOSC3',
+    subtitle: 'Civic tech advocacy platform',
+    description:
+      'Social advocacy app for community engagement and awareness campaigns, built during UPLB Computer Science Society.',
+    link: 'https://sosc3-advocacy-app.vercel.app',
+    tech: ['React', 'Tailwind', 'Vercel'],
+    status: 'Live',
+  },
+  {
+    code: '06',
+    title: 'Diet Plan',
+    subtitle: 'Health and nutrition planner',
+    description:
+      'Personalized diet planner with calorie targets and meal recommendations. Full MERN stack with a clean, approachable UI.',
+    link: 'https://diet-plan-calculator.vercel.app',
+    tech: ['MERN', 'Tailwind'],
+    status: 'MVP',
+  },
+  {
+    code: '07',
+    title: 'MDCAS',
+    subtitle: 'Dental clinic management',
+    description:
+      'Appointment scheduling, patient records, and an admin dashboard for Maralit Dental Clinic.',
+    link: 'https://mdcas-fe.vercel.app',
+    tech: ['MERN', 'Tailwind'],
+    status: 'MVP',
+  },
+];
+
+function ProjectCard({ p, idx }: { p: (typeof PROJECTS)[number]; idx: number }) {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <a
+      href={p.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`reveal delay-${(idx % 4) + 1} group relative border border-white/10 bg-white/[0.015] card-hover overflow-hidden block`}
+    >
+      {/* Browser chrome bar */}
+      <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/10 bg-white/[0.02]">
+        <div className="flex gap-1.5">
+          <span className="w-2.5 h-2.5 rounded-full bg-white/15" />
+          <span className="w-2.5 h-2.5 rounded-full bg-white/15" />
+          <span className="w-2.5 h-2.5 rounded-full bg-white/15" />
+        </div>
+        <div className="flex-1 flex justify-center">
+          <span className="font-mono text-[10px] tracking-[0.1em] text-white/45 truncate max-w-[70%]">
+            {p.link.replace(/^https?:\/\//, '')}
+          </span>
+        </div>
+        <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/40">
+          {p.status}
+        </span>
+      </div>
+
+      <div className="relative aspect-[16/10] overflow-hidden bg-[#0f0f0f]">
+        <div className="absolute inset-0 grid-bg-dense opacity-40" />
+
+        {/* Fallback label shown while screenshot loads */}
+        <div
+          className={`absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-500 ${
+            loaded ? 'opacity-0' : 'opacity-100'
+          }`}
+        >
+          <div className="font-display text-6xl lg:text-7xl text-white/20 leading-none tracking-tight">
+            {p.title}
+          </div>
+          <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/30 mt-4">
+            loading preview
+          </div>
+        </div>
+
+        <img
+          src={shot(p.link)}
+          alt={`${p.title} preview`}
+          loading="lazy"
+          onLoad={() => setLoaded(true)}
+          className={`relative w-full h-full object-cover object-top transition-all duration-700 ${
+            loaded ? 'opacity-100 group-hover:scale-[1.02]' : 'opacity-0'
+          }`}
+        />
+
+        {/* Subtle bottom gradient for legibility of the badge */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-80" />
+
+        <div className="absolute bottom-4 right-4 w-10 h-10 rounded-full border border-white/25 flex items-center justify-center bg-black/60 backdrop-blur-sm group-hover:bg-[var(--accent)] group-hover:text-black group-hover:border-[var(--accent)] transition-all">
+          <ArrowUpRight className="w-4 h-4" />
+        </div>
+      </div>
+
+      <div className="p-6">
+        <div className="flex items-start justify-between gap-4 mb-3">
+          <div>
+            <div className="flex items-baseline gap-3 mb-1">
+              <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/35">
+                {p.code}
+              </span>
+              <h3 className="font-display text-2xl lg:text-[1.75rem] font-semibold tracking-tight text-white">
+                {p.title}
+              </h3>
+            </div>
+            <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-white/50">
+              {p.subtitle}
+            </div>
+          </div>
+        </div>
+
+        <p className="text-white/65 leading-relaxed mb-5 text-[14.5px]">{p.description}</p>
+
+        <div className="flex flex-wrap gap-2">
+          {p.tech.map((t) => (
+            <span
+              key={t}
+              className="font-mono text-[10px] tracking-[0.15em] uppercase text-white/60 border border-white/15 px-2.5 py-1 rounded-full"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
+    </a>
+  );
+}
+
+const EXPERIENCE = [
+  {
+    role: 'Junior Test Automation Engineer',
+    company: 'Billease',
+    period: 'Apr 2025 — Present',
+    description:
+      'Build and maintain Android test automation with Appium and BrowserStack. Surfaced 20+ critical bugs and shipped 40+ merge requests improving app stability across release cycles. Authored regression suites and spec files integrated into CI/CD for rapid pre-production issue resolution.',
+    tags: ['Appium', 'BrowserStack', 'Android', 'CI/CD', 'Regression'],
+  },
+  {
+    role: 'Codebreak 2.0 Champion',
+    company: 'Tenext.ai Hackathon',
+    period: 'May 2025',
+    description:
+      'Won 1st place building a RAG-based AI platform for customer support agents. The assistant generated live call scripts from past and current tickets and ran automated QA analytics after calls. Handled APIs, microservices, deployment, and AI integration to ship an MVP in under 24 hours.',
+    tags: ['AI', 'RAG', 'Microservices', 'Real-time'],
+  },
+  {
+    role: 'BS Computer Science',
+    company: 'University of the Philippines Los Baños',
+    period: 'Sep 2021 — Jul 2025',
+    description:
+      'Honor Roll. Iskolar ng Laguna and UP SLAS scholar. Relevant coursework: Operating Systems (CMSC 125), Computer Networks (CMSC 137), Cybersecurity, Data Structures & Algorithms. Thesis affiliate with IRRI on bioinformatics tooling.',
+    tags: ['UPLB CS', 'Honor Roll', 'Iskolar ng Laguna', 'UP SLAS'],
+  },
+  {
+    role: 'Bioinformatics SWE Intern · Thesis Affiliate',
+    company: 'International Rice Research Institute (IRRI)',
+    period: 'Jul 2024 — May 2025',
+    description:
+      'Implemented a custom OAuth authentication flow for SNPseek in a Dockerized Drupal environment to improve secure user access and system integration. Designed and developed a MERN-based SNPseek platform using a microservices architecture for scalability, usability, and faster data processing.',
+    tags: ['MERN', 'Drupal', 'Docker', 'OAuth', 'Microservices'],
+  },
+  {
+    role: 'Code Wars Co-Head · Project Manager',
+    company: 'UPLB CS Society · 41st CS Week',
+    period: 'Oct 2023 — Jul 2025',
+    description:
+      'Led a 7-member dev team enhancing the competitive programming event platform. Oversaw feature development, bug tracking, testing, and deployment. Supported 20 teams, 3 judges, and 3 continuous hours of live service with zero downtime.',
+    tags: ['Leadership', 'Deploy', 'Ship'],
+  },
+  {
+    role: 'Freelance Full-Stack Developer',
+    company: '2 Weeks · Project-based',
+    period: 'Aug 2024 — Oct 2024',
+    description:
+      'Built a story-based interactive game with a 3-person team using the MERN stack. Handled frontend, backend, and UI/UX to ensure client satisfaction.',
+    tags: ['MERN', 'Client work'],
+  },
+  {
+    role: 'eLBigayan · Team Lead',
+    company: 'Flutter Donation Platform',
+    period: 'May 2024 — Jun 2024',
+    description:
+      'Led a 2-member team building a donation system. Used Flutter and Dart with 4 Firebase services to create a secure, scalable backend.',
+    tags: ['Flutter', 'Firebase', 'Team Lead'],
+  },
+  {
+    role: 'Fire Nation Invasion · Game Developer',
+    company: 'Unity Multiplayer Game',
+    period: 'Apr 2024 — Jun 2024',
+    description:
+      'Worked with 2 teammates on character abilities and game mechanics. Implemented networked multiplayer for up to 4 players across different computers.',
+    tags: ['Unity', 'C#', 'Multiplayer'],
+  },
+  {
+    role: 'PICSEL · Backend Developer',
+    company: 'Reservation System · 20-dev team',
+    period: 'Feb 2024 — Jun 2024',
+    description:
+      '9 commits, 12 merged PRs across 7 features in a 20-developer team over 5 months. Integrated Google authentication to enhance security and streamline the login process.',
+    tags: ['Node.js', 'PostgreSQL', 'Auth'],
+  },
+];
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const active = useScrollSpy(NAV_ITEMS.map((n) => n.id));
+  useRevealOnScroll();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
       setIsMenuOpen(false);
     }
   };
 
+  const year = new Date().getFullYear();
+
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-black/95 backdrop-blur-sm border-b border-white/20' : 'bg-transparent'
-      }`}>
-        <div className="max-w-6xl mx-auto px-6 py-6">
+    <div className="min-h-screen bg-[var(--bg)] text-white">
+      {/* NAV */}
+      <nav
+        className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
+          scrolled ? 'bg-black/75 backdrop-blur-xl border-b border-white/10' : 'bg-transparent'
+        }`}
+      >
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-10 py-5">
           <div className="flex justify-between items-center">
-            <div className="text-2xl font-light tracking-wide">Jet Timothy Cerezo</div>
-            
-            {/* Desktop Menu */}
-            <div className="hidden md:flex space-x-12">
-              {['Home', 'About', 'Projects', 'Contact'].map((item) => (
+            <button
+              onClick={() => scrollToSection('home')}
+              className="flex items-center gap-2 group"
+            >
+              <span className="w-7 h-7 rounded-md border border-white/20 flex items-center justify-center group-hover:border-[var(--accent)] transition-colors">
+                <Terminal className="w-3.5 h-3.5 text-[var(--accent)]" />
+              </span>
+              <span className="font-display text-[15px] font-semibold tracking-tight">
+                jvcerezo
+              </span>
+            </button>
+
+            <div className="hidden md:flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.03] p-1 backdrop-blur">
+              {NAV_ITEMS.map((item) => (
                 <button
-                  key={item}
-                  onClick={() => scrollToSection(item.toLowerCase())}
-                  className="text-sm font-light tracking-wide hover:text-gray-400 transition-colors duration-300"
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`relative px-4 py-1.5 text-[13px] transition-colors rounded-full flex items-center gap-2 ${
+                    active === item.id
+                      ? 'bg-white text-black font-medium'
+                      : 'text-white/70 hover:text-white'
+                  }`}
                 >
-                  {item}
+                  <span className="font-mono text-[10px] opacity-60">{item.num}</span>
+                  {item.label}
                 </button>
               ))}
             </div>
 
-            {/* Mobile Menu Button */}
-            <button 
-              className="md:hidden"
+            <div className="hidden md:block">
+              <Button
+                size="sm"
+                className="bg-[var(--accent)] text-black hover:bg-[var(--accent)]/90 rounded-full px-5 font-medium"
+                asChild
+              >
+                <a href="/JetCerezo_Resume.pdf" download>
+                  <Download className="w-3.5 h-3.5 mr-2" />
+                  Resume
+                </a>
+              </Button>
+            </div>
+
+            <button
+              className="md:hidden text-white"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
 
-          {/* Mobile Menu */}
           {isMenuOpen && (
-            <div className="md:hidden mt-8 pb-6 border-t border-white/20">
-              <div className="flex flex-col space-y-6 mt-6">
-                {['Home', 'About', 'Projects', 'Contact'].map((item) => (
+            <div className="md:hidden mt-5 pb-4 border-t border-white/10">
+              <div className="flex flex-col space-y-1 mt-4">
+                {NAV_ITEMS.map((item) => (
                   <button
-                    key={item}
-                    onClick={() => scrollToSection(item.toLowerCase())}
-                    className="text-left text-lg font-light tracking-wide hover:text-gray-400 transition-colors duration-300"
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className={`text-left py-2.5 px-3 rounded-lg text-base transition-colors flex items-center gap-3 ${
+                      active === item.id ? 'bg-white/10 text-white' : 'text-white/70'
+                    }`}
                   >
-                    {item}
+                    <span className="font-mono text-[11px] opacity-50">{item.num}</span>
+                    {item.label}
                   </button>
                 ))}
+                <Button
+                  size="sm"
+                  className="mt-3 bg-[var(--accent)] text-black hover:bg-[var(--accent)]/90 rounded-full font-medium"
+                  asChild
+                >
+                  <a href="/JetCerezo_Resume.pdf" download>
+                    <Download className="w-3.5 h-3.5 mr-2" />
+                    Download Resume
+                  </a>
+                </Button>
               </div>
             </div>
           )}
         </div>
       </nav>
 
-      {/* Hero Section - New Layout with Large Photo */}
-      <section id="home" className="min-h-screen flex items-center justify-center px-6 py-20">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left Column - Large Photo */}
-            <div className="relative order-2 lg:order-1">
-              <div className="relative group">
-                {/* Main Photo Container */}
-                <div className="relative w-full max-w-lg mx-auto">
-                  <div className="aspect-[4/5] relative overflow-hidden rounded-3xl border-4 border-white/20 shadow-2xl">
-                    <img 
-                      src="/profile.jpg" 
-                      alt="Jet Timothy Cerezo" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                    {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  </div>
-                  
-                  {/* Decorative Elements */}
-                  <div className="absolute -top-4 -left-4 w-24 h-24 border-l-2 border-t-2 border-white/30 rounded-tl-3xl"></div>
-                  <div className="absolute -bottom-4 -right-4 w-24 h-24 border-r-2 border-b-2 border-white/30 rounded-br-3xl"></div>
-                  
-                  {/* Floating Badges */}
-                  <Card className="absolute -top-6 right-8 bg-black/80 border-white/20 backdrop-blur-sm">
-                    <CardContent className="p-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                        <span className="text-white text-sm font-medium">Available</span>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="absolute -bottom-8 -left-6 bg-black/90 border-white/20 backdrop-blur-sm">
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-3">
-                        <Code className="w-5 h-5 text-blue-400" />
-                        <div>
-                          <p className="text-white text-sm font-medium">3 Years</p>
-                          <p className="text-gray-300 text-xs">Experience</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
+      {/* HERO */}
+      <section id="home" className="relative min-h-[100vh] flex items-center overflow-hidden pt-28 pb-20">
+        <div className="absolute inset-0 grid-bg opacity-60" />
+        <div className="absolute left-0 top-1/3 w-[60%] h-[40%] bg-gradient-to-r from-[var(--accent-dim)] to-transparent blur-3xl pointer-events-none opacity-40" />
+
+        <div className="relative max-w-[1440px] w-full mx-auto px-6 lg:px-10">
+          <div className="grid lg:grid-cols-12 gap-10 items-center">
+            <div className="lg:col-span-8 space-y-10 animate-reveal">
+              <div className="flex flex-wrap items-center gap-4">
+                <span className="flex items-center gap-2 font-mono text-[11px] tracking-[0.22em] uppercase text-white/70 border border-white/15 rounded-full pl-2 pr-3 py-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-dot" />
+                  <span className="text-[var(--accent)]">/</span> Available for work
+                </span>
+                <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-white/45">
+                  Laguna, PH · UTC+8
+                </span>
+              </div>
+
+              <div>
+                <h1 className="font-display font-semibold leading-[0.9] tracking-[-0.045em] text-[clamp(3rem,9.5vw,9rem)] text-white">
+                  Jet Timothy<br />
+                  Cerezo<span className="text-[var(--accent)]">.</span>
+                </h1>
+                <p className="font-display text-2xl lg:text-4xl text-white/60 font-medium tracking-tight mt-4">
+                  Software developer shipping full-stack products.
+                </p>
+              </div>
+
+              <p className="text-[17px] lg:text-lg text-white/70 max-w-2xl leading-relaxed">
+                I design and ship web and mobile products end-to-end, from database schema to
+                Play Store. Currently a Junior Test Automation Engineer at{' '}
+                <span className="text-white font-medium">Billease</span>, and shipping{' '}
+                <button
+                  onClick={() => scrollToSection('sandalan')}
+                  className="link-underline text-white font-medium"
+                >
+                  Sandalan
+                </button>
+                , a Filipino adulting and finance app live on Google Play. UPLB Computer Science,
+                Batch 2025.
+              </p>
+
+              <div className="flex flex-wrap gap-3">
+                <Button
+                  size="lg"
+                  className="bg-[var(--accent)] text-black hover:bg-[var(--accent)]/90 font-medium rounded-full px-7 h-12"
+                  onClick={() => scrollToSection('sandalan')}
+                >
+                  See Sandalan <span className="ml-2">→</span>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="ghost"
+                  className="border border-white/20 text-white hover:bg-white/10 rounded-full px-7 h-12"
+                  onClick={() => scrollToSection('work')}
+                >
+                  All Projects
+                </Button>
+                <Button
+                  size="lg"
+                  variant="ghost"
+                  className="border border-white/20 text-white hover:bg-white/10 rounded-full px-7 h-12"
+                  asChild
+                >
+                  <a href="mailto:jetjetcerezo@gmail.com">
+                    <Mail className="w-4 h-4 mr-2" />
+                    Hire me
+                  </a>
+                </Button>
+              </div>
+
+              <div className="flex items-center gap-5 pt-2">
+                {[
+                  { icon: Github, href: 'https://github.com/jvcerezo', label: 'GitHub' },
+                  { icon: Linkedin, href: 'https://www.linkedin.com/in/jet-timothy-cerezo-126903254', label: 'LinkedIn' },
+                  { icon: Mail, href: 'mailto:jetjetcerezo@gmail.com', label: 'Email' },
+                ].map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className="text-white/55 hover:text-[var(--accent)] transition-colors"
+                  >
+                    <s.icon className="w-5 h-5" />
+                  </a>
+                ))}
               </div>
             </div>
 
-            {/* Right Column - Content */}
-            <div className="space-y-8 order-1 lg:order-2">
-              <div className="space-y-6">
-                <div className="flex items-center gap-3">
-                  <Badge variant="outline" className="border-white/30 text-white bg-white/5">
-                    <MapPin className="w-3 h-3 mr-1" />
-                    University of the Philippines Los Baños Graduate
-                  </Badge>
-                  <Badge variant="outline" className="border-white/30 text-white bg-white/5">
-                    <Award className="w-3 h-3 mr-1" />
-                    Full-Stack Developer
-                  </Badge>
+            <div className="lg:col-span-4 animate-reveal">
+              <div className="relative">
+                <div className="aspect-[4/5] relative overflow-hidden rounded-2xl border border-white/15">
+                  <img
+                    src="/profile.jpg"
+                    alt="Jet Timothy Cerezo"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+
+                  <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
+                    <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/80 bg-black/60 backdrop-blur-sm border border-white/15 px-2 py-1 rounded">
+                      ~/portrait.jpg
+                    </div>
+                  </div>
+
+                  <div className="absolute bottom-5 left-5 right-5">
+                    <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/70 mb-1.5">
+                      // CURRENTLY
+                    </div>
+                    <div className="text-white font-medium">
+                      QA @ Billease · Shipping Sandalan
+                    </div>
+                  </div>
                 </div>
-                
-                <h1 className="text-6xl lg:text-8xl font-light tracking-tight">
-                  <span className="block">Jet Timothy</span>
-                  <span className="block text-gray-400">Cerezo</span>
-                </h1>
-                
-                <div className="space-y-4">
-                  <h2 className="text-2xl lg:text-3xl font-light text-gray-300">
-                    Full-Stack Developer
-                  </h2>
-                  <p className="text-lg text-gray-400 leading-relaxed max-w-xl">
-                    Computer Science graduate from University of the Philippines Los Baños Batch 2025. 
-                    Passionate about building scalable web applications using MongoDB, Express.js, React, and Node.js.
-                  </p>
-                </div>
-              </div>
-
-              {/* Stats Cards */}
-              <div className="grid grid-cols-3 gap-4">
-                <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
-                  <CardContent className="p-4 text-center">
-                    <div className="text-2xl font-bold text-white mb-1">11</div>
-                    <div className="text-xs text-gray-300">Projects</div>
-                  </CardContent>
-                </Card>
-                <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
-                  <CardContent className="p-4 text-center">
-                    <div className="text-2xl font-bold text-white mb-1">3</div>
-                    <div className="text-xs text-gray-300">Years Exp</div>
-                  </CardContent>
-                </Card>
-                <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
-                  <CardContent className="p-4 text-center">
-                    <div className="text-2xl font-bold text-white mb-1">MERN</div>
-                    <div className="text-xs text-gray-300">Stack</div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button 
-                  size="lg" 
-                  className="bg-white text-black hover:bg-gray-200 font-medium"
-                  onClick={() => scrollToSection('projects')}
-                >
-                  View My Work
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-                <Button 
-                  size="lg" 
-                  className="bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-black transition-all"
-                  onClick={() => scrollToSection('contact')}
-                >
-                  <Mail className="w-4 h-4 mr-2" />
-                  Get In Touch
-                </Button>
-              </div>
-
-              {/* Social Links */}
-              <div className="flex items-center gap-4 pt-4">
-                <span className="text-sm text-gray-400">Follow me:</span>
-                <div className="flex gap-3">
-                  <Button size="sm" variant="ghost" className="text-white hover:text-gray-300 hover:bg-white/10" asChild>
-                    <a href="https://github.com/jvcerezo" target="_blank" rel="noopener noreferrer">
-                      <Github className="w-4 h-4" />
-                    </a>
-                  </Button>
-                  <Button size="sm" variant="ghost" className="text-white hover:text-gray-300 hover:bg-white/10" asChild>
-                    <a href="https://www.linkedin.com/in/jet-timothy-cerezo-126903254" target="_blank" rel="noopener noreferrer">
-                      <Linkedin className="w-4 h-4" />
-                    </a>
-                  </Button>
+                <div className="mt-4 grid grid-cols-3 gap-px bg-white/10 border border-white/10">
+                  {[
+                    { v: '3y', l: 'Building' },
+                    { v: '11+', l: 'Projects' },
+                    { v: '1', l: 'On Play Store' },
+                  ].map((m) => (
+                    <div key={m.l} className="bg-[var(--bg)] p-4 text-center">
+                      <div className="font-display text-2xl font-semibold">{m.v}</div>
+                      <div className="font-mono text-[9px] tracking-[0.22em] uppercase text-white/45 mt-0.5">
+                        {m.l}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -218,594 +545,555 @@ function App() {
         </div>
       </section>
 
-      {/* About Section - Enhanced with Tabs and Skills */}
-      <section id="about" className="py-32 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl lg:text-6xl font-light mb-6 tracking-wide">About Me</h2>
-            <Separator className="w-32 mx-auto bg-white/30" />
-            <p className="text-xl text-gray-400 mt-6 max-w-2xl mx-auto">
-              Passionate about creating digital solutions that make a difference
-            </p>
+      {/* RECOGNITION STRIP */}
+      <section className="relative py-14 border-y border-white/10 bg-white/[0.015]">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
+          <div className="flex items-center gap-3 mb-8 reveal">
+            <span className="section-label bracket">Recognition</span>
+            <span className="h-px flex-1 bg-white/10" />
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 border border-white/10 reveal">
+            {[
+              { icon: Trophy, title: 'Codebreak 2.0 Champion', meta: 'Tenext.ai · 2025' },
+              { icon: Briefcase, title: 'QA Automation @ Billease', meta: 'Apr 2025 · Present' },
+              { icon: GraduationCap, title: 'Iskolar ng Laguna · UP SLAS', meta: 'UPLB CS · Batch 2025' },
+              { icon: Rocket, title: 'Google Play Developer', meta: 'Sandalan · Live' },
+            ].map((r) => (
+              <div key={r.title} className="bg-[var(--bg)] p-6 flex items-start gap-4">
+                <r.icon className="w-4 h-4 text-[var(--accent)] mt-1 shrink-0" />
+                <div>
+                  <div className="text-white font-medium text-[15px] leading-snug font-display">
+                    {r.title}
+                  </div>
+                  <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/45 mt-1.5">
+                    {r.meta}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SANDALAN */}
+      <section id="sandalan" className="relative py-28 lg:py-32 border-t border-white/10 overflow-hidden">
+        <div className="absolute inset-0 grid-bg opacity-30" />
+
+        <div className="relative max-w-[1440px] mx-auto px-6 lg:px-10">
+          <div className="flex items-center gap-3 mb-10 reveal">
+            <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-[var(--accent)]">
+              [01] Featured Case Study
+            </span>
+            <span className="h-px flex-1 bg-white/10" />
+            <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-white/40">
+              Mar 2026 — present
+            </span>
           </div>
 
-          <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 mb-12 bg-white/10 border border-white/20">
-              <TabsTrigger value="overview" className="text-white data-[state=active]:bg-white data-[state=active]:text-black font-medium">
-                Overview
-              </TabsTrigger>
-              <TabsTrigger value="skills" className="text-white data-[state=active]:bg-white data-[state=active]:text-black font-medium">
+          {/* Feature graphic */}
+          <div className="reveal relative aspect-[1024/500] w-full overflow-hidden rounded-2xl border border-white/15 mb-14">
+            <img
+              src="/sandalan/feature.png"
+              alt="Sandalan feature graphic"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+            <div className="absolute inset-0 flex items-end p-6 lg:p-12">
+              <div className="max-w-3xl">
+                <Badge
+                  variant="outline"
+                  className="border-[var(--accent)]/40 text-[var(--accent)] bg-[var(--accent)]/10 rounded-full mb-4 font-mono text-[10px] tracking-[0.22em] uppercase"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] mr-2 animate-dot" />
+                  Live on Google Play
+                </Badge>
+                <div className="font-display font-semibold tracking-[-0.04em] text-5xl lg:text-8xl leading-[0.9] text-white">
+                  Sandalan<span className="text-[var(--accent)]">.</span>
+                </div>
+                <div className="font-display text-xl lg:text-3xl text-white/75 mt-2 max-w-2xl font-medium tracking-tight">
+                  The adulting guide Filipinos wish they had at 22.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid lg:grid-cols-12 gap-12 items-start">
+            <div className="lg:col-span-7 space-y-8">
+              <p className="text-lg text-white/75 leading-relaxed reveal">
+                A solo-built Filipino adulting and finance app. 15,000+ lines of Flutter across
+                13 synced database tables, 38+ bank integrations, OCR receipt scanning, a Taglish
+                AI chat assistant, government tax and contribution calculators, and Google Play
+                Billing. Works fully offline, syncs when online, zero trackers.
+              </p>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 border border-white/10 reveal delay-1">
+                {[
+                  { k: '15K+', v: 'Lines of Flutter' },
+                  { k: '13', v: 'Synced tables' },
+                  { k: '38+', v: 'Bank integrations' },
+                  { k: '1,000+', v: 'Gov offices' },
+                ].map((m) => (
+                  <div key={m.v} className="bg-[var(--bg)] p-5">
+                    <div className="font-display text-3xl font-semibold tracking-tight">{m.k}</div>
+                    <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/45 mt-1">
+                      {m.v}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap gap-2 reveal delay-2">
+                {['Flutter', 'Dart', 'Riverpod', 'Drift (SQLite)', 'Supabase', 'PostgreSQL', 'Go Router', 'Google Play Billing', 'OCR', 'RAG'].map(
+                  (t) => (
+                    <span
+                      key={t}
+                      className="font-mono text-[10px] tracking-[0.15em] uppercase text-white/75 border border-white/20 bg-white/[0.02] rounded-full px-3 py-1.5"
+                    >
+                      {t}
+                    </span>
+                  )
+                )}
+              </div>
+
+              <div className="flex flex-wrap gap-3 pt-2 reveal delay-3">
+                <Button
+                  size="lg"
+                  className="bg-[var(--accent)] text-black hover:bg-[var(--accent)]/90 rounded-full px-6 font-medium h-12"
+                  asChild
+                >
+                  <a href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer">
+                    <Smartphone className="w-4 h-4 mr-2" />
+                    Google Play
+                    <ArrowUpRight className="w-4 h-4 ml-2" />
+                  </a>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="ghost"
+                  className="border border-white/20 text-white hover:bg-white/10 rounded-full px-6 h-12"
+                  asChild
+                >
+                  <a href={SANDALAN_SITE} target="_blank" rel="noopener noreferrer">
+                    <Globe className="w-4 h-4 mr-2" />
+                    Landing page
+                  </a>
+                </Button>
+              </div>
+            </div>
+
+            {/* Phone stack */}
+            <div className="lg:col-span-5 reveal delay-2">
+              <div className="relative h-[480px] lg:h-[560px] max-w-md mx-auto">
+                {[
+                  { src: '/sandalan/screen-2.png', rotate: '-6deg', tx: '-30%', ty: '8%', z: 10 },
+                  { src: '/sandalan/screen-3.png', rotate: '0deg', tx: '0%', ty: '0%', z: 20 },
+                  { src: '/sandalan/screen-1.png', rotate: '6deg', tx: '30%', ty: '8%', z: 10 },
+                ].map((p, i) => (
+                  <div
+                    key={i}
+                    className="absolute top-0 left-1/2 w-[60%] aspect-[9/19] overflow-hidden rounded-[2rem] border border-white/20 bg-black shadow-2xl shadow-black/50"
+                    style={{
+                      transform: `translate(calc(-50% + ${p.tx}), ${p.ty}) rotate(${p.rotate})`,
+                      zIndex: p.z,
+                    }}
+                  >
+                    <img src={p.src} alt="Sandalan screen" className="w-full h-full object-cover" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Case study row */}
+          <div className="mt-28 grid lg:grid-cols-3 gap-px bg-white/10 border border-white/10 reveal">
+            {[
+              {
+                label: '01 / The problem',
+                body:
+                  'Adulting and personal finance for Filipinos is scattered across outdated government PDFs, conflicting blog posts, and tita advice. First-time TIN, SSS, or PhilHealth registrations are stressful, and money tracking apps ignore the local context (GCash, Maya, local banks, 13th month pay).',
+              },
+              {
+                label: '02 / The approach',
+                body:
+                  'Architected an offline-first sync engine with conflict resolution, incremental replication, and retry/failure recovery across 13 tables, from PostgreSQL (Supabase) to local SQLite (Drift). Row-level security, RLS-backed auth, 38+ bank integrations, OCR receipt scanning, and a RAG-based Taglish chat assistant.',
+              },
+              {
+                label: '03 / The outcome',
+                body:
+                  '15,000+ line Flutter app live on Google Play. Every feature free, government tax and contribution calculators aligned with 2026 rates, Google Play Billing hooked up, zero trackers. Shipping updates weekly driven by in-app user feedback.',
+              },
+            ].map((c) => (
+              <div key={c.label} className="bg-[var(--bg)] p-8">
+                <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--accent)] mb-4">
+                  {c.label}
+                </div>
+                <p className="text-white/75 leading-relaxed text-[15px]">{c.body}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Feature grid */}
+          <div className="mt-20 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                icon: CheckCircle2,
+                title: 'Step-by-step guides',
+                body:
+                  'Six life stages from Unang Hakbang (fresh grad) to Gintong Taon (retirement). Real fees, real offices, real paperwork.',
+              },
+              {
+                icon: MapPin,
+                title: '1,000+ government offices',
+                body:
+                  'BIR, SSS, PhilHealth, Pag-IBIG, LTO, DFA, PSA. Find the closest branch and get directions in one tap.',
+              },
+              {
+                icon: Zap,
+                title: 'Personal life admin',
+                body:
+                  'Bills, expenses, budgets, goals, and a document vault. Built for how Filipinos actually spend money.',
+              },
+              {
+                icon: Sparkles,
+                title: 'Taglish AI assistant',
+                body:
+                  '"Anong ginastos ko this week?", "Pano kumuha ng TIN?". Natural language, plain Filipino-English.',
+              },
+              {
+                icon: Shield,
+                title: 'Offline-first, private',
+                body:
+                  'Local SQLite via Drift, Supabase sync when online. No trackers, RA 10173 compliant, export or delete anytime.',
+              },
+              {
+                icon: Server,
+                title: 'Shipped solo',
+                body:
+                  'Designed, built, and launched end-to-end: Flutter app, Supabase backend, schema migrations, CI, store listing.',
+              },
+            ].map((f, idx) => (
+              <div
+                key={f.title}
+                className={`reveal delay-${(idx % 5) + 1} p-7 border border-white/10 bg-white/[0.015] card-hover`}
+              >
+                <f.icon className="w-5 h-5 text-[var(--accent)] mb-5" />
+                <h3 className="font-display text-xl font-semibold mb-2 tracking-tight">{f.title}</h3>
+                <p className="text-white/65 text-sm leading-relaxed">{f.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* WORK */}
+      <section id="work" className="relative py-28 lg:py-32 px-6 lg:px-10 border-t border-white/10">
+        <div className="max-w-[1440px] mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16 reveal">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="section-label bracket">Selected Work</span>
+                <span className="w-8 h-px bg-white/30" />
+              </div>
+              <h2 className="font-display text-5xl lg:text-7xl font-semibold tracking-[-0.035em] leading-[0.95]">
+                Other things<br />
+                <span className="text-white/45">I've shipped.</span>
+              </h2>
+            </div>
+            <a
+              href="https://github.com/jvcerezo"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 font-mono text-xs tracking-[0.22em] uppercase text-white/60 hover:text-[var(--accent)] link-underline"
+            >
+              All on GitHub <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+            {PROJECTS.map((p, idx) => (
+              <ProjectCard key={p.title} p={p} idx={idx} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ABOUT */}
+      <section id="about" className="relative py-28 lg:py-32 px-6 lg:px-10 border-t border-white/10">
+        <div className="max-w-[1440px] mx-auto">
+          <div className="grid lg:grid-cols-12 gap-12 mb-20">
+            <div className="lg:col-span-5 reveal">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="section-label bracket">About</span>
+                <span className="w-8 h-px bg-white/30" />
+              </div>
+              <h2 className="font-display text-5xl lg:text-7xl font-semibold tracking-[-0.035em] leading-[0.95]">
+                I ship<br />
+                <span className="text-white/45">end-to-end.</span>
+              </h2>
+            </div>
+            <div className="lg:col-span-7 space-y-5 text-white/70 text-[17px] leading-relaxed reveal delay-1">
+              <p>
+                Fresh Computer Science graduate from the University of the Philippines Los Baños
+                (Batch 2025). Over the last three years I've built web, mobile, and microservices
+                apps, won a national AI hackathon, interned on bioinformatics software for IRRI,
+                and led teams for academic flagship events.
+              </p>
+              <p>
+                Lately I ship as a solo developer. That means writing the schema, wiring the
+                backend, polishing the UI, watching crash logs, and reading user feedback the
+                morning after a release. I care about products that work for the market they're
+                actually built for.
+              </p>
+              <p className="text-white font-medium">
+                Hiring a generalist who owns the full stack and gets work in front of real users?
+                Let's talk.
+              </p>
+            </div>
+          </div>
+
+          <Tabs defaultValue="skills" className="w-full">
+            <TabsList className="flex w-full max-w-lg mx-auto mb-12 bg-white/[0.04] border border-white/10 rounded-full p-1">
+              <TabsTrigger
+                value="skills"
+                className="flex-1 rounded-full text-white data-[state=active]:bg-white data-[state=active]:text-black font-medium"
+              >
                 Skills
               </TabsTrigger>
-              <TabsTrigger value="experience" className="text-white data-[state=active]:bg-white data-[state=active]:text-black font-medium">
+              <TabsTrigger
+                value="experience"
+                className="flex-1 rounded-full text-white data-[state=active]:bg-white data-[state=active]:text-black font-medium"
+              >
                 Experience
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="overview" className="space-y-12">
-              <div className="grid lg:grid-cols-2 gap-16 items-start">
-                <div className="space-y-8">
-                  <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
-                    <CardHeader>
-                      <CardTitle className="text-white flex items-center gap-3">
-                        <Palette className="w-6 h-6" />
-                        My Journey
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-300 leading-relaxed">
-                        I am a fresh Computer Science graduate from University of the Philippines Los Baños, 
-                        I love everything about full-stack development, from concept making to deployment. I believe in writing 
-                        clean, efficient code that creates meaningful digital experiences.
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
-                    <CardHeader>
-                      <CardTitle className="text-white flex items-center gap-3">
-                        <Star className="w-6 h-6" />
-                        What Drives Me
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-300 leading-relaxed">
-                        I consider coding solutions that work toward building scalable web applications that solve real-world problems as a hobby. From Junior year until now
-                        the MERN stack excites me because it allows for full-stack development with JavaScript, 
-                        creating seamless experiences from database to user interface.
-                      </p>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                <div className="space-y-8">
-                  <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
-                    <CardHeader>
-                      <CardTitle className="text-white flex items-center gap-3">
-                        <Award className="w-6 h-6" />
-                        Achievements
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-300">University Projects</span>
-                        <Badge variant="secondary" className="bg-white/10 text-white">4+</Badge>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-300">Years Experience</span>
-                        <Badge variant="secondary" className="bg-white/10 text-white">3 Years</Badge>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-300">MERN Stack Projects</span>
-                        <Badge variant="secondary" className="bg-white/10 text-white">4+</Badge>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-300">University of the Philippines Los Baños Graduate</span>
-                        <Badge variant="secondary" className="bg-white/10 text-white">2025</Badge>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
-                    <CardHeader>
-                      <CardTitle className="text-white flex items-center gap-3">
-                        <Users className="w-6 h-6" />
-                        Collaboration
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-300 leading-relaxed">
-                        I thrive in collaborative environments, working closely with designers, 
-                        product managers, and fellow developers to bring visions to life.
-                      </p>
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="skills" className="space-y-12">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <TabsContent value="skills">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                  { 
-                    category: 'Backend Development', 
-                    icon: Server, 
-                    skills: ['Node.js', 'Express.js', 'MongoDB', 'PostgreSQL', 'RESTful APIs', 'Supabase', 'Firebase', 'Drupal']
+                  {
+                    category: 'Languages',
+                    icon: Code,
+                    skills: ['Java', 'C / C++', 'Python', 'JavaScript', 'TypeScript', 'Dart', 'SQL'],
                   },
-                  { 
-                    category: 'Frontend Development', 
-                    icon: Code, 
-                    skills: ['React', 'JavaScript', 'TypeScript', 'HTML/CSS', 'Tailwind CSS', 'Bootstrap', 'Vite', 'Flutter', 'Dart']
+                  {
+                    category: 'Mobile',
+                    icon: Smartphone,
+                    skills: ['Flutter', 'Dart', 'Riverpod', 'Drift (SQLite)', 'Go Router', 'Supabase Flutter'],
                   },
-                  { 
-                    category: 'Tools & DevOps', 
-                    icon: Database, 
-                    skills: ['Git', 'GitHub', 'GitLab CI/CD', 'Vercel', 'AWS', 'Docker', 'Render']
+                  {
+                    category: 'Frontend',
+                    icon: Palette,
+                    skills: ['React', 'Next.js', 'Tailwind CSS', 'shadcn/ui', 'Vite'],
                   },
-                  { 
-                    category: 'AI & APIs', 
-                    icon: Star, 
-                    skills: ['Gemini API', 'API Integration', 'Data Visualization', 'Machine Learning']
+                  {
+                    category: 'Backend',
+                    icon: Server,
+                    skills: ['Node.js', 'Express', 'Supabase', 'PostgreSQL', 'MongoDB', 'REST APIs'],
                   },
-                  { 
-                    category: 'Mobile & Game Dev', 
-                    icon: Palette, 
-                    skills: ['Flutter', 'Dart', 'Unity', 'C#', 'Mobile Apps', 'Game Mechanics']
+                  {
+                    category: 'QA & Automation',
+                    icon: Shield,
+                    skills: ['Appium', 'BrowserStack', 'Regression suites', 'CI/CD', 'Bug triage'],
                   },
-                  { 
-                    category: 'Database & Cloud', 
-                    icon: Database, 
-                    skills: ['MongoDB', 'PostgreSQL', 'Firebase', 'Supabase', 'Cloud Firestore', 'AWS']
+                  {
+                    category: 'Infra & AI',
+                    icon: Database,
+                    skills: ['Git', 'Docker', 'Vercel', 'AWS', 'Gemini API', 'Claude API', 'RAG'],
                   },
-                ].map((skillGroup, index) => (
-                  <Card key={index} className="bg-white/5 border-white/20 backdrop-blur-sm">
-                    <CardHeader>
-                      <CardTitle className="text-white flex items-center gap-3">
-                        <skillGroup.icon className="w-6 h-6" />
-                        {skillGroup.category}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex flex-wrap gap-2">
-                        {skillGroup.skills.map((skill, skillIndex) => (
-                          <Badge key={skillIndex} variant="outline" className="border-white/30 text-white text-xs">
-                            {skill}
-                          </Badge>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
+                ].map((group) => (
+                  <div
+                    key={group.category}
+                    className="p-6 border border-white/10 bg-white/[0.015] card-hover"
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      <group.icon className="w-4 h-4 text-[var(--accent)]" />
+                      <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-white/80">
+                        {group.category}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {group.skills.map((s) => (
+                        <span
+                          key={s}
+                          className="text-[13px] text-white/85 border border-white/15 rounded-full px-3 py-1"
+                        >
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
             </TabsContent>
 
-            <TabsContent value="experience" className="space-y-8">
-              <div className="space-y-8">
-                {[
-                  {
-                    role: 'Bachelor of Science in Computer Science',
-                    company: 'University of the Philippines Los Baños',
-                    period: 'September 2021 - July 2025',
-                    description: 'Completed comprehensive computer science education with focus on software engineering, data structures, algorithms, and web development.',
-                    achievements: ['Graduated Honor Roll', 'College Scholar and Honor Roll for multiple semesters', 'Special problem in bioinformatics in collaboration with International Rice Research Institute(IRRI)', 'Active member of UPLB Computer Science Society']
-                  },
-                  {
-                    role: 'Codebreak 2.0 Champion',
-                    company: 'Tenext.ai Codebreak 2.0 Hackathon',
-                    period: 'May 2025',
-                    description: 'Won as Champion in Tenext.ai Codebreak 2.0 Hackathon for developing an innovative AI agent in under 24 hours.',
-                    achievements: ['Developed an MVP with AI Integration', 'Implemented real-time QA analytics for voice calls', 'Full audio support and real-time script generation during calls', 'Received recognition for technical excellence']
-                  },
-                  {
-                    role: '41st CS Week Code Wars Co-Head / Team Lead / Project Manager',
-                    company: 'UPLB Computer Science Society',
-                    period: 'January 2025 - March 2025',
-                    description: 'Led the web development of the organization\'s flagship event. Managed a team of developers to create a seamless online experience for participants and judges.',
-                    achievements: ['AWS Deployment', 'Shipped 8 features in 2 months', 'Successfully launched the app used by 20 teams and 4 judges without any downtimes', 'Leadership']
-                  },
-                  {
-                    role: 'Bioinformatics Software Development Intern',
-                    company: 'International Rice Research Institute (IRRI)',
-                    period: 'July 2024 - May 2025',
-                    description: 'Created an authentication module from scratch using Drupal and Docker, and redeveloped IRRI\'s SNPSeek into SNP-MERN, utilizing modern web technologies and microservices architecture',
-                    achievements: ['Learned Drupal and Dockerization', 'Developed SNPSeek and its core functionalities into a new tech stack (MERN) in under 5 months', 'Successfully converted SNPSeek monolithic architecture to microservices', 'Deployed SNP-MERN completely free using my own laptop as a server XD']
-                  },
-                  {
-                    role: '2 Weeks - Full Stack Developer',
-                    company: 'Client Project',
-                    period: 'August 2024',
-                    description: 'Created a responsive story game using ReactJS and Vercel with 2 members for a client in a span of 3 weeks.',
-                    achievements: ['Built responsive story game interface', 'Collaborated with team of 3 developers', 'Delivered project within 3-week timeline', 'Deployed using Vercel platform']
-                  },
-                  {
-                    role: 'eLBigayan - Team Lead',
-                    company: 'Flutter Development Project',
-                    period: 'May 2024 - June 2024',
-                    description: 'Led a team of 2 members in developing a Flutter and Dart donation system.',
-                    achievements: ['Led team of 3 developers', 'Integrated 4 Firebase services', 'Created secure and scalable backend', 'Delivered fully functional donation platform']
-                  },
-                  {
-                    role: 'Fire Nation Invasion - Game Developer',
-                    company: 'Game Development Project',
-                    period: 'April 2024 - June 2024',
-                    description: 'Worked with 2 members to develop key features, including character abilities and game mechanics.',
-                    achievements: ['Developed character abilities and game mechanics', 'Implemented multiplayer feature for up to 4 players', 'Enabled cross-computer connectivity', 'Collaborated in 3-member development team']
-                  },
-                  {
-                    role: 'PICSEL - Backend Developer',
-                    company: 'Reservation System Development',
-                    period: 'February 2024 - June 2024',
-                    description: 'Developed backend components for a reservation system with PostgreSQL, Express.js, Node.js, and React, contributing 94 commits and 12 merged pull requests to 7 features in a 20-developer team over 5 months.',
-                    achievements: ['Successfully integrated Google authentication', 'Enhanced security and streamlined user login process', '94 commits and 12 merged pull requests', 'Contributed to 7 features in 20-developer team']
-                  },
-                ].map((job, index) => (
-                  <Card key={index} className="bg-white/5 border-white/20 backdrop-blur-sm">
-                    <CardHeader>
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <CardTitle className="text-white">{job.role}</CardTitle>
-                          <CardDescription className="text-gray-400 mt-1">
-                            {job.company} • {job.period}
-                          </CardDescription>
+            <TabsContent value="experience">
+              <div className="relative">
+                <div className="absolute left-0 md:left-[140px] top-0 bottom-0 w-px bg-white/10" />
+                <div className="space-y-2">
+                  {EXPERIENCE.map((job, index) => (
+                    <div
+                      key={job.role + index}
+                      className="relative grid md:grid-cols-[140px_1fr] gap-6 md:gap-10 py-6 border-b border-white/5 last:border-b-0"
+                    >
+                      <div className="md:pr-6 relative">
+                        <span className="absolute -left-[3px] md:left-[134px] top-1 w-2 h-2 rounded-full bg-[var(--accent)]" />
+                        <div className="pl-6 md:pl-0 md:text-right">
+                          <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/50">
+                            {job.period}
+                          </div>
                         </div>
-                        <Badge variant="outline" className="border-white/30 text-white">
-                          <Calendar className="w-3 h-3 mr-1" />
-                          {job.period.includes(' - ') ? job.period.split(' - ')[1] : job.period}
-                        </Badge>
                       </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-300 mb-4">{job.description}</p>
-                      <div className="space-y-2">
-                        <h4 className="text-white font-medium text-sm">Key Achievements:</h4>
-                        <ul className="space-y-1">
-                          {job.achievements.map((achievement, achIndex) => (
-                            <li key={achIndex} className="text-gray-300 text-sm flex items-center gap-2">
-                              <ChevronRight className="w-3 h-3 text-gray-400" />
-                              {achievement}
-                            </li>
+                      <div className="pl-6 md:pl-10">
+                        <h3 className="font-display text-xl lg:text-2xl font-semibold text-white tracking-tight">
+                          {job.role}
+                        </h3>
+                        <div className="text-white/55 text-sm mt-1 font-mono tracking-[0.05em]">
+                          {job.company}
+                        </div>
+                        <p className="text-white/70 leading-relaxed mt-3 text-[15px]">
+                          {job.description}
+                        </p>
+                        <div className="flex flex-wrap gap-2 mt-4">
+                          {job.tags.map((t) => (
+                            <span
+                              key={t}
+                              className="font-mono text-[10px] tracking-[0.15em] uppercase text-white/55 border border-white/15 px-2.5 py-1 rounded-full"
+                            >
+                              {t}
+                            </span>
                           ))}
-                        </ul>
+                        </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                    </div>
+                  ))}
+                </div>
               </div>
             </TabsContent>
           </Tabs>
         </div>
       </section>
 
-      {/* Projects Section - Enhanced with Detailed Cards */}
-      <section id="projects" className="py-32 px-6 bg-white/5">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl lg:text-6xl font-light mb-6 tracking-wide">Featured Projects</h2>
-            <Separator className="w-32 mx-auto bg-white/30" />
-            <p className="text-xl text-gray-400 mt-6 max-w-2xl mx-auto">
-              A showcase of my recent work and technical expertise
+      {/* CONTACT */}
+      <section id="contact" className="relative py-28 lg:py-32 px-6 lg:px-10 border-t border-white/10 overflow-hidden">
+        <div className="absolute inset-0 grid-bg opacity-40" />
+        <div className="relative max-w-[1440px] mx-auto">
+          <div className="text-center mb-14 reveal">
+            <div className="font-mono text-[11px] tracking-[0.22em] uppercase text-[var(--accent)] mb-6">
+              [04] Contact
+            </div>
+            <h2 className="font-display font-semibold text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-[-0.04em]">
+              Got a project?<br />
+              <span className="text-white/45">Let's build it.</span>
+            </h2>
+            <p className="text-lg text-white/65 mt-8 max-w-2xl mx-auto">
+              Open to full-time roles, contract work, and partnerships. Happy to chat about
+              Flutter apps, React products, or the Filipino market specifically.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-3 gap-px bg-white/10 border border-white/10 max-w-4xl mx-auto mb-12 reveal">
             {[
-              {
-                title: 'IskOS - Academic Management System',
-                description: 'Comprehensive academic system for students to manage their schedules, track absences, and calculate GWA. Features Google Calendar integration and subjects database.',
-                link: 'https://isk-os.vercel.app',
-                tech: ['React', 'TypeScript', 'Google Calendar API', 'Database'],
-                features: ['Schedule import', 'Google Calendar sync', 'Absence tracker', 'GWA Calculator', 'Subjects database'],
-                status: 'In Development',
-                image: '📚'
-              },
-              {
-                title: 'Ottodot Assessment',
-                description: 'Full-stack coding assessment project showcasing modern web development practices with AI integration. Built with TypeScript and Supabase backend.',
-                link: 'https://ottodot-coding-task-full-stack-eta.vercel.app',
-                tech: ['TypeScript', 'JavaScript', 'Supabase', 'Gemini API'],
-                features: ['AI integration', 'Database management', 'Modern TypeScript', 'Supabase backend'],
-                status: 'Live Production',
-                image: '🤖'
-              },
-              {
-                title: 'SNP-MERN',
-                description: 'Full-stack bioinformatics web application for genetic variant analysis and interpretation with advanced filtering capabilities. Developed during IRRI internship.',
-                link: 'https://snpseek-mern.vercel.app',
-                tech: ['React', 'Node.js', 'Express.js', 'MongoDB'],
-                features: ['Genetic variant analysis', 'Interactive charts', 'Advanced filtering', 'Data visualization'],
-                status: 'Live Production',
-                image: '🧬'
-              },
-              {
-                title: 'SOSC3 Advocacy App',
-                description: 'Social advocacy web application promoting community engagement and social awareness campaigns.',
-                link: 'https://sosc3-advocacy-app.vercel.app',
-                tech: ['React', 'Tailwind CSS', 'HTML', 'Vercel'],
-                features: ['Advocacy campaigns', 'Research', 'Social sharing', 'Community features'],
-                status: 'Live Production',
-                image: '🏛️'
-              },
-              {
-                title: 'Diet Plan Calculator',
-                description: 'Health and nutrition application for creating personalized diet plans with calorie tracking and meal recommendations.',
-                link: 'https://diet-plan-calculator.vercel.app',
-                tech: ['React', 'Node.js', 'Express.js', 'MongoDB', 'Tailwind CSS'],
-                features: ['Nutrition calculation', 'Meal planning', 'Calorie tracking', 'Personalized recommendations'],
-                status: 'MVP',
-                image: '🍎'
-              },
-              {
-                title: 'Maralit Dental Clinic Appointment System',
-                description: 'Comprehensive dental clinic management system with appointment scheduling and patient record management.',
-                link: 'https://mdcas-fe.vercel.app',
-                tech: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS'],
-                features: ['Appointment scheduling', 'Patient management', 'Medical records', 'Clinic administration'],
-                status: 'MVP',
-                image: '🏥'
-              },
-            ].map((project, index) => (
-              <Card key={index} className="bg-black/50 border-white/20 backdrop-blur-sm overflow-hidden group hover:border-white/40 transition-all duration-500">
-                <div className="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-8xl opacity-50">{project.image}</div>
+              { icon: Mail, label: 'Email', value: 'jetjetcerezo@gmail.com', href: 'mailto:jetjetcerezo@gmail.com' },
+              { icon: Phone, label: 'Phone', value: '+63 998 914 8907', href: 'tel:+639989148907' },
+              { icon: MapPin, label: 'Location', value: 'Laguna, Philippines', href: null },
+            ].map((c) => {
+              const content = (
+                <>
+                  <c.icon className="w-4 h-4 text-[var(--accent)] mb-4" />
+                  <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/45 mb-2">
+                    {c.label}
                   </div>
-                  <div className="absolute top-4 right-4">
-                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-                      {project.status}
-                    </Badge>
-                  </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <div className="flex flex-wrap gap-2">
-                      {project.tech.slice(0, 3).map((tech, techIndex) => (
-                        <Badge key={techIndex} variant="outline" className="border-white/30 text-white text-xs bg-black/70 backdrop-blur-sm">
-                          {tech}
-                        </Badge>
-                      ))}
-                      {project.tech.length > 3 && (
-                        <Badge variant="outline" className="border-white/30 text-white text-xs bg-black/70 backdrop-blur-sm">
-                          +{project.tech.length - 3}
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
+                  <div className="text-white font-medium">{c.value}</div>
+                </>
+              );
+              return c.href ? (
+                <a
+                  key={c.label}
+                  href={c.href}
+                  className="bg-[var(--bg)] p-8 hover:bg-white/[0.04] transition-colors"
+                >
+                  {content}
+                </a>
+              ) : (
+                <div key={c.label} className="bg-[var(--bg)] p-8">
+                  {content}
                 </div>
-                
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <CardTitle className="text-white text-xl group-hover:text-gray-300 transition-colors">
-                      {project.title}
-                    </CardTitle>
-                    <Button 
-                      size="sm" 
-                      variant="ghost" 
-                      className="text-white hover:text-gray-300 p-2"
-                      asChild
-                    >
-                      <a href={project.link} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                    </Button>
-                  </div>
-                  <CardDescription className="text-gray-400 leading-relaxed">
-                    {project.description}
-                  </CardDescription>
-                </CardHeader>
-                
-                <CardContent className="space-y-6">
-                  <div>
-                    <h4 className="text-white font-medium text-sm mb-3">Key Features:</h4>
-                    <div className="grid grid-cols-2 gap-2">
-                      {project.features.map((feature, featureIndex) => (
-                        <div key={featureIndex} className="flex items-center gap-2 text-gray-300 text-sm">
-                          <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
-                          {feature}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h4 className="text-white font-medium text-sm mb-3">Tech Stack:</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {project.tech.map((tech, techIndex) => (
-                        <Badge key={techIndex} variant="outline" className="border-white/30 text-white text-xs">
-                          {tech}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <Button 
-                    className="w-full bg-white text-black hover:bg-gray-200 font-medium"
-                    asChild
-                  >
-                    <a href={project.link} target="_blank" rel="noopener noreferrer">
-                      View Live Project
-                      <ExternalLink className="w-4 h-4 ml-2" />
-                    </a>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+              );
+            })}
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-3 reveal delay-2">
+            <Button
+              size="lg"
+              className="bg-[var(--accent)] text-black hover:bg-[var(--accent)]/90 rounded-full px-7 font-medium h-12"
+              asChild
+            >
+              <a href="mailto:jetjetcerezo@gmail.com">
+                <Mail className="w-4 h-4 mr-2" />
+                Send a message
+              </a>
+            </Button>
+            <Button
+              size="lg"
+              variant="ghost"
+              className="border border-white/20 text-white hover:bg-white/10 rounded-full px-6 h-12"
+              asChild
+            >
+              <a href="https://github.com/jvcerezo" target="_blank" rel="noopener noreferrer">
+                <Github className="w-4 h-4 mr-2" />
+                GitHub
+              </a>
+            </Button>
+            <Button
+              size="lg"
+              variant="ghost"
+              className="border border-white/20 text-white hover:bg-white/10 rounded-full px-6 h-12"
+              asChild
+            >
+              <a
+                href="https://www.linkedin.com/in/jet-timothy-cerezo-126903254"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Linkedin className="w-4 h-4 mr-2" />
+                LinkedIn
+              </a>
+            </Button>
+            <Button
+              size="lg"
+              variant="ghost"
+              className="border border-white/20 text-white hover:bg-white/10 rounded-full px-6 h-12"
+              asChild
+            >
+              <a href="/JetCerezo_Resume.pdf" download>
+                <Download className="w-4 h-4 mr-2" />
+                Resume
+              </a>
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* Contact Section - Enhanced */}
-      <section id="contact" className="py-32 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl lg:text-6xl font-light mb-6 tracking-wide">Let's Connect</h2>
-            <Separator className="w-32 mx-auto bg-white/30" />
-            <p className="text-xl text-gray-400 mt-6 max-w-2xl mx-auto">
-              Always open to connecting with fellow developers and exploring new opportunities.
-            </p>
+      {/* FOOTER */}
+      <footer className="relative py-12 px-6 lg:px-10 border-t border-white/10">
+        <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="flex items-center gap-3">
+            <span className="w-6 h-6 rounded-md border border-white/20 flex items-center justify-center">
+              <Terminal className="w-3 h-3 text-[var(--accent)]" />
+            </span>
+            <span className="font-display text-[15px] font-semibold tracking-tight">
+              Jet Timothy Cerezo
+            </span>
+            <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/40">
+              © {year}
+            </span>
           </div>
-
-          <div className="grid lg:grid-cols-2 gap-16">
-            {/* Contact Info */}
-            <div className="space-y-8">
-              <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle className="text-white text-2xl mb-4">Get In Touch</CardTitle>
-                  <CardDescription className="text-gray-400 text-lg">
-                    I'm always interested in connecting with fellow developers, discussing technology, and exploring potential collaboration opportunities.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="flex items-center gap-4 p-4 rounded-lg bg-white/5 border border-white/10">
-                    <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                      <Mail className="w-6 h-6 text-blue-400" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-medium">Email</h3>
-                      <p className="text-gray-400">jetjetcerezo@gmail.com</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-4 p-4 rounded-lg bg-white/5 border border-white/10">
-                    <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
-                      <Phone className="w-6 h-6 text-green-400" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-medium">Phone</h3>
-                      <p className="text-gray-400">+63 998 914 8907</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-4 p-4 rounded-lg bg-white/5 border border-white/10">
-                    <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                      <MapPin className="w-6 h-6 text-purple-400" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-medium">Location</h3>
-                      <p className="text-gray-400">Philippines</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Social Links */}
-              <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle className="text-white">Follow My Journey</CardTitle>
-                  <CardDescription className="text-gray-400">
-                    Stay updated with my latest projects and professional growth
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex gap-4">
-                    <Button 
-                      size="lg" 
-                      className="bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-black transition-all flex-1"
-                      asChild
-                    >
-                      <a href="https://github.com/jvcerezo" target="_blank" rel="noopener noreferrer">
-                        <Github className="w-5 h-5 mr-2" />
-                        GitHub
-                      </a>
-                    </Button>
-                    <Button 
-                      size="lg" 
-                      className="bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-black transition-all flex-1"
-                      asChild
-                    >
-                      <a href="https://www.linkedin.com/in/jet-timothy-cerezo-126903254" target="_blank" rel="noopener noreferrer">
-                        <Linkedin className="w-5 h-5 mr-2" />
-                        LinkedIn
-                      </a>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* CTA Section */}
-            <div className="space-y-8">
-              <Card className="bg-gradient-to-br from-white/10 to-white/5 border-white/30 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle className="text-white text-2xl">Let's Network</CardTitle>
-                  <CardDescription className="text-gray-400 text-lg">
-                    Always open to connecting with fellow professionals and exploring opportunities
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3 text-gray-300">
-                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span>Open to networking opportunities</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-gray-300">
-                      <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                      <span>Interested in technology discussions</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-gray-300">
-                      <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                      <span>Always learning and growing</span>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <Button 
-                      size="lg" 
-                      className="w-full bg-white text-black hover:bg-gray-200 font-medium"
-                      asChild
-                    >
-                      <a href="mailto:jetjetcerezo@gmail.com">
-                        <Mail className="w-5 h-5 mr-2" />
-                        Send Message
-                      </a>
-                    </Button>
-                    
-                    <Button 
-                      size="lg" 
-                      className="w-full bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-black transition-all"
-                      asChild
-                    >
-                      <a href="/JetCerezo_Resume.pdf" download="Jet_Timothy_Cerezo_Resume.pdf" target="_blank" rel="noopener noreferrer">
-                        <Download className="w-5 h-5 mr-2" />
-                        Download Resume
-                      </a>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle className="text-white">Professional Interests</CardTitle>
-                  <CardDescription className="text-gray-400">
-                    Areas I'm passionate about and always eager to discuss
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {[
-                    { interest: 'Full-Stack Development', focus: 'MERN Stack' },
-                    { interest: 'Software Architecture', focus: 'Scalable Systems' },
-                    { interest: 'Technology Innovation', focus: 'Emerging Trends' },
-                    { interest: 'Professional Growth', focus: 'Continuous Learning' }
-                  ].map((item, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-white/5">
-                      <span className="text-gray-300">{item.interest}</span>
-                      <Badge variant="outline" className="border-white/30 text-white">
-                        {item.focus}
-                      </Badge>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-            </div>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[10px] tracking-[0.22em] uppercase text-white/50">
+            <span>Built with React · Vite · Tailwind</span>
+            <button onClick={() => scrollToSection('home')} className="hover:text-[var(--accent)]">
+              Back to top ↑
+            </button>
           </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-white/20">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="text-gray-400 font-light">
-            © 2025 Jet Timothy Cerezo. All rights reserved.
-          </p>
         </div>
       </footer>
     </div>
