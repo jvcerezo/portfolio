@@ -106,16 +106,18 @@ I build end-to-end: schema, backend, frontend, mobile, store listing, and the po
 - **Iskolar ng Laguna** and **UP SLAS Scholar** — UPLB Computer Science, Batch 2025
 - **Honor Roll** — UPLB Computer Science
 
-### GitHub
+### By the numbers
 
-<div align="center">
-
-[![Jet's GitHub stats](https://github-readme-stats.vercel.app/api?username=jvcerezo&show_icons=true&theme=tokyonight&hide_border=true&include_all_commits=true&count_private=true&card_width=460)](https://github.com/jvcerezo)
-[![Top languages](https://github-readme-stats.vercel.app/api/top-langs/?username=jvcerezo&layout=compact&theme=tokyonight&hide_border=true&langs_count=8&card_width=320)](https://github.com/jvcerezo)
-
-[![GitHub streak](https://github-readme-streak-stats.herokuapp.com?user=jvcerezo&theme=tokyonight&hide_border=true)](https://github.com/jvcerezo)
-
-</div>
+| | |
+| --- | --- |
+| **15,000+** | lines of Flutter shipped in Sandalan |
+| **13** | synced Drift + Supabase tables |
+| **38+** | bank integrations in Sandalan |
+| **20+** | critical bugs surfaced at Billease |
+| **40+** | merge requests shipped at Billease |
+| **1st place** | Codebreak 2.0 Hackathon, built in under 24 hours |
+| **5 months** | to rewrite IRRI's SNPseek from monolith to MERN microservices |
+| **7-dev team** | led for UPLB CS Week Code Wars, zero downtime during 3 hours live |
 
 ---
 
