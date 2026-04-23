@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "vite",
     "gen:og": "node scripts/gen-og.mjs",
-    "prebuild": "node scripts/gen-og.mjs",
+    "gen:banner": "node scripts/gen-linkedin-banner.mjs",
+    "gen:assets": "node scripts/gen-og.mjs && node scripts/gen-linkedin-banner.mjs",
+    "prebuild": "node scripts/gen-og.mjs && node scripts/gen-linkedin-banner.mjs",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
