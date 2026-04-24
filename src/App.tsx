@@ -11,8 +11,8 @@ import { Badge } from './components/ui/badge';
 
 const NAV_ITEMS = [
   { id: 'home', label: 'Home', num: '00' },
-  { id: 'sandalan', label: 'Sandalan', num: '01' },
-  { id: 'about', label: 'About', num: '02' },
+  { id: 'about', label: 'About', num: '01' },
+  { id: 'sandalan', label: 'Featured', num: '02' },
   { id: 'work', label: 'Work', num: '03' },
   { id: 'contact', label: 'Contact', num: '04' },
 ];
@@ -638,6 +638,162 @@ function App() {
         </div>
       </section>
 
+      {/* ABOUT */}
+      <section id="about" className="relative py-28 lg:py-32 px-6 lg:px-10 border-t border-fg/10">
+        <div className="max-w-[1440px] mx-auto">
+          <div className="grid lg:grid-cols-12 gap-12 mb-20">
+            <div className="lg:col-span-5 reveal">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="section-label bracket">About</span>
+                <span className="w-8 h-px bg-fg/30" />
+              </div>
+              <h2 className="font-display text-5xl lg:text-7xl font-semibold tracking-[-0.035em] leading-[0.95]">
+                I ship<br />
+                <span className="text-fg/45">end-to-end.</span>
+              </h2>
+            </div>
+            <div className="lg:col-span-7 space-y-5 text-fg/70 text-[17px] leading-relaxed reveal delay-1">
+              <p>
+                Fresh Computer Science graduate from the University of the Philippines Los Baños
+                (Batch 2025). Over the last three years I've built web, mobile, and microservices
+                apps, won the Codebreak 2.0 AI hackathon, interned on bioinformatics software for IRRI,
+                and led teams for academic flagship events.
+              </p>
+              <p>
+                Lately I ship as a solo developer. That means writing the schema, wiring the
+                backend, polishing the UI, watching crash logs, and reading user feedback the
+                morning after a release. I care about products that work for the market they're
+                actually built for.
+              </p>
+              <p className="text-fg font-medium">
+                Hiring a generalist who owns the full stack and gets work in front of real users?
+                Let's talk.
+              </p>
+            </div>
+          </div>
+
+          <Tabs defaultValue="skills" className="w-full">
+            <TabsList className="flex w-full max-w-lg mx-auto mb-12 bg-fg/[0.055] border border-fg/10 rounded-full p-1">
+              <TabsTrigger
+                value="skills"
+                className="flex-1 rounded-full text-fg data-[state=active]:bg-fg data-[state=active]:text-bg font-medium"
+              >
+                Skills
+              </TabsTrigger>
+              <TabsTrigger
+                value="experience"
+                className="flex-1 rounded-full text-fg data-[state=active]:bg-fg data-[state=active]:text-bg font-medium"
+              >
+                Experience
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="skills">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[
+                  {
+                    category: 'Languages',
+                    icon: Code,
+                    skills: ['Java', 'C / C++', 'Python', 'JavaScript', 'TypeScript', 'Dart', 'SQL'],
+                  },
+                  {
+                    category: 'Mobile',
+                    icon: Smartphone,
+                    skills: ['Flutter', 'Dart', 'Riverpod', 'Drift (SQLite)', 'Go Router', 'Supabase Flutter'],
+                  },
+                  {
+                    category: 'Frontend',
+                    icon: Palette,
+                    skills: ['React', 'Next.js', 'Tailwind CSS', 'shadcn/ui', 'Vite'],
+                  },
+                  {
+                    category: 'Backend',
+                    icon: Server,
+                    skills: ['Node.js', 'Express', 'Supabase', 'PostgreSQL', 'MongoDB', 'REST APIs'],
+                  },
+                  {
+                    category: 'Test Automation',
+                    icon: Shield,
+                    skills: ['Appium', 'BrowserStack', 'Android E2E', 'Regression suites', 'CI/CD'],
+                  },
+                  {
+                    category: 'Infra & AI',
+                    icon: Database,
+                    skills: ['Git', 'Docker', 'Vercel', 'AWS', 'Gemini API', 'Claude API', 'RAG'],
+                  },
+                ].map((group) => (
+                  <div
+                    key={group.category}
+                    className="p-6 border border-fg/10 bg-fg/[0.025] card-hover"
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      <group.icon className="w-4 h-4 text-brand" />
+                      <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-fg/80">
+                        {group.category}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {group.skills.map((s) => (
+                        <span
+                          key={s}
+                          className="text-[13px] text-fg/85 border border-fg/15 rounded-full px-3 py-1"
+                        >
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="experience">
+              <div className="relative">
+                <div className="absolute left-0 md:left-[140px] top-0 bottom-0 w-px bg-fg/10" />
+                <div className="space-y-2">
+                  {EXPERIENCE.map((job, index) => (
+                    <div
+                      key={job.role + index}
+                      className="relative grid md:grid-cols-[140px_1fr] gap-6 md:gap-10 py-6 border-b border-fg/5 last:border-b-0"
+                    >
+                      <div className="md:pr-6 relative">
+                        <span className="absolute -left-[3px] md:left-[134px] top-1 w-2 h-2 rounded-full bg-brand" />
+                        <div className="pl-6 md:pl-0 md:text-right">
+                          <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/50">
+                            {job.period}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="pl-6 md:pl-10">
+                        <h3 className="font-display text-xl lg:text-2xl font-semibold text-fg tracking-tight">
+                          {job.role}
+                        </h3>
+                        <div className="text-fg/55 text-sm mt-1 font-mono tracking-[0.05em]">
+                          {job.company}
+                        </div>
+                        <p className="text-fg/70 leading-relaxed mt-3 text-[15px]">
+                          {job.description}
+                        </p>
+                        <div className="flex flex-wrap gap-2 mt-4">
+                          {job.tags.map((t) => (
+                            <span
+                              key={t}
+                              className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg/55 border border-fg/15 px-2.5 py-1 rounded-full"
+                            >
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </section>
+
       {/* SANDALAN */}
       <section id="sandalan" className="relative py-28 lg:py-32 border-t border-fg/10 overflow-hidden">
         <div className="absolute inset-0 grid-bg opacity-30" />
@@ -645,7 +801,7 @@ function App() {
         <div className="relative max-w-[1440px] mx-auto px-6 lg:px-10">
           <div className="flex items-center gap-3 mb-10 reveal">
             <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-brand">
-              [01] Featured Case Study
+              [02] Featured Case Study
             </span>
             <span className="h-px flex-1 bg-fg/10" />
             <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-fg/40">
@@ -848,162 +1004,6 @@ function App() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ABOUT */}
-      <section id="about" className="relative py-28 lg:py-32 px-6 lg:px-10 border-t border-fg/10">
-        <div className="max-w-[1440px] mx-auto">
-          <div className="grid lg:grid-cols-12 gap-12 mb-20">
-            <div className="lg:col-span-5 reveal">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="section-label bracket">About</span>
-                <span className="w-8 h-px bg-fg/30" />
-              </div>
-              <h2 className="font-display text-5xl lg:text-7xl font-semibold tracking-[-0.035em] leading-[0.95]">
-                I ship<br />
-                <span className="text-fg/45">end-to-end.</span>
-              </h2>
-            </div>
-            <div className="lg:col-span-7 space-y-5 text-fg/70 text-[17px] leading-relaxed reveal delay-1">
-              <p>
-                Fresh Computer Science graduate from the University of the Philippines Los Baños
-                (Batch 2025). Over the last three years I've built web, mobile, and microservices
-                apps, won the Codebreak 2.0 AI hackathon, interned on bioinformatics software for IRRI,
-                and led teams for academic flagship events.
-              </p>
-              <p>
-                Lately I ship as a solo developer. That means writing the schema, wiring the
-                backend, polishing the UI, watching crash logs, and reading user feedback the
-                morning after a release. I care about products that work for the market they're
-                actually built for.
-              </p>
-              <p className="text-fg font-medium">
-                Hiring a generalist who owns the full stack and gets work in front of real users?
-                Let's talk.
-              </p>
-            </div>
-          </div>
-
-          <Tabs defaultValue="skills" className="w-full">
-            <TabsList className="flex w-full max-w-lg mx-auto mb-12 bg-fg/[0.055] border border-fg/10 rounded-full p-1">
-              <TabsTrigger
-                value="skills"
-                className="flex-1 rounded-full text-fg data-[state=active]:bg-fg data-[state=active]:text-bg font-medium"
-              >
-                Skills
-              </TabsTrigger>
-              <TabsTrigger
-                value="experience"
-                className="flex-1 rounded-full text-fg data-[state=active]:bg-fg data-[state=active]:text-bg font-medium"
-              >
-                Experience
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="skills">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[
-                  {
-                    category: 'Languages',
-                    icon: Code,
-                    skills: ['Java', 'C / C++', 'Python', 'JavaScript', 'TypeScript', 'Dart', 'SQL'],
-                  },
-                  {
-                    category: 'Mobile',
-                    icon: Smartphone,
-                    skills: ['Flutter', 'Dart', 'Riverpod', 'Drift (SQLite)', 'Go Router', 'Supabase Flutter'],
-                  },
-                  {
-                    category: 'Frontend',
-                    icon: Palette,
-                    skills: ['React', 'Next.js', 'Tailwind CSS', 'shadcn/ui', 'Vite'],
-                  },
-                  {
-                    category: 'Backend',
-                    icon: Server,
-                    skills: ['Node.js', 'Express', 'Supabase', 'PostgreSQL', 'MongoDB', 'REST APIs'],
-                  },
-                  {
-                    category: 'Test Automation',
-                    icon: Shield,
-                    skills: ['Appium', 'BrowserStack', 'Android E2E', 'Regression suites', 'CI/CD'],
-                  },
-                  {
-                    category: 'Infra & AI',
-                    icon: Database,
-                    skills: ['Git', 'Docker', 'Vercel', 'AWS', 'Gemini API', 'Claude API', 'RAG'],
-                  },
-                ].map((group) => (
-                  <div
-                    key={group.category}
-                    className="p-6 border border-fg/10 bg-fg/[0.025] card-hover"
-                  >
-                    <div className="flex items-center gap-3 mb-4">
-                      <group.icon className="w-4 h-4 text-brand" />
-                      <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-fg/80">
-                        {group.category}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {group.skills.map((s) => (
-                        <span
-                          key={s}
-                          className="text-[13px] text-fg/85 border border-fg/15 rounded-full px-3 py-1"
-                        >
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="experience">
-              <div className="relative">
-                <div className="absolute left-0 md:left-[140px] top-0 bottom-0 w-px bg-fg/10" />
-                <div className="space-y-2">
-                  {EXPERIENCE.map((job, index) => (
-                    <div
-                      key={job.role + index}
-                      className="relative grid md:grid-cols-[140px_1fr] gap-6 md:gap-10 py-6 border-b border-fg/5 last:border-b-0"
-                    >
-                      <div className="md:pr-6 relative">
-                        <span className="absolute -left-[3px] md:left-[134px] top-1 w-2 h-2 rounded-full bg-brand" />
-                        <div className="pl-6 md:pl-0 md:text-right">
-                          <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/50">
-                            {job.period}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="pl-6 md:pl-10">
-                        <h3 className="font-display text-xl lg:text-2xl font-semibold text-fg tracking-tight">
-                          {job.role}
-                        </h3>
-                        <div className="text-fg/55 text-sm mt-1 font-mono tracking-[0.05em]">
-                          {job.company}
-                        </div>
-                        <p className="text-fg/70 leading-relaxed mt-3 text-[15px]">
-                          {job.description}
-                        </p>
-                        <div className="flex flex-wrap gap-2 mt-4">
-                          {job.tags.map((t) => (
-                            <span
-                              key={t}
-                              className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg/55 border border-fg/15 px-2.5 py-1 rounded-full"
-                            >
-                              {t}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </TabsContent>
-          </Tabs>
         </div>
       </section>
 
