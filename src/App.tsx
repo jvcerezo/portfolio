@@ -719,7 +719,7 @@ function App() {
                   {
                     category: 'Infra & AI',
                     icon: Database,
-                    skills: ['Git', 'Docker', 'Vercel', 'AWS', 'Gemini API', 'Claude API', 'RAG'],
+                    skills: ['Git', 'Docker', 'Vercel', 'AWS', 'Gemini API', 'Claude API', 'Hugging Face', 'Groq', 'Llama', 'RAG'],
                   },
                 ].map((group) => (
                   <div
