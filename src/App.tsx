@@ -250,8 +250,8 @@ const EXPERIENCE = [
     company: 'Billease',
     period: 'Apr 2025 — Present',
     description:
-      'Build and maintain Android test automation with Appium and BrowserStack. Surfaced 20+ critical bugs and shipped 40+ merge requests improving app stability across release cycles. Authored regression suites and spec files integrated into CI/CD for rapid pre-production issue resolution.',
-    tags: ['Appium', 'BrowserStack', 'Android', 'CI/CD', 'Regression'],
+      'Shipped 50+ merge requests and 30k+ lines of code expanding automated test coverage and infrastructure for a high-scale Android app. Engineered the CI/CD pipeline integrations for core regression and emergency hotfix suites. Discovered and resolved 30+ critical bugs using Appium and BrowserStack as the final technical gatekeeper before deployment. Integrated Claude/AI into the automation workflow to accelerate script development and debugging.',
+    tags: ['Appium', 'BrowserStack', 'Android', 'CI/CD', 'Claude AI', 'Regression'],
   },
   {
     role: 'Codebreak 2.0 Champion',
