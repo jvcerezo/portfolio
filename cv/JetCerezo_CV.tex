@@ -1,0 +1,241 @@
+%-----------------------------------------------------------------------------
+% Jet Timothy V. Cerezo - Curriculum Vitae
+%
+% Compile:
+%   pdflatex JetCerezo_CV.tex
+% or upload to Overleaf and Recompile.
+%
+% Requires: titlesec, enumitem, hyperref, fontawesome5, tabularx, xcolor,
+% microtype, parskip (all standard in TeX Live / MiKTeX full install).
+%-----------------------------------------------------------------------------
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[top=0.55in,bottom=0.55in,left=0.6in,right=0.6in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[scaled=0.95]{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{microtype}
+\linespread{1.05}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fontawesome5}
+\usepackage{tabularx}
+\usepackage{parskip}
+
+%---------- Colors
+\definecolor{ink}{HTML}{111111}
+\definecolor{muted}{HTML}{3A3A3A} % darker than before for stronger contrast
+\definecolor{accent}{HTML}{B45309} % amber-700, matches portfolio brand
+
+%---------- Hyperref
+\hypersetup{
+  colorlinks=true,
+  urlcolor=accent,
+  linkcolor=accent,
+  citecolor=accent,
+  pdftitle={Jet Timothy V. Cerezo - Curriculum Vitae},
+  pdfauthor={Jet Timothy V. Cerezo},
+  pdfsubject={Curriculum Vitae},
+}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+
+%---------- Section styling (custom; avoids titlesec/L3 incompatibility)
+\newcommand{\cvsection}[1]{%
+  \par\vspace{12pt}%
+  \noindent{\normalsize\bfseries\color{ink}\MakeUppercase{#1}}%
+  \par\vspace{2pt}%
+  \noindent\textcolor{ink}{\rule{\linewidth}{0.5pt}}%
+  \par\vspace{4pt}%
+}
+
+%---------- Entry: title, subtitle, date
+\newcommand{\entry}[3]{%
+  \par\medskip
+  \noindent\begin{tabularx}{\linewidth}{@{}X r@{}}
+    \textbf{#1} & {\small\color{muted}#3} \\
+    {\small\color{muted}#2} & \\
+  \end{tabularx}\par\vspace{1pt}
+}
+
+%---------- Project: title, stack, date/status
+\newcommand{\project}[3]{%
+  \par\medskip
+  \noindent\begin{tabularx}{\linewidth}{@{}X r@{}}
+    \textbf{#1} & {\small\color{muted}#3} \\
+    {\small\color{muted}#2} & \\
+  \end{tabularx}\par\vspace{1pt}
+}
+
+%---------- List spacing
+\setlist[itemize]{
+  leftmargin=1.2em,
+  topsep=3pt,
+  partopsep=0pt,
+  parsep=1pt,
+  itemsep=2pt,
+}
+
+%=============================================================================
+\begin{document}
+
+%---------- Header
+\begin{center}
+  {\Huge\bfseries Jet Timothy V. Cerezo}\\[3pt]
+  {\large\itshape\color{muted}Software Developer}\\[6pt]
+  {\small%
+    \faEnvelope\ \href{mailto:jetjetcerezo@gmail.com}{jetjetcerezo@gmail.com}
+    \quad\textbar\quad
+    \faPhone*\ \href{tel:+639989148907}{+63 998 914 8907}
+    \quad\textbar\quad
+    \faMapMarker*\ Los Ba\~nos, Laguna \\[3pt]
+    \faGlobe\ \href{https://jettimothycerezo.dev}{jettimothycerezo.dev}
+    \quad\textbar\quad
+    \faLinkedin\ \href{https://www.linkedin.com/in/jet-timothy-cerezo-126903254}{jet-timothy-cerezo}
+    \quad\textbar\quad
+    \faGithub\ \href{https://github.com/jvcerezo}{github.com/jvcerezo}%
+  }
+\end{center}
+
+%---------- Summary
+\cvsection{Summary}
+Fresh BS Computer Science graduate from the University of the Philippines Los Ba\~nos (2025), currently a Junior Test Automation Engineer at Billease and solo developer of \textbf{Sandalan}, a Filipino adulting and finance app live on Google Play. Three years building production web and mobile products end-to-end\,---\,from database schema to store listing. Codebreak 2.0 hackathon champion (2025) and IRRI bioinformatics thesis affiliate. Comfortable owning the full stack: Flutter, React/Next.js, Node.js, PostgreSQL/Supabase, and AI integration (RAG, Gemini, Claude).
+
+%---------- Experience
+\cvsection{Professional Experience}
+
+\entry{Junior Test Automation Engineer}{Billease}{Apr 2025\,--\,Present}
+\begin{itemize}
+  \item Shipped \textbf{50+ merge requests and 30{,}000+ lines of code} expanding automated test coverage and infrastructure for a high-scale Android consumer-fintech application.
+  \item Engineered and maintained \textbf{CI/CD pipeline integrations} for the core regression and emergency-hotfix suites, validating every production release against high-priority test cases.
+  \item Discovered and resolved \textbf{30+ critical, high-impact bugs} using Appium and BrowserStack, acting as the final technical gatekeeper before deployment.
+  \item Integrated \textbf{Claude / AI} into the automation workflow to accelerate script development and complex debugging, lifting both development velocity and test accuracy.
+\end{itemize}
+
+\entry{Bioinformatics Software Developer Intern \& Thesis Affiliate}{International Rice Research Institute (IRRI)}{Jul 2024\,--\,May 2025}
+\begin{itemize}
+  \item Implemented a custom \textbf{OAuth authentication flow} for SNPseek within a Dockerized Drupal environment, hardening secure user access and external system integration.
+  \item Designed and developed a \textbf{MERN-based SNPseek platform} using a microservices architecture, applying full-stack techniques to improve scalability, usability, and data-processing efficiency.
+\end{itemize}
+
+\entry{Full-Stack Developer \textnormal{(Freelance)}}{Project-based engagement, remote}{Aug 2024\,--\,Oct 2024}
+\begin{itemize}
+  \item Built a \textbf{story-based interactive game} with a 3-person team using the MERN stack, owning frontend, backend, and UI/UX through to client delivery.
+\end{itemize}
+
+%---------- Projects
+\cvsection{Selected Projects}
+
+\project{Sandalan\,---\,Filipino Adulting \& Finance App}{Flutter, Dart, Riverpod, Drift (SQLite), Supabase, PostgreSQL, OCR, RAG}{Mar 2026\,--\,Present\ \ \textbullet\ \ Live on Google Play}
+\begin{itemize}
+  \item Solo-developed and shipped a \textbf{15{,}000+ line Flutter mobile app} on Google Play, featuring 13 synced database tables, 38+ bank integrations, government tax and contribution calculators, OCR receipt scanning, a Taglish AI chat assistant, and Google Play Billing.
+  \item Architected an \textbf{offline-first sync engine} with conflict resolution, incremental replication, retry / failure recovery, and row-level security across PostgreSQL (Supabase) and local SQLite (Drift).
+  \item Designed and shipped six life-stage guides covering 1{,}000+ government offices (BIR, SSS, PhilHealth, Pag-IBIG, LTO, DFA, PSA); zero trackers, RA 10173 compliant.
+  \item Links: \href{https://play.google.com/store/apps/details?id=com.jvcerezo.exitplan}{Google Play} \textbullet\ \href{https://exitplan-tau.vercel.app}{exitplan-tau.vercel.app}
+\end{itemize}
+
+\project{Developer Camp Manila 2026\,---\,Voice-Driven Services Marketplace}{Full-stack, conversational AI, speech recognition, TTS, real-time matchmaking}{Apr 2026\ \ \textbullet\ \ Hackathon}
+\begin{itemize}
+  \item Built an \textbf{all-in-one services marketplace app} with an embedded voice-driven AI assistant capable of \textbf{speech recognition, natural conversational responses, services matchmaking} between users and providers, and end-to-end automation of the business workflow.
+\end{itemize}
+
+\project{Codebreak 2.0\,---\,RAG-based AI Support Platform}{RAG, microservices, real-time APIs, full-stack}{May 2025\ \ \textbullet\ \ Hackathon Champion}
+\begin{itemize}
+  \item Built a full-stack AI platform for customer-support agents featuring a RAG-based assistant that generated live call scripts from past and current tickets, plus automated post-call QA analytics.
+  \item Owned APIs, microservices, deployment, and AI integration end-to-end, delivering an MVP in \textbf{under 24 hours} and taking 1st place against seasoned industry professionals.
+\end{itemize}
+
+\project{IskOS\,---\,Academic OS for UPLB Students}{React, TypeScript, Google Calendar API, Supabase}{In Development}
+\begin{itemize}
+  \item Building a productivity dashboard that imports class schedules, syncs with Google Calendar, tracks absences, and computes GWA\,---\,designed for students juggling academic deadlines. \href{https://isk-os.vercel.app}{isk-os.vercel.app}
+\end{itemize}
+
+\project{Ottodot\,---\,Gemini-Powered Math Practice Generator}{Next.js, TypeScript, Supabase, Gemini API}{2025\ \ \textbullet\ \ Live}
+\begin{itemize}
+  \item Submitted as a full-stack recruitment task; generates math problems via Gemini with session history persistence. \href{https://ottodot-coding-task-full-stack-eta.vercel.app}{ottodot-coding-task-full-stack-eta.vercel.app}
+\end{itemize}
+
+\project{SNPseek MERN\,---\,Genetic Variant Analysis (IRRI)}{React, Node.js, Express, MongoDB}{2024\,--\,2025\ \ \textbullet\ \ Live}
+\begin{itemize}
+  \item Rewrote IRRI's legacy SNPseek into a modern MERN microservices stack with advanced filtering and interactive charts. \href{https://snpseek-mern.vercel.app}{snpseek-mern.vercel.app}
+\end{itemize}
+
+\project{SOSC3\,---\,Civic Tech Advocacy Platform}{React, Tailwind CSS, Vercel}{2024\ \ \textbullet\ \ Live}
+\begin{itemize}
+  \item Built a social-advocacy app for community engagement and awareness campaigns during UPLB CS Society. \href{https://sosc3-advocacy-app.vercel.app}{sosc3-advocacy-app.vercel.app}
+\end{itemize}
+
+\project{PICSEL\,---\,Reservation System \textnormal{(Backend Developer)}}{Node.js, Express, PostgreSQL, React}{Feb 2024\,--\,Jun 2024}
+\begin{itemize}
+  \item Integrated Google authentication to harden security and streamline login.
+  \item Contributed \textbf{9 commits and 12 merged PRs across 7 features} in a 20-developer team over 5 months.
+\end{itemize}
+
+\project{eLBigayan\,---\,Flutter Donation Platform \textnormal{(Team Lead)}}{Flutter, Dart, Firebase (4 services)}{May 2024\,--\,Jun 2024}
+\begin{itemize}
+  \item Led a 2-member team through the full development cycle of a donation system; integrated four Firebase services for a secure, scalable backend.
+\end{itemize}
+
+\smallskip
+\noindent\textbf{Additional Projects}
+\begin{itemize}
+  \item \textbf{Fire Nation Invasion} \textnormal{\textbullet\ Unity, C\#}\,---\,3-person Unity multiplayer game (up to 4 players, networked); built character abilities and core mechanics (Apr\,--\,Jun 2024).
+  \item \textbf{MDCAS} \textnormal{\textbullet\ MERN, Tailwind}\,---\,appointment scheduling, patient records, and admin dashboard for Maralit Dental Clinic. \href{https://mdcas-fe.vercel.app}{mdcas-fe.vercel.app}
+  \item \textbf{Diet Plan Calculator} \textnormal{\textbullet\ MERN, Tailwind}\,---\,personalized diet planner with calorie targets and meal recommendations. \href{https://diet-plan-calculator.vercel.app}{diet-plan-calculator.vercel.app}
+\end{itemize}
+
+%---------- Education
+\cvsection{Education}
+
+\entry{Bachelor of Science in Computer Science}{University of the Philippines Los Ba\~nos}{Sep 2021\,--\,Jul 2025}
+\begin{itemize}
+  \item \textbf{Honor Roll} \textbullet\ Iskolar ng Laguna scholar \textbullet\ UP SLAS scholar
+  \item Relevant coursework: Operating Systems (CMSC 125), Computer Networks (CMSC 137), Cybersecurity, Data Structures \& Algorithms.
+  \item Thesis affiliate with IRRI on bioinformatics tooling for genetic variant analysis.
+\end{itemize}
+
+\entry{Senior High School\,---\,STEM Strand}{STI College Calamba}{Sep 2019\,--\,Jun 2021}
+\begin{itemize}
+  \item Graduated \textbf{With Honors}.
+\end{itemize}
+
+%---------- Honors
+\cvsection{Honors \& Awards}
+\begin{itemize}
+  \item \textbf{Codebreak 2.0 Champion}, Tenext.ai Hackathon\,---\,1st place, RAG-based AI customer-support platform built in under 24 hours (May 2025).
+  \item \textbf{Honor Roll}, UPLB Department of Computer Science (multiple terms, 2021\,--\,2025).
+  \item \textbf{Iskolar ng Laguna}, Provincial Government of Laguna scholarship recipient.
+  \item \textbf{UP Student Learning Assistance System (SLAS)} scholarship recipient.
+  \item \textbf{Graduated With Honors}, STI College Calamba (2021).
+\end{itemize}
+
+%---------- Leadership
+\cvsection{Leadership \& Activities}
+
+\entry{Code Wars Co-Head \& Project Manager}{UPLB Computer Science Society \textbullet\ 41st CS Week}{Oct 2023\,--\,Jul 2025}
+\begin{itemize}
+  \item Led a 7-member development team enhancing a competitive-programming event platform, overseeing feature development, bug tracking, testing, and deployment.
+  \item Deployed and managed the live platform supporting \textbf{20 participating teams, 3 judges, and 3 continuous hours of zero-downtime service}.
+\end{itemize}
+
+%---------- Skills
+\cvsection{Technical Skills}
+
+\begin{tabularx}{\linewidth}{@{}l X@{}}
+  \textbf{Languages} & Java, C, C++, Python, JavaScript, TypeScript, Dart, SQL \\[2pt]
+  \textbf{Mobile} & Flutter, Dart, Riverpod, Drift (SQLite), Go Router, Supabase Flutter \\[2pt]
+  \textbf{Frontend} & React, Next.js, Tailwind CSS, shadcn/ui, Vite \\[2pt]
+  \textbf{Backend} & Node.js, Express, Supabase, PostgreSQL, MongoDB, REST APIs \\[2pt]
+  \textbf{Test Automation} & Appium, BrowserStack, Android E2E, regression suites, CI/CD \\[2pt]
+  \textbf{Infra \& AI} & Git, Docker, Vercel, AWS, Gemini API, Claude API, Hugging Face, Groq, Llama, RAG \\[2pt]
+  \textbf{Spoken} & English (Fluent) \textbullet\ Filipino / Tagalog (Native) \\
+\end{tabularx}
+
+\vspace{10pt}
+\noindent{\small\itshape\color{muted}References available upon request.}
+
+\end{document}
