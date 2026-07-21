@@ -1,28 +1,162 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
 import {
-  Menu, X, Mail, Phone, MapPin, Github, Linkedin, Download,
-  Code, Database, Server, ArrowUpRight,
-  Smartphone, Shield, Sparkles, Globe, Zap, CheckCircle2, Palette,
-  Trophy, Leaf, Briefcase, Rocket, Terminal, Sun, Moon,
+  Mail, Phone, MapPin, Github, Linkedin, Download, ArrowUpRight, Sun, Moon,
 } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
-import { Button } from './components/ui/button';
-import { Badge } from './components/ui/badge';
 
 const NAV_ITEMS = [
-  { id: 'home', label: 'Home', num: '00' },
-  { id: 'about', label: 'About', num: '01' },
-  { id: 'sandalan', label: 'Featured', num: '02' },
-  { id: 'work', label: 'Work', num: '03' },
-  { id: 'contact', label: 'Contact', num: '04' },
+  { id: 'about', label: 'About' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'work', label: 'Work' },
+  { id: 'contact', label: 'Contact' },
 ];
 
-const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.jvcerezo.exitplan';
-const SANDALAN_SITE = 'https://exitplan-tau.vercel.app';
+// Stable module-level identity — passing a fresh array into useScrollSpy on every
+// render would tear down and re-register the IntersectionObserver each time.
+const NAV_IDS = NAV_ITEMS.map((n) => n.id);
 
-// WordPress mshots — free, aggressively cached, loads fast
-const shot = (url: string) =>
-  `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}?w=1600&h=1000`;
+const PROFILE = {
+  name: 'Jet Timothy V. Cerezo',
+  title: 'Full-Stack Software Engineer',
+  email: 'jetjetcerezo@gmail.com',
+  // mailto: hands off to whatever the OS default handler is — on Windows that is
+  // usually Outlook. Link straight into Gmail's compose view instead.
+  gmailCompose:
+    'https://mail.google.com/mail/?view=cm&fs=1&to=jetjetcerezo@gmail.com&su=Hello%20Jet',
+  phone: '+63 998 914 8907',
+  phoneHref: 'tel:+639989148907',
+  location: 'Los Baños, Laguna, Philippines',
+  availability: 'UTC+8 · Open to US hours',
+  github: 'https://github.com/jvcerezo',
+  linkedin: 'https://www.linkedin.com/in/jet-timothy-cerezo-126903254',
+  resume: '/JetCerezo_Resume.pdf',
+};
+
+const SUMMARY = [
+  'Full-stack software engineer with 2+ years building and shipping production web applications across front end and back end. I rebuilt a legacy PHP/MySQL research platform at IRRI into a MERN microservices architecture — seven Dockerized Node.js and Express services behind a single API gateway.',
+  'Most of what I ship, I ship end-to-end: designing the schema, wiring the REST API, polishing the UI, running the CI pipeline, and reading the logs after deploy. I work comfortably in Agile teams and across Linux and Windows.',
+];
+
+const EXPERIENCE = [
+  {
+    role: 'Junior Test Automation Engineer',
+    company: 'Billease',
+    meta: 'Remote',
+    period: 'Apr 2025 — Present',
+    bullets: [
+      'Shipped 50+ merge requests and 30,000+ lines of code building automated test coverage and internal tooling for a high-scale consumer-fintech Android app.',
+      'Engineered and maintained CI/CD pipeline integrations for the core regression and emergency-hotfix suites, validating every production release across Linux CI runners.',
+      'Discovered and resolved 30+ critical, high-impact bugs using Appium and BrowserStack as the final technical gatekeeper before deployment.',
+      'Work in Agile/Scrum ceremonies — sprint planning, daily standups, and retrospectives — collaborating with developers and QA across every release cycle.',
+    ],
+    tech: ['CI/CD', 'Appium', 'BrowserStack', 'Linux', 'Claude API'],
+  },
+  {
+    role: 'Software Developer · Thesis Affiliate',
+    company: 'International Rice Research Institute (IRRI)',
+    meta: 'Los Baños, Laguna',
+    period: 'Jul 2024 — May 2025',
+    bullets: [
+      'Re-architected IRRI’s legacy SNPseek genomics platform into a MERN microservices system: seven independent Node.js/Express services behind a single API gateway, orchestrated with Docker Compose.',
+      'Worked hands-on across the existing PHP/MySQL Drupal stack, building a custom SSO/OAuth layer that bridged the legacy PHP application with the new Node services.',
+      'Designed MongoDB schemas and REST/JSON endpoints for large-scale genomic datasets, and built the React front end with multi-criteria filtering and interactive charts.',
+    ],
+    tech: ['PHP', 'MySQL', 'MongoDB', 'Node.js', 'Express', 'React', 'Docker', 'SSO'],
+  },
+  {
+    role: 'Full-Stack Developer',
+    company: 'Freelance / Project-Based',
+    meta: 'Remote',
+    period: 'Aug 2024 — Oct 2024',
+    bullets: [
+      'Built a story-based interactive web game on the MERN stack with a 3-person team; owned front end, back end, and UI/UX through to client delivery.',
+    ],
+    tech: ['MongoDB', 'Express', 'React', 'Node.js'],
+  },
+  {
+    role: 'Code Wars Co-Head · Project Manager',
+    company: 'UPLB Computer Science Society',
+    meta: 'Los Baños, Laguna',
+    period: 'Oct 2023 — Jul 2025',
+    bullets: [
+      'Led a 7-member development team on the competitive-programming event platform, overseeing feature development, bug tracking, testing, and deployment.',
+      'Ran the live platform for 20 teams, 3 judges, and 3 continuous hours of zero-downtime service.',
+    ],
+    tech: ['Leadership', 'Deployment', 'Testing'],
+  },
+];
+
+const PROJECTS = [
+  {
+    name: 'Sandalan',
+    tagline: 'Filipino adulting and finance app, live on Google Play',
+    year: '2024 — 2025',
+    description:
+      'Solo-built and shipped: 38+ bank integrations, tax calculators, OCR receipt scanning, an AI chat assistant, and Google Play Billing. Architected an offline-first sync engine with conflict resolution and incremental replication across 13 tables spanning PostgreSQL and SQLite, secured with row-level security. Currently migrating the product to a single Next.js 16 and TypeScript codebase — deployed to web and packaged for Android and iOS with Capacitor — using Supabase SSR auth, TanStack Query offline persistence, and Dexie/IndexedDB.',
+    tech: ['Flutter', 'Dart', 'Supabase', 'PostgreSQL', 'Next.js', 'TypeScript', 'Capacitor'],
+    link: 'https://play.google.com/store/apps/details?id=com.jvcerezo.exitplan',
+    badge: 'Google Play',
+  },
+  {
+    name: 'SNPseek MERN',
+    tagline: 'Genomics microservices platform · IRRI',
+    year: '2024 — 2025',
+    description:
+      'Rewrite of IRRI’s legacy PHP/MySQL SNPseek platform into seven independent Node.js/Express services behind an API gateway, orchestrated with Docker Compose. Advanced multi-criteria filtering and interactive charts over large genomic datasets.',
+    tech: ['React', 'Node.js', 'Express', 'MongoDB', 'Docker'],
+    link: 'https://snpseek-mern.vercel.app',
+    badge: null,
+  },
+  {
+    name: 'Codebreak 2.0',
+    tagline: 'RAG-based AI support platform — 1st place, Tenext.ai hackathon',
+    year: '2025',
+    description:
+      'Full-stack AI platform for customer-support agents with a RAG assistant, automated live call scripts, and post-call QA analytics. Owned REST APIs, microservices, deployment, and AI integration end-to-end, shipping a working MVP in under 24 hours.',
+    tech: ['Node.js', 'Microservices', 'RAG', 'REST APIs'],
+    link: 'https://www.facebook.com/photo/?fbid=706685865053901&set=a.263981095991049',
+    badge: '1st place',
+  },
+  {
+    name: 'PICSEL',
+    tagline: 'Reservation system · 20-developer team',
+    year: '2024',
+    description:
+      'Built back-end components over 5 months in a 20-developer team; integrated Google authentication and shipped across 7 features with peer code review.',
+    tech: ['Node.js', 'PostgreSQL', 'OAuth'],
+    link: null,
+    badge: null,
+  },
+  {
+    name: 'SOSC3',
+    tagline: 'Civic tech advocacy platform',
+    year: '2023',
+    description:
+      'Social advocacy app for community engagement and awareness campaigns, built during UPLB Computer Science Society events.',
+    tech: ['React', 'Tailwind CSS', 'Vercel'],
+    link: 'https://sosc3-advocacy-app.vercel.app',
+    badge: null,
+  },
+];
+
+const SKILLS: [string, string][] = [
+  ['Languages', 'JavaScript · TypeScript · PHP · SQL · Python · Java · C/C++ · Dart'],
+  ['Front End', 'React · Next.js · jQuery · HTML5 · CSS3 · Tailwind CSS · Vite'],
+  ['Back End', 'Node.js · Express · Nest.js · REST APIs · JSON · Microservices · API gateway & middleware · JWT / OAuth / SSO'],
+  ['Databases', 'MySQL · MongoDB · PostgreSQL · SQLite · Supabase · Schema design · Query optimization'],
+  ['DevOps', 'Docker · Docker Compose · CI/CD · Git · GitHub · GitLab · Vercel · AWS · Linux & Windows'],
+  ['Tools', 'VS Code · Postman · Jira · Agile/Scrum · Code review · Unit & E2E testing'],
+  ['Mobile & AI', 'Flutter · Riverpod · Drift · Claude API · Gemini API · RAG · Hugging Face · Groq'],
+];
+
+const EDUCATION = {
+  school: 'University of the Philippines Los Baños',
+  degree: 'Bachelor of Science, Computer Science',
+  period: '2021 — 2025',
+  meta: 'Los Baños, Laguna',
+  notes:
+    'Graduated Honor Roll; Provincial Government of Laguna Scholarship Recipient. Coursework: Operating Systems, Computer Networks, Cybersecurity, Data Structures & Algorithms, Database Systems.',
+};
 
 type Theme = 'light' | 'dark';
 
@@ -30,26 +164,25 @@ function useTheme(): [Theme, () => void] {
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === 'undefined') return 'dark';
     const stored = window.localStorage.getItem('theme') as Theme | null;
-    if (stored === 'light' || stored === 'dark') return stored;
-    return document.documentElement.classList.contains('dark') ? 'dark' : 'dark';
+    return stored === 'light' || stored === 'dark' ? stored : 'dark';
   });
 
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'dark') root.classList.add('dark');
-    else root.classList.remove('dark');
+    root.classList.toggle('dark', theme === 'dark');
     root.style.colorScheme = theme;
     try {
       window.localStorage.setItem('theme', theme);
     } catch {}
   }, [theme]);
 
-  const toggle = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
-  return [theme, toggle];
+  return [theme, () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))];
 }
 
 function useScrollSpy(ids: string[]) {
-  const [active, setActive] = useState<string>(ids[0]);
+  const [active, setActive] = useState<string>('');
+  const [atEnd, setAtEnd] = useState(false);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -57,7 +190,7 @@ function useScrollSpy(ids: string[]) {
           if (e.isIntersecting) setActive(e.target.id);
         });
       },
-      { rootMargin: '-40% 0px -55% 0px', threshold: 0 }
+      { rootMargin: '-25% 0px -60% 0px', threshold: 0 }
     );
     ids.forEach((id) => {
       const el = document.getElementById(id);
@@ -65,7 +198,24 @@ function useScrollSpy(ids: string[]) {
     });
     return () => observer.disconnect();
   }, [ids]);
-  return active;
+
+  // The final section sits too close to the document end to ever reach the
+  // observer band, so bottom-of-page always resolves to the last nav item.
+  useEffect(() => {
+    const onScroll = () => {
+      const doc = document.documentElement;
+      setAtEnd(window.innerHeight + window.scrollY >= doc.scrollHeight - 2);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    onScroll();
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, []);
+
+  return atEnd ? ids[ids.length - 1] : active;
 }
 
 function useRevealOnScroll() {
@@ -79,1088 +229,360 @@ function useRevealOnScroll() {
           }
         });
       },
-      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.05, rootMargin: '0px 0px -32px 0px' }
     );
     document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 }
 
-const PROJECTS = [
-  {
-    code: '02',
-    title: 'IskOS',
-    subtitle: 'Academic OS for UPLB students',
-    description:
-      'Import class schedules, sync with Google Calendar, track absences, and compute GWA. Built for friends who kept missing deadlines.',
-    link: 'https://isk-os.vercel.app',
-    tech: ['React', 'TypeScript', 'Google Calendar API', 'Supabase'],
-    status: 'In Dev',
-  },
-  {
-    code: '03',
-    title: 'Ottodot',
-    subtitle: 'Full-stack technical assessment',
-    description:
-      'Gemini-powered math practice generator with session history. Submitted as a full-stack recruitment task.',
-    link: 'https://ottodot-coding-task-full-stack-eta.vercel.app',
-    tech: ['Next.js', 'TypeScript', 'Supabase', 'Gemini API'],
-    status: 'Live',
-  },
-  {
-    code: '04',
-    title: 'SNP-MERN',
-    subtitle: 'Genetic variant analysis · IRRI',
-    description:
-      'Rewrite of IRRI\'s legacy SNPSeek platform into a modern MERN microservices stack with advanced filtering and interactive charts.',
-    link: 'https://snpseek-mern.vercel.app',
-    tech: ['React', 'Node.js', 'Express', 'MongoDB'],
-    status: 'Live',
-  },
-  {
-    code: '05',
-    title: 'SOSC3',
-    subtitle: 'Civic tech advocacy platform',
-    description:
-      'Social advocacy app for community engagement and awareness campaigns, built during UPLB Computer Science Society.',
-    link: 'https://sosc3-advocacy-app.vercel.app',
-    tech: ['React', 'Tailwind', 'Vercel'],
-    status: 'Live',
-  },
-  {
-    code: '06',
-    title: 'Diet Plan',
-    subtitle: 'Health and nutrition planner',
-    description:
-      'Personalized diet planner with calorie targets and meal recommendations. Full MERN stack with a clean, approachable UI.',
-    link: 'https://diet-plan-calculator.vercel.app',
-    tech: ['MERN', 'Tailwind'],
-    status: 'MVP',
-  },
-  {
-    code: '07',
-    title: 'MDCAS',
-    subtitle: 'Dental clinic management',
-    description:
-      'Appointment scheduling, patient records, and an admin dashboard for Maralit Dental Clinic.',
-    link: 'https://mdcas-fe.vercel.app',
-    tech: ['MERN', 'Tailwind'],
-    status: 'MVP',
-  },
-];
-
-function ProjectCard({ p, idx }: { p: (typeof PROJECTS)[number]; idx: number }) {
-  const [loaded, setLoaded] = useState(false);
+function Section({
+  id,
+  label,
+  children,
+}: {
+  id?: string;
+  label: string;
+  children: ReactNode;
+}) {
   return (
-    <a
-      href={p.link}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`reveal delay-${(idx % 4) + 1} group relative border border-fg/10 bg-fg/[0.025] card-hover overflow-hidden block`}
-    >
-      {/* Browser chrome bar */}
-      <div className="flex items-center gap-2 px-4 py-2.5 border-b border-fg/10 bg-fg/[0.035]">
-        <div className="flex gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-fg/15" />
-          <span className="w-2.5 h-2.5 rounded-full bg-fg/15" />
-          <span className="w-2.5 h-2.5 rounded-full bg-fg/15" />
-        </div>
-        <div className="flex-1 flex justify-center">
-          <span className="font-mono text-[10px] tracking-[0.1em] text-fg/45 truncate max-w-[70%]">
-            {p.link.replace(/^https?:\/\//, '')}
-          </span>
-        </div>
-        <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/40">
-          {p.status}
-        </span>
+    <section id={id} className="scroll-mt-20 pt-14">
+      <div className="reveal">
+        <h2 className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-fg/50">
+          {label}
+        </h2>
+        <div className="mt-2 h-px w-full bg-fg/15" />
       </div>
-
-      <div className="relative aspect-[16/10] overflow-hidden bg-fg/[0.04] dark:bg-fg/[0.03]">
-        <div className="absolute inset-0 grid-bg-dense opacity-40" />
-
-        {/* Fallback label shown while screenshot loads */}
-        <div
-          className={`absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-500 ${
-            loaded ? 'opacity-0' : 'opacity-100'
-          }`}
-        >
-          <div className="font-display text-6xl lg:text-7xl text-fg/20 leading-none tracking-tight">
-            {p.title}
-          </div>
-          <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/30 mt-4">
-            loading preview
-          </div>
-        </div>
-
-        <img
-          src={shot(p.link)}
-          alt={`${p.title} preview`}
-          loading="lazy"
-          onLoad={() => setLoaded(true)}
-          className={`relative w-full h-full object-cover object-top transition-all duration-700 ${
-            loaded ? 'opacity-100 group-hover:scale-[1.02]' : 'opacity-0'
-          }`}
-        />
-
-        {/* Subtle bottom gradient for legibility of the badge */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-80" />
-
-        <div className="absolute bottom-4 right-4 w-10 h-10 rounded-full border border-white/30 flex items-center justify-center bg-black/60 text-white backdrop-blur-sm group-hover:bg-brand group-hover:text-bg group-hover:border-brand transition-all">
-          <ArrowUpRight className="w-4 h-4" />
-        </div>
-      </div>
-
-      <div className="p-6">
-        <div className="flex items-start justify-between gap-4 mb-3">
-          <div>
-            <div className="flex items-baseline gap-3 mb-1">
-              <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/35">
-                {p.code}
-              </span>
-              <h3 className="font-display text-2xl lg:text-[1.75rem] font-semibold tracking-tight text-fg">
-                {p.title}
-              </h3>
-            </div>
-            <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-fg/50">
-              {p.subtitle}
-            </div>
-          </div>
-        </div>
-
-        <p className="text-fg/65 leading-relaxed mb-5 text-[14.5px]">{p.description}</p>
-
-        <div className="flex flex-wrap gap-2">
-          {p.tech.map((t) => (
-            <span
-              key={t}
-              className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg/60 border border-fg/15 px-2.5 py-1 rounded-full"
-            >
-              {t}
-            </span>
-          ))}
-        </div>
-      </div>
-    </a>
+      <div className="mt-6">{children}</div>
+    </section>
   );
 }
 
-const EXPERIENCE = [
-  {
-    role: 'Junior Test Automation Engineer',
-    company: 'Billease',
-    period: 'Apr 2025 — Present',
-    description:
-      'Shipped 50+ merge requests and 30k+ lines of code expanding automated test coverage and infrastructure for a high-scale Android app. Engineered the CI/CD pipeline integrations for core regression and emergency hotfix suites. Discovered and resolved 30+ critical bugs using Appium and BrowserStack as the final technical gatekeeper before deployment. Integrated Claude/AI into the automation workflow to accelerate script development and debugging.',
-    tags: ['Appium', 'BrowserStack', 'Android', 'CI/CD', 'Claude AI', 'Regression'],
-  },
-  {
-    role: 'Codebreak 2.0 Champion',
-    company: 'Tenext.ai Hackathon',
-    period: 'May 2025',
-    description:
-      'Won 1st place building a RAG-based AI platform for customer support agents. The assistant generated live call scripts from past and current tickets and ran automated QA analytics after calls. Handled APIs, microservices, deployment, and AI integration to ship an MVP in under 24 hours.',
-    tags: ['AI', 'RAG', 'Microservices', 'Real-time'],
-  },
-  {
-    role: 'BS Computer Science',
-    company: 'University of the Philippines Los Baños',
-    period: 'Sep 2021 — Jul 2025',
-    description:
-      'Honor Roll. Iskolar ng Laguna and UP SLAS scholar. Relevant coursework: Operating Systems (CMSC 125), Computer Networks (CMSC 137), Cybersecurity, Data Structures & Algorithms. Thesis affiliate with IRRI on bioinformatics tooling.',
-    tags: ['UPLB CS', 'Honor Roll', 'Iskolar ng Laguna', 'UP SLAS'],
-  },
-  {
-    role: 'Bioinformatics SWE Intern · Thesis Affiliate',
-    company: 'International Rice Research Institute (IRRI)',
-    period: 'Jul 2024 — May 2025',
-    description:
-      'Implemented a custom OAuth authentication flow for SNPseek in a Dockerized Drupal environment to improve secure user access and system integration. Designed and developed a MERN-based SNPseek platform using a microservices architecture for scalability, usability, and faster data processing.',
-    tags: ['MERN', 'Drupal', 'Docker', 'OAuth', 'Microservices'],
-  },
-  {
-    role: 'Code Wars Co-Head · Project Manager',
-    company: 'UPLB CS Society · 41st CS Week',
-    period: 'Oct 2023 — Jul 2025',
-    description:
-      'Led a 7-member dev team enhancing the competitive programming event platform. Oversaw feature development, bug tracking, testing, and deployment. Supported 20 teams, 3 judges, and 3 continuous hours of live service with zero downtime.',
-    tags: ['Leadership', 'Deploy', 'Ship'],
-  },
-  {
-    role: 'Freelance Full-Stack Developer',
-    company: '2 Weeks · Project-based',
-    period: 'Aug 2024 — Oct 2024',
-    description:
-      'Built a story-based interactive game with a 3-person team using the MERN stack. Handled frontend, backend, and UI/UX to ensure client satisfaction.',
-    tags: ['MERN', 'Client work'],
-  },
-  {
-    role: 'eLBigayan · Team Lead',
-    company: 'Flutter Donation Platform',
-    period: 'May 2024 — Jun 2024',
-    description:
-      'Led a 2-member team building a donation system. Used Flutter and Dart with 4 Firebase services to create a secure, scalable backend.',
-    tags: ['Flutter', 'Firebase', 'Team Lead'],
-  },
-  {
-    role: 'Fire Nation Invasion · Game Developer',
-    company: 'Unity Multiplayer Game',
-    period: 'Apr 2024 — Jun 2024',
-    description:
-      'Worked with 2 teammates on character abilities and game mechanics. Implemented networked multiplayer for up to 4 players across different computers.',
-    tags: ['Unity', 'C#', 'Multiplayer'],
-  },
-  {
-    role: 'PICSEL · Backend Developer',
-    company: 'Reservation System · 20-dev team',
-    period: 'Feb 2024 — Jun 2024',
-    description:
-      '9 commits, 12 merged PRs across 7 features in a 20-developer team over 5 months. Integrated Google authentication to enhance security and streamline the login process.',
-    tags: ['Node.js', 'PostgreSQL', 'Auth'],
-  },
-];
+function TechLine({ items }: { items: string[] }) {
+  return (
+    <p className="mt-3 font-mono text-[10.5px] leading-relaxed tracking-[0.06em] text-fg/45">
+      {items.join('  ·  ')}
+    </p>
+  );
+}
 
+function Bullets({ items }: { items: string[] }) {
+  return (
+    <ul className="mt-3 space-y-2">
+      {items.map((b) => (
+        <li
+          key={b}
+          className="relative pl-4 text-[14.5px] leading-[1.65] text-fg/70 before:absolute before:left-0 before:top-0 before:text-fg/30 before:content-['—']"
+        >
+          {b}
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const active = useScrollSpy(NAV_ITEMS.map((n) => n.id));
   const [theme, toggleTheme] = useTheme();
+  const active = useScrollSpy(NAV_IDS);
+  const [scrolled, setScrolled] = useState(false);
   useRevealOnScroll();
 
   useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 40);
-      const docH = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(docH > 0 ? (y / docH) * 100 : 0);
-    };
+    const onScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-      setIsMenuOpen(false);
-    }
-  };
-
+  const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   const year = new Date().getFullYear();
 
   return (
     <div className="min-h-screen bg-bg text-fg">
-      {/* Scroll progress */}
-      <div className="fixed top-0 left-0 right-0 z-[60] h-[2px] bg-fg/5">
-        <div
-          className="h-full bg-brand transition-[width] duration-150 ease-out"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-
-      {/* NAV */}
-      <nav
-        className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
-          scrolled ? 'bg-bg/80 backdrop-blur-xl border-b border-fg/10' : 'bg-transparent'
+      {/* TOP BAR */}
+      <header
+        className={`sticky top-0 z-50 bg-bg/85 backdrop-blur-md transition-colors ${
+          scrolled ? 'border-b border-fg/10' : 'border-b border-transparent'
         }`}
       >
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-10 py-5">
-          <div className="flex justify-between items-center">
-            <button
-              onClick={() => scrollToSection('home')}
-              className="flex items-center gap-2 group"
-            >
-              <span className="w-7 h-7 rounded-md border border-fg/20 flex items-center justify-center group-hover:border-brand transition-colors">
-                <Terminal className="w-3.5 h-3.5 text-brand" />
-              </span>
-              <span className="font-display text-[15px] font-semibold tracking-tight">
-                jvcerezo
-              </span>
-            </button>
+        <div className="mx-auto flex h-14 max-w-[760px] items-center justify-between gap-4 px-6">
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="font-display text-[14px] font-semibold tracking-tight hover:text-fg/70 transition-colors"
+          >
+            Jet Cerezo
+          </button>
 
-            <div className="hidden md:flex items-center gap-1 rounded-full border border-fg/10 bg-fg/[0.04] p-1 backdrop-blur">
-              {NAV_ITEMS.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  aria-current={active === item.id ? 'page' : undefined}
-                  className={`relative px-4 py-1.5 text-[13px] transition-colors rounded-full flex items-center gap-2 ${
-                    active === item.id
-                      ? 'bg-fg text-bg font-medium'
-                      : 'text-fg/70 hover:text-fg'
-                  }`}
-                >
-                  <span className="font-mono text-[10px] opacity-60">{item.num}</span>
-                  {item.label}
-                </button>
-              ))}
-            </div>
-
-            <div className="hidden md:flex items-center gap-2">
+          <nav className="hidden items-center gap-6 sm:flex">
+            {NAV_ITEMS.map((item) => (
               <button
-                onClick={toggleTheme}
-                aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-                className="w-9 h-9 rounded-full border border-fg/15 flex items-center justify-center hover:border-fg/30 hover:bg-fg/5 transition-colors"
+                key={item.id}
+                onClick={() => go(item.id)}
+                className={`text-[13px] transition-colors ${
+                  active === item.id ? 'text-fg' : 'text-fg/50 hover:text-fg/80'
+                }`}
               >
-                {theme === 'dark' ? (
-                  <Sun className="w-4 h-4 theme-icon" />
-                ) : (
-                  <Moon className="w-4 h-4 theme-icon" />
-                )}
+                {item.label}
               </button>
-              <Button
-                size="sm"
-                className="bg-brand text-bg hover:bg-brand/90 rounded-full px-5 font-medium"
-                asChild
-              >
-                <a href="/JetCerezo_Resume.pdf" download>
-                  <Download className="w-3.5 h-3.5 mr-2" />
-                  Resume
-                </a>
-              </Button>
-            </div>
+            ))}
+          </nav>
 
+          <div className="flex items-center gap-1">
             <button
-              className="md:hidden text-fg"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Toggle menu"
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              className="flex h-8 w-8 items-center justify-center rounded-md text-fg/60 transition-colors hover:bg-fg/5 hover:text-fg"
             >
-              {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
-          </div>
-
-          {isMenuOpen && (
-            <div className="md:hidden mt-5 pb-4 border-t border-fg/10">
-              <div className="flex flex-col space-y-1 mt-4">
-                {NAV_ITEMS.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => scrollToSection(item.id)}
-                    className={`text-left py-2.5 px-3 rounded-lg text-base transition-colors flex items-center gap-3 ${
-                      active === item.id ? 'bg-fg/10 text-fg' : 'text-fg/70'
-                    }`}
-                  >
-                    <span className="font-mono text-[11px] opacity-50">{item.num}</span>
-                    {item.label}
-                  </button>
-                ))}
-                <button
-                  onClick={toggleTheme}
-                  className="mt-3 flex items-center gap-3 py-2.5 px-3 rounded-lg text-base text-fg/70 hover:bg-fg/5 transition-colors"
-                >
-                  {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                  <span>Switch to {theme === 'dark' ? 'light' : 'dark'} mode</span>
-                </button>
-                <Button
-                  size="sm"
-                  className="mt-2 bg-brand text-bg hover:bg-brand/90 rounded-full font-medium"
-                  asChild
-                >
-                  <a href="/JetCerezo_Resume.pdf" download>
-                    <Download className="w-3.5 h-3.5 mr-2" />
-                    Download Resume
-                  </a>
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
-      </nav>
-
-      <main>
-      {/* HERO */}
-      <section id="home" aria-label="Introduction" className="relative min-h-[100vh] flex items-center overflow-hidden pt-28 pb-20">
-        <div className="absolute inset-0 grid-bg opacity-60" />
-        <div className="absolute left-0 top-1/3 w-[60%] h-[40%] bg-gradient-to-r from-brand/15 to-transparent blur-3xl pointer-events-none opacity-40" />
-
-        <div className="relative max-w-[1440px] w-full mx-auto px-6 lg:px-10">
-          <div className="grid lg:grid-cols-12 gap-10 items-center">
-            <div className="lg:col-span-8 space-y-10 animate-reveal">
-              <div className="flex flex-wrap items-center gap-4">
-                <span className="flex items-center gap-2 font-mono text-[11px] tracking-[0.22em] uppercase text-fg/70 border border-fg/15 rounded-full pl-2 pr-3 py-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand animate-dot" />
-                  <span className="text-brand">/</span> Available for work
-                </span>
-                <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-fg/45">
-                  Laguna, PH · UTC+8
-                </span>
-              </div>
-
-              <div>
-                <h1 className="font-display font-semibold leading-[0.9] tracking-[-0.045em] text-[clamp(3rem,9.5vw,9rem)] text-fg">
-                  Jet Timothy<br />
-                  Cerezo<span className="text-brand">.</span>
-                </h1>
-                <p className="font-display text-2xl lg:text-4xl text-fg/60 font-medium tracking-tight mt-4">
-                  Software developer shipping full-stack products.
-                </p>
-              </div>
-
-              <p className="text-[17px] lg:text-lg text-fg/70 max-w-2xl leading-relaxed">
-                I design and ship web and mobile products end-to-end, from database schema to
-                Play Store. Currently a Junior Test Automation Engineer at{' '}
-                <span className="text-fg font-medium">Billease</span>, and shipping{' '}
-                <button
-                  onClick={() => scrollToSection('sandalan')}
-                  className="link-underline text-fg font-medium"
-                >
-                  Sandalan
-                </button>
-                , a Filipino adulting and finance app live on Google Play. UPLB Computer Science,
-                Batch 2025.
-              </p>
-
-              <div className="flex flex-wrap gap-3">
-                <Button
-                  size="lg"
-                  className="bg-brand text-bg hover:bg-brand/90 font-medium rounded-full px-7 h-12"
-                  onClick={() => scrollToSection('sandalan')}
-                >
-                  See Sandalan <span className="ml-2">→</span>
-                </Button>
-                <Button
-                  size="lg"
-                  variant="ghost"
-                  className="border border-fg/20 text-fg hover:bg-fg/10 rounded-full px-7 h-12"
-                  onClick={() => scrollToSection('work')}
-                >
-                  All Projects
-                </Button>
-                <Button
-                  size="lg"
-                  variant="ghost"
-                  className="border border-fg/20 text-fg hover:bg-fg/10 rounded-full px-7 h-12"
-                  asChild
-                >
-                  <a href="mailto:jetjetcerezo@gmail.com">
-                    <Mail className="w-4 h-4 mr-2" />
-                    Hire me
-                  </a>
-                </Button>
-              </div>
-
-              <div className="flex items-center gap-5 pt-2">
-                {[
-                  { icon: Github, href: 'https://github.com/jvcerezo', label: 'GitHub' },
-                  { icon: Linkedin, href: 'https://www.linkedin.com/in/jet-timothy-cerezo-126903254', label: 'LinkedIn' },
-                  { icon: Mail, href: 'mailto:jetjetcerezo@gmail.com', label: 'Email' },
-                ].map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={s.label}
-                    className="text-fg/55 hover:text-brand transition-colors"
-                  >
-                    <s.icon className="w-5 h-5" />
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            <div className="lg:col-span-4 animate-reveal">
-              <div className="relative">
-                <div className="aspect-[4/5] relative overflow-hidden rounded-2xl border border-fg/15">
-                  <img
-                    src="/profile.jpg"
-                    alt="Jet Timothy Cerezo, Filipino full-stack software developer"
-                    width="800"
-                    height="1000"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-
-                  <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
-                    <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/85 bg-black/60 backdrop-blur-sm border border-white/15 px-2 py-1 rounded">
-                      ~/portrait.jpg
-                    </div>
-                  </div>
-
-                  <div className="absolute bottom-5 left-5 right-5">
-                    <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/75 mb-1.5">
-                      // CURRENTLY
-                    </div>
-                    <div className="text-white font-medium">
-                      Test Automation @ Billease
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-4 grid grid-cols-3 gap-px bg-fg/10 border border-fg/10">
-                  {[
-                    { v: '3y', l: 'Building' },
-                    { v: '11+', l: 'Projects' },
-                    { v: '1', l: 'On Play Store' },
-                  ].map((m) => (
-                    <div key={m.l} className="bg-bg p-4 text-center">
-                      <div className="font-display text-2xl font-semibold">{m.v}</div>
-                      <div className="font-mono text-[9px] tracking-[0.22em] uppercase text-fg/45 mt-0.5">
-                        {m.l}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* RECOGNITION STRIP */}
-      <section className="relative py-14 border-y border-fg/10 bg-fg/[0.025]">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
-          <div className="flex items-center gap-3 mb-8 reveal">
-            <span className="section-label bracket">Recognition</span>
-            <span className="h-px flex-1 bg-fg/10" />
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-fg/10 border border-fg/10 reveal">
-            {[
-              { icon: Briefcase, title: 'Jr. Test Automation Engineer', meta: 'Billease · Apr 2025 · Present' },
-              { icon: Rocket, title: 'Google Play Developer', meta: 'Sandalan · Live' },
-              { icon: Leaf, title: 'Bioinformatics SWE Intern', meta: 'IRRI · 2024 — 2025' },
-              { icon: Trophy, title: 'Codebreak 2.0 Champion', meta: 'Tenext.ai · 2025' },
-            ].map((r) => (
-              <div key={r.title} className="bg-bg p-6 flex items-start gap-4">
-                <r.icon className="w-4 h-4 text-brand mt-1 shrink-0" />
-                <div>
-                  <div className="text-fg font-medium text-[15px] leading-snug font-display">
-                    {r.title}
-                  </div>
-                  <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/45 mt-1.5">
-                    {r.meta}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ABOUT */}
-      <section id="about" className="relative py-28 lg:py-32 px-6 lg:px-10 border-t border-fg/10">
-        <div className="max-w-[1440px] mx-auto">
-          <div className="grid lg:grid-cols-12 gap-12 mb-20">
-            <div className="lg:col-span-5 reveal">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="section-label bracket">About</span>
-                <span className="w-8 h-px bg-fg/30" />
-              </div>
-              <h2 className="font-display text-5xl lg:text-7xl font-semibold tracking-[-0.035em] leading-[0.95]">
-                I ship<br />
-                <span className="text-fg/45">end-to-end.</span>
-              </h2>
-            </div>
-            <div className="lg:col-span-7 space-y-5 text-fg/70 text-[17px] leading-relaxed reveal delay-1">
-              <p>
-                Fresh Computer Science graduate from the University of the Philippines Los Baños
-                (Batch 2025). Over the last three years I've built web, mobile, and microservices
-                apps, won the Codebreak 2.0 AI hackathon, interned on bioinformatics software for IRRI,
-                and led teams for academic flagship events.
-              </p>
-              <p>
-                Lately I ship as a solo developer. That means writing the schema, wiring the
-                backend, polishing the UI, watching crash logs, and reading user feedback the
-                morning after a release. I care about products that work for the market they're
-                actually built for.
-              </p>
-              <p className="text-fg font-medium">
-                Hiring a generalist who owns the full stack and gets work in front of real users?
-                Let's talk.
-              </p>
-            </div>
-          </div>
-
-          <Tabs defaultValue="skills" className="w-full">
-            <TabsList className="flex w-full max-w-lg mx-auto mb-12 bg-fg/[0.055] border border-fg/10 rounded-full p-1">
-              <TabsTrigger
-                value="skills"
-                className="flex-1 rounded-full text-fg data-[state=active]:bg-fg data-[state=active]:text-bg font-medium"
-              >
-                Skills
-              </TabsTrigger>
-              <TabsTrigger
-                value="experience"
-                className="flex-1 rounded-full text-fg data-[state=active]:bg-fg data-[state=active]:text-bg font-medium"
-              >
-                Experience
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="skills">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[
-                  {
-                    category: 'Languages',
-                    icon: Code,
-                    skills: ['Java', 'C / C++', 'Python', 'JavaScript', 'TypeScript', 'Dart', 'SQL'],
-                  },
-                  {
-                    category: 'Mobile',
-                    icon: Smartphone,
-                    skills: ['Flutter', 'Dart', 'Riverpod', 'Drift (SQLite)', 'Go Router', 'Supabase Flutter'],
-                  },
-                  {
-                    category: 'Frontend',
-                    icon: Palette,
-                    skills: ['React', 'Next.js', 'Tailwind CSS', 'shadcn/ui', 'Vite'],
-                  },
-                  {
-                    category: 'Backend',
-                    icon: Server,
-                    skills: ['Node.js', 'Express', 'Supabase', 'PostgreSQL', 'MongoDB', 'REST APIs'],
-                  },
-                  {
-                    category: 'Test Automation',
-                    icon: Shield,
-                    skills: ['Appium', 'BrowserStack', 'Android E2E', 'Regression suites', 'CI/CD'],
-                  },
-                  {
-                    category: 'Infra & AI',
-                    icon: Database,
-                    skills: ['Git', 'Docker', 'Vercel', 'AWS', 'Gemini API', 'Claude API', 'Hugging Face', 'Groq', 'Llama', 'RAG'],
-                  },
-                ].map((group) => (
-                  <div
-                    key={group.category}
-                    className="p-6 border border-fg/10 bg-fg/[0.025] card-hover"
-                  >
-                    <div className="flex items-center gap-3 mb-4">
-                      <group.icon className="w-4 h-4 text-brand" />
-                      <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-fg/80">
-                        {group.category}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {group.skills.map((s) => (
-                        <span
-                          key={s}
-                          className="text-[13px] text-fg/85 border border-fg/15 rounded-full px-3 py-1"
-                        >
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="experience">
-              <div className="relative">
-                <div className="absolute left-0 md:left-[140px] top-0 bottom-0 w-px bg-fg/10" />
-                <div className="space-y-2">
-                  {EXPERIENCE.map((job, index) => (
-                    <div
-                      key={job.role + index}
-                      className="relative grid md:grid-cols-[140px_1fr] gap-6 md:gap-10 py-6 border-b border-fg/5 last:border-b-0"
-                    >
-                      <div className="md:pr-6 relative">
-                        <span className="absolute -left-[3px] md:left-[134px] top-1 w-2 h-2 rounded-full bg-brand" />
-                        <div className="pl-6 md:pl-0 md:text-right">
-                          <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/50">
-                            {job.period}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="pl-6 md:pl-10">
-                        <h3 className="font-display text-xl lg:text-2xl font-semibold text-fg tracking-tight">
-                          {job.role}
-                        </h3>
-                        <div className="text-fg/55 text-sm mt-1 font-mono tracking-[0.05em]">
-                          {job.company}
-                        </div>
-                        <p className="text-fg/70 leading-relaxed mt-3 text-[15px]">
-                          {job.description}
-                        </p>
-                        <div className="flex flex-wrap gap-2 mt-4">
-                          {job.tags.map((t) => (
-                            <span
-                              key={t}
-                              className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg/55 border border-fg/15 px-2.5 py-1 rounded-full"
-                            >
-                              {t}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </section>
-
-      {/* SANDALAN */}
-      <section id="sandalan" className="relative py-28 lg:py-32 border-t border-fg/10 overflow-hidden">
-        <div className="absolute inset-0 grid-bg opacity-30" />
-
-        <div className="relative max-w-[1440px] mx-auto px-6 lg:px-10">
-          <div className="flex items-center gap-3 mb-10 reveal">
-            <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-brand">
-              [02] Featured Case Study
-            </span>
-            <span className="h-px flex-1 bg-fg/10" />
-            <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-fg/40">
-              Mar 2026 — present
-            </span>
-          </div>
-
-          {/* Feature graphic */}
-          <div className="reveal relative aspect-[1024/500] w-full overflow-hidden rounded-2xl border border-fg/15 mb-14">
-            <img
-              src="/sandalan/feature.png"
-              alt="Sandalan app feature graphic — Filipino adulting and finance companion"
-              width="1024"
-              height="500"
-              loading="lazy"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-            <div className="absolute inset-0 flex items-end p-6 lg:p-12">
-              <div className="max-w-3xl">
-                <Badge
-                  variant="outline"
-                  className="border-brand/40 text-brand bg-brand/10 rounded-full mb-4 font-mono text-[10px] tracking-[0.22em] uppercase"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand mr-2 animate-dot" />
-                  Live on Google Play
-                </Badge>
-                <h2 className="font-display font-semibold tracking-[-0.04em] text-5xl lg:text-8xl leading-[0.9] text-white">
-                  Sandalan<span className="text-brand">.</span>
-                </h2>
-                <p className="font-display text-xl lg:text-3xl text-white/75 mt-2 max-w-2xl font-medium tracking-tight">
-                  The adulting guide Filipinos wish they had at 22.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid lg:grid-cols-12 gap-12 items-start">
-            <div className="lg:col-span-7 space-y-8">
-              <p className="text-lg text-fg/75 leading-relaxed reveal">
-                A solo-built Filipino adulting and finance app. 15,000+ lines of Flutter across
-                13 synced database tables, 38+ bank integrations, OCR receipt scanning, a Taglish
-                AI chat assistant, government tax and contribution calculators, and Google Play
-                Billing. Works fully offline, syncs when online, zero trackers.
-              </p>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-fg/10 border border-fg/10 reveal delay-1">
-                {[
-                  { k: '15K+', v: 'Lines of Flutter' },
-                  { k: '13', v: 'Synced tables' },
-                  { k: '38+', v: 'Bank integrations' },
-                  { k: '1,000+', v: 'Gov offices' },
-                ].map((m) => (
-                  <div key={m.v} className="bg-bg p-5">
-                    <div className="font-display text-3xl font-semibold tracking-tight">{m.k}</div>
-                    <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/45 mt-1">
-                      {m.v}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex flex-wrap gap-2 reveal delay-2">
-                {['Flutter', 'Dart', 'Riverpod', 'Drift (SQLite)', 'Supabase', 'PostgreSQL', 'Go Router', 'Google Play Billing', 'OCR', 'RAG'].map(
-                  (t) => (
-                    <span
-                      key={t}
-                      className="font-mono text-[10px] tracking-[0.15em] uppercase text-fg/75 border border-fg/20 bg-fg/[0.035] rounded-full px-3 py-1.5"
-                    >
-                      {t}
-                    </span>
-                  )
-                )}
-              </div>
-
-              <div className="flex flex-wrap gap-3 pt-2 reveal delay-3">
-                <Button
-                  size="lg"
-                  className="bg-brand text-bg hover:bg-brand/90 rounded-full px-6 font-medium h-12"
-                  asChild
-                >
-                  <a href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer">
-                    <Smartphone className="w-4 h-4 mr-2" />
-                    Google Play
-                    <ArrowUpRight className="w-4 h-4 ml-2" />
-                  </a>
-                </Button>
-                <Button
-                  size="lg"
-                  variant="ghost"
-                  className="border border-fg/20 text-fg hover:bg-fg/10 rounded-full px-6 h-12"
-                  asChild
-                >
-                  <a href={SANDALAN_SITE} target="_blank" rel="noopener noreferrer">
-                    <Globe className="w-4 h-4 mr-2" />
-                    Landing page
-                  </a>
-                </Button>
-              </div>
-            </div>
-
-            {/* Phone stack */}
-            <div className="lg:col-span-5 reveal delay-2">
-              <div className="relative h-[480px] lg:h-[560px] max-w-md mx-auto">
-                {[
-                  { src: '/sandalan/screen-2.png', rotate: '-6deg', tx: '-30%', ty: '8%', z: 10 },
-                  { src: '/sandalan/screen-3.png', rotate: '0deg', tx: '0%', ty: '0%', z: 20 },
-                  { src: '/sandalan/screen-1.png', rotate: '6deg', tx: '30%', ty: '8%', z: 10 },
-                ].map((p, i) => (
-                  <div
-                    key={i}
-                    className="absolute top-0 left-1/2 w-[60%] aspect-[9/19] overflow-hidden rounded-[2rem] border border-fg/20 bg-black shadow-2xl shadow-black/50"
-                    style={{
-                      transform: `translate(calc(-50% + ${p.tx}), ${p.ty}) rotate(${p.rotate})`,
-                      zIndex: p.z,
-                    }}
-                  >
-                    <img src={p.src} alt="Sandalan Android app screenshot" loading="lazy" className="w-full h-full object-cover" />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Case study row */}
-          <div className="mt-28 grid lg:grid-cols-3 gap-px bg-fg/10 border border-fg/10 reveal">
-            {[
-              {
-                label: '01 / The problem',
-                body:
-                  'Adulting and personal finance for Filipinos is scattered across outdated government PDFs, conflicting blog posts, and tita advice. First-time TIN, SSS, or PhilHealth registrations are stressful, and money tracking apps ignore the local context (GCash, Maya, local banks, 13th month pay).',
-              },
-              {
-                label: '02 / The approach',
-                body:
-                  'Architected an offline-first sync engine with conflict resolution, incremental replication, and retry/failure recovery across 13 tables, from PostgreSQL (Supabase) to local SQLite (Drift). Row-level security, RLS-backed auth, 38+ bank integrations, OCR receipt scanning, and a RAG-based Taglish chat assistant.',
-              },
-              {
-                label: '03 / The outcome',
-                body:
-                  '15,000+ line Flutter app live on Google Play. Every feature free, government tax and contribution calculators aligned with 2026 rates, Google Play Billing hooked up, zero trackers. Shipping updates weekly driven by in-app user feedback.',
-              },
-            ].map((c) => (
-              <div key={c.label} className="bg-bg p-8">
-                <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-brand mb-4">
-                  {c.label}
-                </div>
-                <p className="text-fg/75 leading-relaxed text-[15px]">{c.body}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Feature grid */}
-          <div className="mt-20 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                icon: CheckCircle2,
-                title: 'Step-by-step guides',
-                body:
-                  'Six life stages from Unang Hakbang (fresh grad) to Gintong Taon (retirement). Real fees, real offices, real paperwork.',
-              },
-              {
-                icon: MapPin,
-                title: '1,000+ government offices',
-                body:
-                  'BIR, SSS, PhilHealth, Pag-IBIG, LTO, DFA, PSA. Find the closest branch and get directions in one tap.',
-              },
-              {
-                icon: Zap,
-                title: 'Personal life admin',
-                body:
-                  'Bills, expenses, budgets, goals, and a document vault. Built for how Filipinos actually spend money.',
-              },
-              {
-                icon: Sparkles,
-                title: 'Taglish AI assistant',
-                body:
-                  '"Anong ginastos ko this week?", "Pano kumuha ng TIN?". Natural language, plain Filipino-English.',
-              },
-              {
-                icon: Shield,
-                title: 'Offline-first, private',
-                body:
-                  'Local SQLite via Drift, Supabase sync when online. No trackers, RA 10173 compliant, export or delete anytime.',
-              },
-              {
-                icon: Server,
-                title: 'Shipped solo',
-                body:
-                  'Designed, built, and launched end-to-end: Flutter app, Supabase backend, schema migrations, CI, store listing.',
-              },
-            ].map((f, idx) => (
-              <div
-                key={f.title}
-                className={`reveal delay-${(idx % 5) + 1} p-7 border border-fg/10 bg-fg/[0.025] card-hover`}
-              >
-                <f.icon className="w-5 h-5 text-brand mb-5" />
-                <h3 className="font-display text-xl font-semibold mb-2 tracking-tight">{f.title}</h3>
-                <p className="text-fg/65 text-sm leading-relaxed">{f.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* WORK */}
-      <section id="work" className="relative py-28 lg:py-32 px-6 lg:px-10 border-t border-fg/10">
-        <div className="max-w-[1440px] mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16 reveal">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="section-label bracket">Selected Work</span>
-                <span className="w-8 h-px bg-fg/30" />
-              </div>
-              <h2 className="font-display text-5xl lg:text-7xl font-semibold tracking-[-0.035em] leading-[0.95]">
-                Other things<br />
-                <span className="text-fg/45">I've shipped.</span>
-              </h2>
-            </div>
             <a
-              href="https://github.com/jvcerezo"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 font-mono text-xs tracking-[0.22em] uppercase text-fg/60 hover:text-brand link-underline"
+              href={PROFILE.resume}
+              download
+              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[13px] text-fg/60 transition-colors hover:bg-fg/5 hover:text-fg"
             >
-              All on GitHub <ArrowUpRight className="w-3.5 h-3.5" />
+              <Download className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Résumé</span>
             </a>
           </div>
+        </div>
+      </header>
 
-          <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-            {PROJECTS.map((p, idx) => (
-              <ProjectCard key={p.title} p={p} idx={idx} />
+      <main className="mx-auto max-w-[760px] px-6 pb-24">
+        {/* MASTHEAD */}
+        <div className="flex flex-col-reverse gap-8 pt-16 sm:flex-row sm:items-start sm:justify-between sm:gap-10">
+          <div className="animate-reveal min-w-0 flex-1">
+            <h1 className="font-display text-[30px] font-semibold leading-tight tracking-[-0.03em] sm:text-[34px]">
+              {PROFILE.name}
+            </h1>
+            <p className="mt-1 text-[16px] text-fg/60">{PROFILE.title}</p>
+
+            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1.5 font-mono text-[11px] text-fg/50">
+              <span className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-brand animate-dot" />
+                Available for work
+              </span>
+              <span className="flex items-center gap-1.5">
+                <MapPin className="h-3 w-3" />
+                {PROFILE.location}
+              </span>
+              <span>{PROFILE.availability}</span>
+            </div>
+
+            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13.5px]">
+              <a
+                href={PROFILE.gmailCompose}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-fg/75 transition-colors hover:text-brand"
+              >
+                <Mail className="h-3.5 w-3.5" />
+                {PROFILE.email}
+              </a>
+              <a
+                href={PROFILE.phoneHref}
+                className="flex items-center gap-1.5 text-fg/75 transition-colors hover:text-brand"
+              >
+                <Phone className="h-3.5 w-3.5" />
+                {PROFILE.phone}
+              </a>
+              <a
+                href={PROFILE.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-fg/75 transition-colors hover:text-brand"
+              >
+                <Github className="h-3.5 w-3.5" />
+                GitHub
+              </a>
+              <a
+                href={PROFILE.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-fg/75 transition-colors hover:text-brand"
+              >
+                <Linkedin className="h-3.5 w-3.5" />
+                LinkedIn
+              </a>
+            </div>
+          </div>
+
+          <img
+            src="/profile.jpg"
+            alt="Jet Timothy Cerezo"
+            width="200"
+            height="200"
+            className="animate-reveal h-24 w-24 shrink-0 rounded-full border border-fg/10 object-cover sm:h-28 sm:w-28"
+          />
+        </div>
+
+        {/* ABOUT */}
+        <Section id="about" label="Summary">
+          <div className="reveal space-y-4">
+            {SUMMARY.map((p) => (
+              <p key={p.slice(0, 24)} className="text-[15px] leading-[1.7] text-fg/75">
+                {p}
+              </p>
             ))}
           </div>
-        </div>
-      </section>
+        </Section>
 
-      {/* CONTACT */}
-      <section id="contact" className="relative py-28 lg:py-32 px-6 lg:px-10 border-t border-fg/10 overflow-hidden">
-        <div className="absolute inset-0 grid-bg opacity-40" />
-        <div className="relative max-w-[1440px] mx-auto">
-          <div className="text-center mb-14 reveal">
-            <div className="font-mono text-[11px] tracking-[0.22em] uppercase text-brand mb-6">
-              [04] Contact
-            </div>
-            <h2 className="font-display font-semibold text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-[-0.04em]">
-              Got a project?<br />
-              <span className="text-fg/45">Let's build it.</span>
-            </h2>
-            <p className="text-lg text-fg/65 mt-8 max-w-2xl mx-auto">
-              Open to full-time roles, contract work, and partnerships. Happy to chat about
-              Flutter apps, React products, or the Filipino market specifically.
-            </p>
+        {/* EXPERIENCE */}
+        <Section id="experience" label="Experience">
+          <div className="space-y-9">
+            {EXPERIENCE.map((job) => (
+              <div key={job.role + job.company} className="reveal">
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <h3 className="font-display text-[15.5px] font-semibold tracking-tight">
+                    {job.role}
+                  </h3>
+                  <span className="font-mono text-[11px] text-fg/45">{job.period}</span>
+                </div>
+                <div className="mt-0.5 flex flex-wrap items-baseline justify-between gap-x-4">
+                  <p className="text-[14px] text-fg/60">{job.company}</p>
+                  <span className="font-mono text-[11px] text-fg/40">{job.meta}</span>
+                </div>
+                <Bullets items={job.bullets} />
+                <TechLine items={job.tech} />
+              </div>
+            ))}
           </div>
+        </Section>
 
-          <div className="grid md:grid-cols-3 gap-px bg-fg/10 border border-fg/10 max-w-4xl mx-auto mb-12 reveal">
-            {[
-              { icon: Mail, label: 'Email', value: 'jetjetcerezo@gmail.com', href: 'mailto:jetjetcerezo@gmail.com' },
-              { icon: Phone, label: 'Phone', value: '+63 998 914 8907', href: 'tel:+639989148907' },
-              { icon: MapPin, label: 'Location', value: 'Laguna, Philippines', href: null },
-            ].map((c) => {
-              const content = (
+        {/* WORK */}
+        <Section id="work" label="Selected Work">
+          <div className="divide-y divide-fg/10 border-y border-fg/10">
+            {PROJECTS.map((p) => {
+              const inner = (
                 <>
-                  <c.icon className="w-4 h-4 text-brand mb-4" />
-                  <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/45 mb-2">
-                    {c.label}
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                    <h3 className="flex items-center gap-1.5 font-display text-[15.5px] font-semibold tracking-tight">
+                      {p.name}
+                      {p.link && (
+                        <ArrowUpRight className="h-3.5 w-3.5 text-fg/35 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand" />
+                      )}
+                      {p.badge && (
+                        <span className="ml-1 rounded-full border border-fg/15 px-2 py-0.5 font-mono text-[9.5px] uppercase tracking-[0.12em] text-fg/50">
+                          {p.badge}
+                        </span>
+                      )}
+                    </h3>
+                    <span className="font-mono text-[11px] text-fg/45">{p.year}</span>
                   </div>
-                  <div className="text-fg font-medium">{c.value}</div>
+                  <p className="mt-0.5 text-[14px] text-fg/60">{p.tagline}</p>
+                  <p className="mt-2.5 text-[14.5px] leading-[1.65] text-fg/70">{p.description}</p>
+                  <TechLine items={p.tech} />
                 </>
               );
-              return c.href ? (
+
+              return p.link ? (
                 <a
-                  key={c.label}
-                  href={c.href}
-                  className="bg-bg p-8 hover:bg-fg/[0.055] transition-colors"
+                  key={p.name}
+                  href={p.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="reveal group block py-6 transition-colors hover:bg-fg/[0.02]"
                 >
-                  {content}
+                  {inner}
                 </a>
               ) : (
-                <div key={c.label} className="bg-bg p-8">
-                  {content}
+                <div key={p.name} className="reveal py-6">
+                  {inner}
                 </div>
               );
             })}
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-3 reveal delay-2">
-            <Button
-              size="lg"
-              className="bg-brand text-bg hover:bg-brand/90 rounded-full px-7 font-medium h-12"
-              asChild
-            >
-              <a href="mailto:jetjetcerezo@gmail.com">
-                <Mail className="w-4 h-4 mr-2" />
-                Send a message
-              </a>
-            </Button>
-            <Button
-              size="lg"
-              variant="ghost"
-              className="border border-fg/20 text-fg hover:bg-fg/10 rounded-full px-6 h-12"
-              asChild
-            >
-              <a href="https://github.com/jvcerezo" target="_blank" rel="noopener noreferrer">
-                <Github className="w-4 h-4 mr-2" />
-                GitHub
-              </a>
-            </Button>
-            <Button
-              size="lg"
-              variant="ghost"
-              className="border border-fg/20 text-fg hover:bg-fg/10 rounded-full px-6 h-12"
-              asChild
-            >
+          <a
+            href={PROFILE.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="reveal mt-5 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fg/50 transition-colors hover:text-brand"
+          >
+            More on GitHub <ArrowUpRight className="h-3 w-3" />
+          </a>
+        </Section>
+
+        {/* SKILLS */}
+        <Section label="Technical Skills">
+          <div className="reveal grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-[104px_1fr] sm:gap-y-3.5">
+            {SKILLS.map(([label, items]) => (
+              <Fragment key={label}>
+                <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-fg/45 sm:pt-1">
+                  {label}
+                </div>
+                <div className="text-[14px] leading-[1.6] text-fg/75">{items}</div>
+              </Fragment>
+            ))}
+          </div>
+        </Section>
+
+        {/* EDUCATION */}
+        <Section label="Education">
+          <div className="reveal">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h3 className="font-display text-[15.5px] font-semibold tracking-tight">
+                {EDUCATION.school}
+              </h3>
+              <span className="font-mono text-[11px] text-fg/45">{EDUCATION.period}</span>
+            </div>
+            <div className="mt-0.5 flex flex-wrap items-baseline justify-between gap-x-4">
+              <p className="text-[14px] text-fg/60">{EDUCATION.degree}</p>
+              <span className="font-mono text-[11px] text-fg/40">{EDUCATION.meta}</span>
+            </div>
+            <p className="mt-3 text-[14.5px] leading-[1.65] text-fg/70">{EDUCATION.notes}</p>
+          </div>
+        </Section>
+
+        {/* CONTACT */}
+        <Section id="contact" label="Contact">
+          <div className="reveal">
+            <p className="text-[15px] leading-[1.7] text-fg/75">
+              Open to full-time remote roles including night shift on US hours, contract work, and
+              partnerships. Happy to talk about full-stack web, microservices, or shipping products
+              for the Filipino market.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-2.5">
               <a
-                href="https://www.linkedin.com/in/jet-timothy-cerezo-126903254"
+                href={PROFILE.gmailCompose}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-md bg-fg px-4 py-2 text-[13.5px] font-medium text-bg transition-opacity hover:opacity-85"
               >
-                <Linkedin className="w-4 h-4 mr-2" />
+                <Mail className="h-3.5 w-3.5" />
+                Send a message
+              </a>
+              <a
+                href={PROFILE.resume}
+                download
+                className="inline-flex items-center gap-2 rounded-md border border-fg/20 px-4 py-2 text-[13.5px] text-fg/80 transition-colors hover:border-fg/40 hover:text-fg"
+              >
+                <Download className="h-3.5 w-3.5" />
+                Download résumé
+              </a>
+              <a
+                href={PROFILE.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-md border border-fg/20 px-4 py-2 text-[13.5px] text-fg/80 transition-colors hover:border-fg/40 hover:text-fg"
+              >
+                <Linkedin className="h-3.5 w-3.5" />
                 LinkedIn
               </a>
-            </Button>
-            <Button
-              size="lg"
-              variant="ghost"
-              className="border border-fg/20 text-fg hover:bg-fg/10 rounded-full px-6 h-12"
-              asChild
-            >
-              <a href="/JetCerezo_Resume.pdf" download>
-                <Download className="w-4 h-4 mr-2" />
-                Resume
-              </a>
-            </Button>
+            </div>
           </div>
-        </div>
-      </section>
+        </Section>
       </main>
 
       {/* FOOTER */}
-      <footer className="relative py-12 px-6 lg:px-10 border-t border-fg/10">
-        <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="flex items-center gap-3">
-            <span className="w-6 h-6 rounded-md border border-fg/20 flex items-center justify-center">
-              <Terminal className="w-3 h-3 text-brand" />
-            </span>
-            <span className="font-display text-[15px] font-semibold tracking-tight">
-              Jet Timothy Cerezo
-            </span>
-            <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-fg/40">
-              © {year}
-            </span>
-          </div>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[10px] tracking-[0.22em] uppercase text-fg/50">
-            <span>Built with React · Vite · Tailwind</span>
-            <button onClick={() => scrollToSection('home')} className="hover:text-brand">
-              Back to top ↑
-            </button>
-          </div>
+      <footer className="border-t border-fg/10">
+        <div className="mx-auto flex max-w-[760px] flex-wrap items-center justify-between gap-3 px-6 py-6 font-mono text-[10.5px] uppercase tracking-[0.14em] text-fg/40">
+          <span>© {year} Jet Timothy Cerezo</span>
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="transition-colors hover:text-fg/70"
+          >
+            Back to top ↑
+          </button>
         </div>
       </footer>
     </div>
