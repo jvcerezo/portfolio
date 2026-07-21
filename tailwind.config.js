@@ -13,6 +13,19 @@ export default {
   			line: 'rgb(var(--c-line) / <alpha-value>)',
   			mute: 'rgb(var(--c-fg) / <alpha-value>)',
   			brand: 'rgb(var(--c-accent) / <alpha-value>)',
+  			// Theme-aware text ramp — see the comment in index.css for why these
+  			// are tokens rather than fg/<alpha> utilities.
+  			ink: {
+  				1: 'var(--ink-1)',
+  				2: 'var(--ink-2)',
+  				3: 'var(--ink-3)',
+  				4: 'var(--ink-4)',
+  				5: 'var(--ink-5)'
+  			},
+  			edge: {
+  				DEFAULT: 'var(--edge)',
+  				strong: 'var(--edge-strong)'
+  			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

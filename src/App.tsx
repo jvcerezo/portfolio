@@ -246,21 +246,52 @@ function Section({
   children: ReactNode;
 }) {
   return (
-    <section id={id} className="scroll-mt-20 pt-14">
+    <section id={id} aria-label={label} className="scroll-mt-20 pt-14">
       <div className="reveal">
-        <h2 className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-fg/50">
+        <h2 className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-ink-4">
           {label}
         </h2>
-        <div className="mt-2 h-px w-full bg-fg/15" />
+        <div className="mt-2 h-px w-full bg-edge-strong" />
       </div>
       <div className="mt-6">{children}</div>
     </section>
   );
 }
 
+/* Title on the left, date flush right — the resume's two-column entry head. */
+function EntryHead({
+  title,
+  subtitle,
+  period,
+  meta,
+  children,
+}: {
+  title: ReactNode;
+  subtitle: string;
+  period: string;
+  meta?: string;
+  children?: ReactNode;
+}) {
+  return (
+    <>
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <h3 className="font-display text-[15.5px] font-semibold tracking-tight text-ink-1">
+          {title}
+          {children}
+        </h3>
+        <span className="font-mono text-[11px] text-ink-4">{period}</span>
+      </div>
+      <div className="mt-0.5 flex flex-wrap items-baseline justify-between gap-x-4">
+        <p className="text-[14px] text-ink-3">{subtitle}</p>
+        {meta && <span className="font-mono text-[11px] text-ink-4">{meta}</span>}
+      </div>
+    </>
+  );
+}
+
 function TechLine({ items }: { items: string[] }) {
   return (
-    <p className="mt-3 font-mono text-[10.5px] leading-relaxed tracking-[0.06em] text-fg/45">
+    <p className="mt-3 font-mono text-[10.5px] leading-relaxed tracking-[0.06em] text-ink-4">
       {items.join('  ·  ')}
     </p>
   );
@@ -272,12 +303,35 @@ function Bullets({ items }: { items: string[] }) {
       {items.map((b) => (
         <li
           key={b}
-          className="relative pl-4 text-[14.5px] leading-[1.65] text-fg/70 before:absolute before:left-0 before:top-0 before:text-fg/30 before:content-['—']"
+          className="relative pl-4 text-[14.5px] leading-[1.65] text-ink-2 before:absolute before:left-0 before:top-0 before:text-ink-4 before:content-['—']"
         >
           {b}
         </li>
       ))}
     </ul>
+  );
+}
+
+function ContactLink({
+  href,
+  icon: Icon,
+  children,
+  external,
+}: {
+  href: string;
+  icon: typeof Mail;
+  children: ReactNode;
+  external?: boolean;
+}) {
+  return (
+    <a
+      href={href}
+      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      className="flex items-center gap-1.5 text-ink-2 transition-colors hover:text-brand"
+    >
+      <Icon className="h-3.5 w-3.5" aria-hidden="true" />
+      {children}
+    </a>
   );
 }
 
@@ -298,31 +352,42 @@ function App() {
   const year = new Date().getFullYear();
 
   return (
-    <div className="min-h-screen bg-bg text-fg">
+    <div className="min-h-screen bg-bg text-ink-1">
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
+
       {/* TOP BAR */}
       <header
         className={`sticky top-0 z-50 bg-bg/85 backdrop-blur-md transition-colors ${
-          scrolled ? 'border-b border-fg/10' : 'border-b border-transparent'
+          scrolled ? 'border-b border-edge' : 'border-b border-transparent'
         }`}
       >
         <div className="mx-auto flex h-14 max-w-[760px] items-center justify-between gap-4 px-6">
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="font-display text-[14px] font-semibold tracking-tight hover:text-fg/70 transition-colors"
+            className="font-display text-[14px] font-semibold tracking-tight text-ink-1 transition-colors hover:text-ink-3"
           >
             Jet Cerezo
           </button>
 
-          <nav className="hidden items-center gap-6 sm:flex">
+          <nav aria-label="Sections" className="hidden items-center gap-6 sm:flex">
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
                 onClick={() => go(item.id)}
-                className={`text-[13px] transition-colors ${
-                  active === item.id ? 'text-fg' : 'text-fg/50 hover:text-fg/80'
+                aria-current={active === item.id ? 'true' : undefined}
+                className={`relative py-1 text-[13px] transition-colors ${
+                  active === item.id ? 'text-ink-1' : 'text-ink-4 hover:text-ink-2'
                 }`}
               >
                 {item.label}
+                <span
+                  aria-hidden="true"
+                  className={`absolute -bottom-0.5 left-0 h-px w-full origin-left bg-brand transition-transform duration-300 ${
+                    active === item.id ? 'scale-x-100' : 'scale-x-0'
+                  }`}
+                />
               </button>
             ))}
           </nav>
@@ -331,87 +396,70 @@ function App() {
             <button
               onClick={toggleTheme}
               aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-              className="flex h-8 w-8 items-center justify-center rounded-md text-fg/60 transition-colors hover:bg-fg/5 hover:text-fg"
+              className="flex h-8 w-8 items-center justify-center rounded-md text-ink-3 transition-colors hover:bg-fg/5 hover:text-ink-1"
             >
-              {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              {theme === 'dark' ? (
+                <Sun className="h-4 w-4" aria-hidden="true" />
+              ) : (
+                <Moon className="h-4 w-4" aria-hidden="true" />
+              )}
             </button>
             <a
               href={PROFILE.resume}
               download
-              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[13px] text-fg/60 transition-colors hover:bg-fg/5 hover:text-fg"
+              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[13px] text-ink-3 transition-colors hover:bg-fg/5 hover:text-ink-1"
             >
-              <Download className="h-3.5 w-3.5" />
+              <Download className="h-3.5 w-3.5" aria-hidden="true" />
               <span className="hidden sm:inline">Résumé</span>
             </a>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-[760px] px-6 pb-24">
+      <main id="main" className="mx-auto max-w-[760px] px-6 pb-24">
         {/* MASTHEAD */}
         <div className="flex flex-col-reverse gap-8 pt-16 sm:flex-row sm:items-start sm:justify-between sm:gap-10">
           <div className="animate-reveal min-w-0 flex-1">
-            <h1 className="font-display text-[30px] font-semibold leading-tight tracking-[-0.03em] sm:text-[34px]">
+            <h1 className="font-display text-[30px] font-semibold leading-tight tracking-[-0.03em] text-ink-1 sm:text-[34px]">
               {PROFILE.name}
             </h1>
-            <p className="mt-1 text-[16px] text-fg/60">{PROFILE.title}</p>
+            <p className="mt-1 text-[16px] text-ink-3">{PROFILE.title}</p>
 
-            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1.5 font-mono text-[11px] text-fg/50">
+            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1.5 font-mono text-[11px] text-ink-4">
               <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-brand animate-dot" />
+                <span className="h-1.5 w-1.5 rounded-full bg-brand animate-dot" aria-hidden="true" />
                 Available for work
               </span>
               <span className="flex items-center gap-1.5">
-                <MapPin className="h-3 w-3" />
+                <MapPin className="h-3 w-3" aria-hidden="true" />
                 {PROFILE.location}
               </span>
               <span>{PROFILE.availability}</span>
             </div>
 
-            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13.5px]">
-              <a
-                href={PROFILE.gmailCompose}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-fg/75 transition-colors hover:text-brand"
-              >
-                <Mail className="h-3.5 w-3.5" />
+            <address className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13.5px] not-italic">
+              <ContactLink href={PROFILE.gmailCompose} icon={Mail} external>
                 {PROFILE.email}
-              </a>
-              <a
-                href={PROFILE.phoneHref}
-                className="flex items-center gap-1.5 text-fg/75 transition-colors hover:text-brand"
-              >
-                <Phone className="h-3.5 w-3.5" />
+              </ContactLink>
+              <ContactLink href={PROFILE.phoneHref} icon={Phone}>
                 {PROFILE.phone}
-              </a>
-              <a
-                href={PROFILE.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-fg/75 transition-colors hover:text-brand"
-              >
-                <Github className="h-3.5 w-3.5" />
+              </ContactLink>
+              <ContactLink href={PROFILE.github} icon={Github} external>
                 GitHub
-              </a>
-              <a
-                href={PROFILE.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-fg/75 transition-colors hover:text-brand"
-              >
-                <Linkedin className="h-3.5 w-3.5" />
+              </ContactLink>
+              <ContactLink href={PROFILE.linkedin} icon={Linkedin} external>
                 LinkedIn
-              </a>
-            </div>
+              </ContactLink>
+            </address>
           </div>
 
           <img
             src="/profile.jpg"
-            alt="Jet Timothy Cerezo"
-            width="200"
-            height="200"
-            className="animate-reveal h-24 w-24 shrink-0 rounded-full border border-fg/10 object-cover sm:h-28 sm:w-28"
+            alt="Jet Timothy Cerezo, full-stack software engineer"
+            width="240"
+            height="240"
+            fetchPriority="high"
+            className="animate-reveal h-24 w-24 shrink-0 rounded-full border border-edge object-cover sm:h-28 sm:w-28"
           />
         </div>
 
@@ -419,7 +467,7 @@ function App() {
         <Section id="about" label="Summary">
           <div className="reveal space-y-4">
             {SUMMARY.map((p) => (
-              <p key={p.slice(0, 24)} className="text-[15px] leading-[1.7] text-fg/75">
+              <p key={p.slice(0, 24)} className="text-[15px] leading-[1.7] text-ink-2">
                 {p}
               </p>
             ))}
@@ -430,46 +478,40 @@ function App() {
         <Section id="experience" label="Experience">
           <div className="space-y-9">
             {EXPERIENCE.map((job) => (
-              <div key={job.role + job.company} className="reveal">
-                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                  <h3 className="font-display text-[15.5px] font-semibold tracking-tight">
-                    {job.role}
-                  </h3>
-                  <span className="font-mono text-[11px] text-fg/45">{job.period}</span>
-                </div>
-                <div className="mt-0.5 flex flex-wrap items-baseline justify-between gap-x-4">
-                  <p className="text-[14px] text-fg/60">{job.company}</p>
-                  <span className="font-mono text-[11px] text-fg/40">{job.meta}</span>
-                </div>
+              <article key={job.role + job.company} className="reveal">
+                <EntryHead
+                  title={job.role}
+                  subtitle={job.company}
+                  period={job.period}
+                  meta={job.meta}
+                />
                 <Bullets items={job.bullets} />
                 <TechLine items={job.tech} />
-              </div>
+              </article>
             ))}
           </div>
         </Section>
 
         {/* WORK */}
         <Section id="work" label="Selected Work">
-          <div className="divide-y divide-fg/10 border-y border-fg/10">
+          <div className="divide-y divide-edge border-y border-edge">
             {PROJECTS.map((p) => {
               const inner = (
                 <>
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                    <h3 className="flex items-center gap-1.5 font-display text-[15.5px] font-semibold tracking-tight">
-                      {p.name}
-                      {p.link && (
-                        <ArrowUpRight className="h-3.5 w-3.5 text-fg/35 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand" />
-                      )}
-                      {p.badge && (
-                        <span className="ml-1 rounded-full border border-fg/15 px-2 py-0.5 font-mono text-[9.5px] uppercase tracking-[0.12em] text-fg/50">
-                          {p.badge}
-                        </span>
-                      )}
-                    </h3>
-                    <span className="font-mono text-[11px] text-fg/45">{p.year}</span>
-                  </div>
-                  <p className="mt-0.5 text-[14px] text-fg/60">{p.tagline}</p>
-                  <p className="mt-2.5 text-[14.5px] leading-[1.65] text-fg/70">{p.description}</p>
+                  <EntryHead title={p.name} subtitle={p.tagline} period={p.year}>
+                    {p.link && (
+                      <ArrowUpRight
+                        aria-hidden="true"
+                        className="ml-1.5 inline h-3.5 w-3.5 align-baseline text-ink-4 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand"
+                      />
+                    )}
+                    {p.badge && (
+                      <span className="ml-2 rounded-full border border-edge-strong px-2 py-0.5 align-middle font-mono text-[9.5px] uppercase tracking-[0.12em] text-ink-4">
+                        {p.badge}
+                      </span>
+                    )}
+                  </EntryHead>
+                  <p className="mt-2.5 text-[14.5px] leading-[1.65] text-ink-2">{p.description}</p>
                   <TechLine items={p.tech} />
                 </>
               );
@@ -480,14 +522,14 @@ function App() {
                   href={p.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="reveal group block py-6 transition-colors hover:bg-fg/[0.02]"
+                  className="reveal group block py-6 transition-colors hover:bg-fg/[0.03]"
                 >
                   {inner}
                 </a>
               ) : (
-                <div key={p.name} className="reveal py-6">
+                <article key={p.name} className="reveal py-6">
                   {inner}
-                </div>
+                </article>
               );
             })}
           </div>
@@ -496,9 +538,9 @@ function App() {
             href={PROFILE.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="reveal mt-5 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fg/50 transition-colors hover:text-brand"
+            className="reveal mt-5 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-4 transition-colors hover:text-brand"
           >
-            More on GitHub <ArrowUpRight className="h-3 w-3" />
+            More on GitHub <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
           </a>
         </Section>
 
@@ -507,10 +549,10 @@ function App() {
           <div className="reveal grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-[104px_1fr] sm:gap-y-3.5">
             {SKILLS.map(([label, items]) => (
               <Fragment key={label}>
-                <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-fg/45 sm:pt-1">
+                <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-4 sm:pt-1">
                   {label}
                 </div>
-                <div className="text-[14px] leading-[1.6] text-fg/75">{items}</div>
+                <div className="text-[14px] leading-[1.6] text-ink-2">{items}</div>
               </Fragment>
             ))}
           </div>
@@ -518,25 +560,21 @@ function App() {
 
         {/* EDUCATION */}
         <Section label="Education">
-          <div className="reveal">
-            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-              <h3 className="font-display text-[15.5px] font-semibold tracking-tight">
-                {EDUCATION.school}
-              </h3>
-              <span className="font-mono text-[11px] text-fg/45">{EDUCATION.period}</span>
-            </div>
-            <div className="mt-0.5 flex flex-wrap items-baseline justify-between gap-x-4">
-              <p className="text-[14px] text-fg/60">{EDUCATION.degree}</p>
-              <span className="font-mono text-[11px] text-fg/40">{EDUCATION.meta}</span>
-            </div>
-            <p className="mt-3 text-[14.5px] leading-[1.65] text-fg/70">{EDUCATION.notes}</p>
-          </div>
+          <article className="reveal">
+            <EntryHead
+              title={EDUCATION.school}
+              subtitle={EDUCATION.degree}
+              period={EDUCATION.period}
+              meta={EDUCATION.meta}
+            />
+            <p className="mt-3 text-[14.5px] leading-[1.65] text-ink-2">{EDUCATION.notes}</p>
+          </article>
         </Section>
 
         {/* CONTACT */}
         <Section id="contact" label="Contact">
           <div className="reveal">
-            <p className="text-[15px] leading-[1.7] text-fg/75">
+            <p className="text-[15px] leading-[1.7] text-ink-2">
               Open to full-time remote roles including night shift on US hours, contract work, and
               partnerships. Happy to talk about full-stack web, microservices, or shipping products
               for the Filipino market.
@@ -548,24 +586,24 @@ function App() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-md bg-fg px-4 py-2 text-[13.5px] font-medium text-bg transition-opacity hover:opacity-85"
               >
-                <Mail className="h-3.5 w-3.5" />
+                <Mail className="h-3.5 w-3.5" aria-hidden="true" />
                 Send a message
               </a>
               <a
                 href={PROFILE.resume}
                 download
-                className="inline-flex items-center gap-2 rounded-md border border-fg/20 px-4 py-2 text-[13.5px] text-fg/80 transition-colors hover:border-fg/40 hover:text-fg"
+                className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
               >
-                <Download className="h-3.5 w-3.5" />
+                <Download className="h-3.5 w-3.5" aria-hidden="true" />
                 Download résumé
               </a>
               <a
                 href={PROFILE.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-fg/20 px-4 py-2 text-[13.5px] text-fg/80 transition-colors hover:border-fg/40 hover:text-fg"
+                className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
               >
-                <Linkedin className="h-3.5 w-3.5" />
+                <Linkedin className="h-3.5 w-3.5" aria-hidden="true" />
                 LinkedIn
               </a>
             </div>
@@ -574,12 +612,12 @@ function App() {
       </main>
 
       {/* FOOTER */}
-      <footer className="border-t border-fg/10">
-        <div className="mx-auto flex max-w-[760px] flex-wrap items-center justify-between gap-3 px-6 py-6 font-mono text-[10.5px] uppercase tracking-[0.14em] text-fg/40">
+      <footer className="border-t border-edge">
+        <div className="mx-auto flex max-w-[760px] flex-wrap items-center justify-between gap-3 px-6 py-6 font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-4">
           <span>© {year} Jet Timothy Cerezo</span>
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="transition-colors hover:text-fg/70"
+            className="transition-colors hover:text-ink-2"
           >
             Back to top ↑
           </button>

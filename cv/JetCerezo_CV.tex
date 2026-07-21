@@ -51,22 +51,25 @@
 }
 
 %---------- Entry: title, subtitle, date, right-side (optional location)
-% The second row is \small but still inherits the 11pt \baselineskip, so it
-% needs negative leading to sit close under the organisation name.
+% tabular* with \extracolsep{\fill} rather than tabularx: an X column is a
+% paragraph box whose first baseline is pushed down by a strut, which both
+% opened a ~20pt gap under the organisation name and left the right-hand
+% column sitting on a different baseline from the left. Plain l/r columns
+% share one baseline, so the pairs line up and \\[-2pt] tunes the leading.
 \newcommand{\entry}[4]{%
   \par\smallskip
-  \noindent\begin{tabularx}{\linewidth}{@{}X r@{}}
-    \textbf{#1} & {\small\itshape\color{muted}#3} \\[-3.5pt]
+  \noindent\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}l r@{}}
+    \textbf{#1} & {\small\itshape\color{muted}#3} \\[-2pt]
     {\small\itshape\color{muted}#2} & {\small\itshape\color{muted}#4} \\
-  \end{tabularx}\par\vspace{-3pt}
+  \end{tabular*}\par\vspace{-2pt}
 }
 
 %---------- Project entry: title, date
 \newcommand{\projitem}[2]{%
   \par\smallskip
-  \noindent\begin{tabularx}{\linewidth}{@{}X r@{}}
+  \noindent\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}l r@{}}
     \textbf{#1} & {\small\itshape\color{muted}#2} \\
-  \end{tabularx}\par\vspace{-3pt}
+  \end{tabular*}\par\vspace{-2pt}
 }
 
 %---------- Skill row: label, contents

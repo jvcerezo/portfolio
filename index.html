@@ -14,6 +14,15 @@
     <!-- Preconnect to font CDN for faster first paint -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      Loaded here rather than via @import in index.css: an @import inside the
+      stylesheet is only discovered after the CSS downloads and parses, which
+      serialises the font request behind it and defeats the preconnect above.
+    -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    />
 
     <!-- Preload above-the-fold image for better LCP -->
     <link rel="preload" as="image" href="/profile.jpg" />
@@ -125,23 +134,43 @@
           "UPLB CS Honor Roll"
         ],
         "knowsAbout": [
-          "Flutter",
-          "Dart",
+          "Full-stack web development",
+          "JavaScript",
+          "TypeScript",
+          "PHP",
+          "SQL",
           "React",
           "Next.js",
-          "TypeScript",
-          "JavaScript",
+          "jQuery",
           "Node.js",
-          "Supabase",
-          "PostgreSQL",
+          "Express",
+          "Nest.js",
+          "REST APIs",
+          "Microservices",
+          "API gateway",
+          "MySQL",
           "MongoDB",
+          "PostgreSQL",
+          "Supabase",
+          "MERN stack",
+          "Docker",
+          "Docker Compose",
+          "CI/CD",
+          "Linux",
+          "OAuth",
+          "Single sign-on",
+          "Agile software development",
+          "Flutter",
+          "Dart",
           "Test Automation",
           "Appium",
           "BrowserStack",
-          "MERN stack",
-          "Docker",
-          "CI/CD"
-        ]
+          "Retrieval-augmented generation"
+        ],
+        "seeks": {
+          "@type": "Demand",
+          "name": "Remote full-stack software engineering roles, including night-shift US hours"
+        }
       }
     </script>
 
