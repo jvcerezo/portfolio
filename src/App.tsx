@@ -92,7 +92,7 @@ const PROJECTS = [
     tagline: 'Filipino adulting and finance app, live on Google Play',
     year: '2024 — 2025',
     description:
-      'Solo-built and shipped: 38+ bank integrations, tax calculators, OCR receipt scanning, an AI chat assistant, and Google Play Billing. Architected an offline-first sync engine with conflict resolution and incremental replication across 13 tables spanning PostgreSQL and SQLite, secured with row-level security. Currently migrating the product to a single Next.js 16 and TypeScript codebase — deployed to web and packaged for Android and iOS with Capacitor — using Supabase SSR auth, TanStack Query offline persistence, and Dexie/IndexedDB.',
+      'Solo-built and shipped: 38+ bank integrations, tax calculators, OCR receipt scanning, and an AI chat assistant. Architected an offline-first sync engine with conflict resolution and incremental replication across 13 tables spanning PostgreSQL and SQLite, secured with row-level security. Currently migrating the product to a single Next.js 16 and TypeScript codebase — deployed to web and packaged for Android and iOS with Capacitor — using Supabase SSR auth, TanStack Query offline persistence, and Dexie/IndexedDB.',
     tech: ['Flutter', 'Dart', 'Supabase', 'PostgreSQL', 'Next.js', 'TypeScript', 'Capacitor'],
     link: 'https://play.google.com/store/apps/details?id=com.jvcerezo.exitplan',
     badge: 'Google Play',
