@@ -48,7 +48,7 @@ const PROFILE = {
 };
 
 const SUMMARY = [
-  "Full-stack software engineer with 2+ years building and shipping production web and mobile applications across front end, back end, and QA automation. I rebuilt a legacy PHP/MySQL research platform at IRRI into a MERN microservices architecture — seven Dockerized Node.js and Express services behind a single API gateway.",
+  "Full-stack software engineer with 2+ years building and shipping production web and mobile applications across front end, back end, and QA automation. I rebuilt IRRI’s legacy Java monolith research platform into a MERN microservices architecture — seven Dockerized Node.js and Express services behind a single API gateway.",
   "Most of what I ship, I ship end-to-end: designing schemas, wiring REST APIs, building responsive UIs, running CI/CD pipelines, and reading production logs after deploy. I work comfortably in Agile teams and across Linux and Windows environments.",
 ];
 
@@ -73,11 +73,11 @@ const EXPERIENCE = [
     meta: "Los Baños, Laguna",
     period: "Jul 2024 — May 2025",
     bullets: [
-      "Re-architected IRRI’s legacy SNPseek genomics platform into a MERN microservices system: seven independent Node.js/Express services behind a single API gateway, orchestrated with Docker Compose.",
-      "Worked hands-on across the existing PHP/MySQL Drupal stack, building a custom SSO/OAuth layer that bridged the legacy PHP application with the new Node services.",
+      "Re-architected IRRI’s legacy Java monolith SNPseek genomics platform into a MERN microservices system: seven independent Node.js/Express services behind a single API gateway, orchestrated with Docker Compose.",
+      "Re-engineered authentication and data access layers, building a custom SSO/OAuth layer that bridged legacy enterprise systems with the new Node services.",
       "Designed MongoDB schemas and REST/JSON endpoints for large-scale genomic datasets, and built the React front end with multi-criteria filtering and interactive charts.",
     ],
-    tech: ["Node.js", "Express", "React", "MongoDB", "Docker", "PHP", "MySQL", "OAuth/SSO"],
+    tech: ["Java", "Node.js", "Express", "React", "MongoDB", "Docker", "Microservices", "OAuth/SSO"],
   },
   {
     role: "Full-Stack Developer",
@@ -134,7 +134,7 @@ const PROJECTS: Project[] = [
     tagline: "Genomics microservices platform · IRRI",
     year: "2024 — 2025",
     description:
-      "Rewrite of IRRI’s legacy PHP/MySQL SNPseek platform into seven independent Node.js/Express services behind an API gateway, orchestrated with Docker Compose. Advanced multi-criteria filtering and interactive charts over large genomic datasets.",
+      "Rewrite of IRRI’s legacy Java monolith SNPseek platform into seven independent Node.js/Express services behind an API gateway, orchestrated with Docker Compose. Advanced multi-criteria filtering and interactive charts over large genomic datasets.",
     tech: ["React", "Node.js", "Express", "MongoDB", "Docker", "API Gateway", "SSO"],
     link: "https://snpseek-mern.vercel.app",
     badge: "IRRI Research",

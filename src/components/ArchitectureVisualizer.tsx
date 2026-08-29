@@ -60,7 +60,7 @@ export function ArchitectureVisualizer() {
               </span>
             </div>
             <p className="text-[13.5px] leading-relaxed text-ink-2">
-              Rewrote legacy PHP/MySQL SNPseek monolith into 7 decoupled Node.js microservices. Integrated custom Single Sign-On (SSO) bridging Drupal auth with new microservices.
+              Rewrote IRRI’s legacy Java monolith SNPseek platform into 7 decoupled Node.js microservices behind an API gateway. Designed high-throughput MongoDB schemas and custom Single Sign-On (SSO) bridging enterprise authentication with new microservices.
             </p>
 
             {/* Architecture diagram cards */}
@@ -91,10 +91,10 @@ export function ArchitectureVisualizer() {
 
               <div className="rounded-lg border border-edge bg-bg p-3">
                 <div className="flex items-center gap-1.5 font-mono text-[10.5px] text-ink-4">
-                  <Database className="h-3 w-3 text-brand" /> Data & Legacy
+                  <Database className="h-3 w-3 text-brand" /> Data Store
                 </div>
-                <div className="mt-1 text-[13px] font-medium text-ink-1">MongoDB + Drupal</div>
-                <p className="mt-1 text-[11.5px] text-ink-3">Genomics store & PHP Drupal SSO bridge</p>
+                <div className="mt-1 text-[13px] font-medium text-ink-1">MongoDB Cluster</div>
+                <p className="mt-1 text-[11.5px] text-ink-3">High-scale genomic variant records & metadata</p>
               </div>
             </div>
 
@@ -105,7 +105,7 @@ export function ArchitectureVisualizer() {
               <ArrowRight className="h-3 w-3 text-ink-5" />
               <span>Docker Compose Mesh</span>
               <ArrowRight className="h-3 w-3 text-ink-5" />
-              <span>MongoDB & Legacy PHP</span>
+              <span>MongoDB Datastore</span>
             </div>
           </div>
         )}
