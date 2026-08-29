@@ -20,11 +20,22 @@ import { ImpactStats } from "./components/ImpactStats";
 import { ArchitectureVisualizer } from "./components/ArchitectureVisualizer";
 import { ScreenshotModal, type ScreenshotItem } from "./components/ScreenshotModal";
 import { Toast } from "./components/Toast";
-import { NavigationRail } from "./components/NavigationRail";
+
+const NAV_ITEMS = [
+  { id: "about", num: "01", label: "About" },
+  { id: "experience", num: "02", label: "Experience" },
+  { id: "architecture", num: "03", label: "Architecture" },
+  { id: "work", num: "04", label: "Projects" },
+  { id: "honors", num: "05", label: "Honors" },
+  { id: "skills", num: "06", label: "Stack" },
+  { id: "contact", num: "07", label: "Contact" },
+];
+
+const NAV_IDS = NAV_ITEMS.map((n) => n.id);
 
 const PROFILE = {
   name: "Jet Timothy V. Cerezo",
-  title: "Full-Stack Software Engineer · Microservices & Mobile",
+  title: "Full-Stack Software Engineer",
   email: "jetjetcerezo@gmail.com",
   gmailCompose:
     "https://mail.google.com/mail/?view=cm&fs=1&to=jetjetcerezo@gmail.com&su=Hello%20Jet",
@@ -312,6 +323,41 @@ function useTheme(): [Theme, () => void] {
   return [theme, () => setTheme((t) => (t === "dark" ? "light" : "dark"))];
 }
 
+function useScrollSpy(ids: string[]) {
+  const [active, setActive] = useState<string>("about");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + window.innerHeight * 0.35;
+      const sectionElements = ids
+        .map((id) => ({ id, el: document.getElementById(id) }))
+        .filter((item) => item.el !== null);
+
+      for (let i = sectionElements.length - 1; i >= 0; i--) {
+        const item = sectionElements[i];
+        if (item.el && item.el.offsetTop <= scrollPosition) {
+          setActive(item.id);
+          return;
+        }
+      }
+      if (sectionElements.length > 0) {
+        setActive(sectionElements[0].id);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, [ids]);
+
+  return active;
+}
+
 function useRevealOnScroll() {
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -342,7 +388,7 @@ function Section({
   children: ReactNode;
 }) {
   return (
-    <section id={id} aria-label={label} className="scroll-mt-12 pt-14">
+    <section id={id} aria-label={label} className="scroll-mt-16 pt-6 first:pt-0">
       <div className="reveal">
         <div className="flex items-center gap-2 font-mono text-[10.5px] font-medium uppercase tracking-[0.2em] text-ink-4">
           {num && <span className="text-brand">{num} //</span>}
@@ -434,6 +480,7 @@ function ContactLink({
 
 function App() {
   const [theme, toggleTheme] = useTheme();
+  const active = useScrollSpy(NAV_IDS);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [isToastOpen, setIsToastOpen] = useState(false);
@@ -444,6 +491,11 @@ function App() {
   useRevealOnScroll();
 
   const year = new Date().getFullYear();
+
+  const go = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
 
   const handleCopyEmail = (e?: React.MouseEvent) => {
     if (e) e.preventDefault();
@@ -474,385 +526,432 @@ function App() {
         Skip to content
       </a>
 
-      <main id="main" className="mx-auto max-w-[760px] px-6 pb-24">
-        {/* TOP UTILITY ROW */}
-        <div className="flex items-center justify-between pt-8 sm:pt-12">
-          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-4">
-            <span className="h-1.5 w-1.5 rounded-full bg-brand animate-dot" aria-hidden="true" />
-            <span>Portfolio // {year}</span>
-          </div>
+      <div className="mx-auto min-h-screen max-w-[1180px] px-6 py-12 md:px-12 md:py-16 lg:px-16 lg:py-0">
+        <div className="lg:flex lg:justify-between lg:gap-14 xl:gap-20">
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={toggleTheme}
-              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-              className="flex h-8 w-8 items-center justify-center rounded-md border border-edge bg-fg/[0.02] text-ink-3 transition-colors hover:border-edge-strong hover:bg-fg/5 hover:text-ink-1"
-            >
-              {theme === "dark" ? (
-                <Sun className="h-3.5 w-3.5" aria-hidden="true" />
-              ) : (
-                <Moon className="h-3.5 w-3.5" aria-hidden="true" />
-              )}
-            </button>
-            <a
-              href={PROFILE.resume}
-              download
-              className="inline-flex items-center gap-1.5 rounded-md border border-edge bg-fg/[0.02] px-3 py-1.5 font-mono text-[11.5px] text-ink-2 transition-all hover:border-edge-strong hover:bg-fg/5 hover:text-ink-1"
-            >
-              <Download className="h-3 w-3" aria-hidden="true" />
-              <span>Résumé</span>
-            </a>
-          </div>
-        </div>
+          {/* ========================================================= */}
+          {/* LEFT COLUMN: Sticky Side Navigator                        */}
+          {/* ========================================================= */}
+          <aside className="lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-[42%] lg:flex-col lg:justify-between lg:py-20 xl:py-24">
+            <div>
+              {/* Profile Avatar & Top Status */}
+              <div className="flex items-center gap-4">
+                <picture className="animate-reveal shrink-0">
+                  <source srcSet="/profile.webp" type="image/webp" />
+                  <img
+                    src="/profile.jpg"
+                    alt="Jet Timothy Cerezo"
+                    width="120"
+                    height="120"
+                    fetchPriority="high"
+                    className="h-16 w-16 rounded-full border border-edge object-cover shadow-sm ring-4 ring-fg/[0.03] sm:h-20 sm:w-20"
+                  />
+                </picture>
+                <div>
+                  <div className="flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-ink-4">
+                    <span className="h-1.5 w-1.5 rounded-full bg-brand animate-dot" aria-hidden="true" />
+                    <span>Portfolio // {year}</span>
+                  </div>
+                  <div className="mt-1">
+                    <TimezoneWidget />
+                  </div>
+                </div>
+              </div>
 
-        {/* MASTHEAD (Bento Hero) */}
-        <div className="flex flex-col-reverse gap-8 pt-8 sm:flex-row sm:items-start sm:justify-between sm:gap-10">
-          <div className="animate-reveal min-w-0 flex-1">
-            <h1 className="font-display text-[32px] font-semibold leading-tight tracking-[-0.03em] text-ink-1 sm:text-[36px]">
-              {PROFILE.name}
-            </h1>
-            <p className="mt-1 text-[16px] text-ink-3">{PROFILE.title}</p>
-
-            <div className="mt-4 flex flex-wrap items-center gap-3">
-              <TimezoneWidget />
-              <span className="flex items-center gap-1.5 font-mono text-[11px] text-ink-4">
+              {/* Name & Title */}
+              <h1 className="mt-6 font-display text-[32px] font-semibold leading-tight tracking-[-0.03em] text-ink-1 sm:text-[38px]">
+                {PROFILE.name}
+              </h1>
+              <p className="mt-1 text-[16px] font-medium text-ink-2">{PROFILE.title}</p>
+              <div className="mt-2.5 flex items-center gap-1.5 font-mono text-[11px] text-ink-4">
                 <MapPin className="h-3 w-3" aria-hidden="true" />
-                {PROFILE.location}
-              </span>
+                <span>{PROFILE.location}</span>
+              </div>
+              <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-ink-3">
+                Building high-scale microservices, offline-first mobile apps, and automated test pipelines for production software.
+              </p>
+
+              {/* SIDE NAVIGATOR LINKS (Desktop) */}
+              <nav className="mt-10 hidden lg:block" aria-label="In-page jump links">
+                <ul className="space-y-3 font-mono text-[12px] uppercase tracking-[0.14em]">
+                  {NAV_ITEMS.map((item) => {
+                    const isActive = active === item.id;
+                    return (
+                      <li key={item.id}>
+                        <button
+                          onClick={() => go(item.id)}
+                          className={`group flex items-center gap-3 py-1 text-left transition-all ${
+                            isActive ? "text-ink-1 font-semibold" : "text-ink-4 hover:text-ink-2"
+                          }`}
+                        >
+                          <span
+                            className={`h-px transition-all duration-300 ${
+                              isActive
+                                ? "w-8 bg-brand"
+                                : "w-3.5 bg-edge-strong group-hover:w-6 group-hover:bg-ink-3"
+                            }`}
+                          />
+                          <span className={isActive ? "text-brand" : "text-ink-4"}>{item.num}</span>
+                          <span>{item.label}</span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </nav>
             </div>
 
-            <address className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13.5px] not-italic">
-              <div className="flex items-center gap-1">
-                <ContactLink href={PROFILE.gmailCompose} icon={Mail} external>
-                  {PROFILE.email}
-                </ContactLink>
+            {/* BOTTOM UTILITY: Theme, Resume, Socials */}
+            <div className="mt-10 lg:mt-0">
+              <div className="flex items-center gap-2.5">
                 <button
-                  type="button"
-                  onClick={handleCopyEmail}
-                  aria-label="Copy email address"
-                  className="flex h-5 w-5 items-center justify-center rounded text-ink-4 transition-colors hover:bg-fg/10 hover:text-ink-1"
-                  title="Copy email to clipboard"
+                  onClick={toggleTheme}
+                  aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                  className="flex h-8 w-8 items-center justify-center rounded-md border border-edge bg-fg/[0.02] text-ink-3 transition-colors hover:border-edge-strong hover:bg-fg/5 hover:text-ink-1"
                 >
-                  {copiedEmail ? (
-                    <Check className="h-3 w-3 text-brand" />
+                  {theme === "dark" ? (
+                    <Sun className="h-3.5 w-3.5" aria-hidden="true" />
                   ) : (
-                    <Copy className="h-3 w-3" />
+                    <Moon className="h-3.5 w-3.5" aria-hidden="true" />
                   )}
                 </button>
-              </div>
-
-              <ContactLink href={PROFILE.phoneHref} icon={Phone}>
-                {PROFILE.phone}
-              </ContactLink>
-              <ContactLink href={PROFILE.github} icon={Github} external>
-                github
-              </ContactLink>
-              <ContactLink href={PROFILE.linkedin} icon={Linkedin} external>
-                linkedin
-              </ContactLink>
-            </address>
-          </div>
-
-          <picture className="animate-reveal shrink-0">
-            <source srcSet="/profile.webp" type="image/webp" />
-            <img
-              src="/profile.jpg"
-              alt="Jet Timothy Cerezo, full-stack software engineer"
-              width="240"
-              height="240"
-              fetchPriority="high"
-              className="h-24 w-24 rounded-full border border-edge object-cover shadow-sm ring-4 ring-fg/[0.03] sm:h-28 sm:w-28"
-            />
-          </picture>
-        </div>
-
-        {/* IMPACT HIGHLIGHTS BY THE NUMBERS */}
-        <div className="mt-10 pt-4">
-          <div className="reveal">
-            <div className="flex items-center gap-2 font-mono text-[10.5px] font-medium uppercase tracking-[0.2em] text-ink-4">
-              <span className="text-brand">⚡ //</span>
-              <span>Impact by the Numbers</span>
-            </div>
-            <div className="mt-2 h-px w-full bg-edge-strong" />
-          </div>
-          <ImpactStats />
-        </div>
-
-        {/* 01 // ABOUT */}
-        <Section id="about" num="01" label="About">
-          <div className="reveal space-y-4">
-            {SUMMARY.map((p) => (
-              <p key={p.slice(0, 24)} className="text-[15px] leading-[1.7] text-ink-2">
-                {p}
-              </p>
-            ))}
-          </div>
-        </Section>
-
-        {/* 02 // EXPERIENCE */}
-        <Section id="experience" num="02" label="Experience">
-          <div className="space-y-9">
-            {EXPERIENCE.map((job) => (
-              <article key={job.role + job.company} className="reveal group">
-                <EntryHead
-                  title={job.role}
-                  subtitle={job.company}
-                  period={job.period}
-                  meta={job.meta}
-                />
-                <Bullets items={job.bullets} />
-                <TechLine items={job.tech} />
-              </article>
-            ))}
-          </div>
-        </Section>
-
-        {/* 03 // ARCHITECTURE & SYSTEM DESIGN */}
-        <Section id="architecture" num="03" label="System Design & Architecture">
-          <div className="reveal">
-            <p className="text-[15px] leading-[1.7] text-ink-2">
-              Interactive architectural diagrams illustrating microservices decoupling, offline-first data synchronization, and RAG retrieval pipelines built across production and research systems.
-            </p>
-          </div>
-          <ArchitectureVisualizer />
-        </Section>
-
-        {/* 04 // SELECTED WORK */}
-        <Section id="work" num="04" label="Selected Projects">
-          {/* Category Filter Pills */}
-          <div className="reveal mb-6 flex flex-wrap items-center gap-1.5">
-            <span className="mr-1 flex items-center gap-1 font-mono text-[10.5px] uppercase tracking-wider text-ink-4">
-              <Filter className="h-3 w-3" /> Filter:
-            </span>
-            {[
-              { id: "all", label: "All Projects" },
-              { id: "featured", label: "Featured" },
-              { id: "web", label: "Full-Stack Web" },
-              { id: "mobile", label: "Mobile & Flutter" },
-              { id: "ai", label: "AI & Systems" },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setProjectCategory(tab.id)}
-                className={`rounded-md px-2.5 py-1 font-mono text-[11px] transition-all ${
-                  projectCategory === tab.id
-                    ? "bg-fg text-bg font-medium shadow-sm"
-                    : "border border-edge bg-fg/[0.02] text-ink-3 hover:border-edge-strong hover:text-ink-1"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          <div className="divide-y divide-edge border-y border-edge">
-            {filteredProjects.map((p) => (
-              <article key={p.name} className="reveal group py-6">
-                <EntryHead
-                  title={
-                    p.link ? (
-                      <a
-                        href={p.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 transition-colors hover:text-brand"
-                      >
-                        <span>{p.name}</span>
-                        <ArrowUpRight
-                          aria-hidden="true"
-                          className="h-3.5 w-3.5 text-ink-4 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand"
-                        />
-                      </a>
-                    ) : (
-                      <span>{p.name}</span>
-                    )
-                  }
-                  subtitle={p.tagline}
-                  period={p.year}
+                <a
+                  href={PROFILE.resume}
+                  download
+                  className="inline-flex items-center gap-1.5 rounded-md border border-edge bg-fg/[0.02] px-3 py-1.5 font-mono text-[11.5px] text-ink-2 transition-all hover:border-edge-strong hover:bg-fg/5 hover:text-ink-1"
                 >
-                  {p.badge && (
-                    <span className="ml-2 rounded-full border border-edge-strong px-2 py-0.5 align-middle font-mono text-[9.5px] uppercase tracking-[0.12em] text-ink-4">
-                      {p.badge}
-                    </span>
-                  )}
-                </EntryHead>
+                  <Download className="h-3 w-3" aria-hidden="true" />
+                  <span>Download Résumé</span>
+                </a>
+              </div>
 
-                <p className="mt-2.5 text-[14.5px] leading-[1.65] text-ink-2">{p.description}</p>
-                <TechLine items={p.tech} />
-
-                {/* Action buttons */}
-                {(p.hasScreenshots || p.link) && (
-                  <div className="mt-4 flex flex-wrap items-center gap-3">
-                    {p.hasScreenshots && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsScreenshotOpen(true);
-                          setScreenshotIndex(0);
-                        }}
-                        className="inline-flex items-center gap-1.5 rounded-md border border-edge-strong bg-fg/[0.03] px-3 py-1.5 font-mono text-[11.5px] text-ink-2 transition-all hover:border-fg/40 hover:bg-fg/[0.06] hover:text-ink-1"
-                      >
-                        <Smartphone className="h-3.5 w-3.5 text-brand" />
-                        <span>View App Screenshots ({SANDALAN_SCREENSHOTS.length})</span>
-                      </button>
-                    )}
-
-                    {p.link && (
-                      <a
-                        href={p.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 font-mono text-[11px] text-ink-4 transition-colors hover:text-brand"
-                      >
-                        <span>{p.badge === "Google Play" ? "View on Google Play" : "Open project"}</span>
-                        <ArrowUpRight className="h-3 w-3" />
-                      </a>
-                    )}
-                  </div>
-                )}
-              </article>
-            ))}
-          </div>
-
-          <a
-            href={PROFILE.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="reveal mt-5 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-4 transition-colors hover:text-brand"
-          >
-            More repositories on GitHub <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
-          </a>
-        </Section>
-
-        {/* 05 // HONORS & HACKATHONS */}
-        <Section id="honors" num="05" label="Honors & Recognition">
-          <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
-            {HONORS.map((item) => (
-              <div
-                key={item.title}
-                className="reveal group relative flex flex-col justify-between rounded-lg border border-edge bg-fg/[0.02] p-4 transition-all duration-200 hover:border-edge-strong hover:bg-fg/[0.04]"
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="rounded-full border border-edge-strong px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.12em] text-brand">
-                      {item.badge}
-                    </span>
-                    <span className="font-mono text-[10.5px] text-ink-4">{item.period}</span>
-                  </div>
-
-                  <h3 className="mt-2.5 font-display text-[15px] font-semibold text-ink-1">
-                    {item.link ? (
-                      <a
-                        href={item.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 hover:text-brand transition-colors"
-                      >
-                        <span>{item.title}</span>
-                        <ArrowUpRight className="h-3.5 w-3.5 text-ink-4 group-hover:text-brand transition-colors" />
-                      </a>
+              <address className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13.5px] not-italic">
+                <div className="flex items-center gap-1">
+                  <ContactLink href={PROFILE.gmailCompose} icon={Mail} external>
+                    {PROFILE.email}
+                  </ContactLink>
+                  <button
+                    type="button"
+                    onClick={handleCopyEmail}
+                    aria-label="Copy email address"
+                    className="flex h-5 w-5 items-center justify-center rounded text-ink-4 transition-colors hover:bg-fg/10 hover:text-ink-1"
+                    title="Copy email to clipboard"
+                  >
+                    {copiedEmail ? (
+                      <Check className="h-3 w-3 text-brand" />
                     ) : (
-                      <span>{item.title}</span>
+                      <Copy className="h-3 w-3" />
                     )}
-                  </h3>
-                  <p className="font-mono text-[11px] text-ink-4 mt-0.5">{item.award}</p>
-                  <p className="mt-2 text-[13px] leading-relaxed text-ink-3">{item.detail}</p>
+                  </button>
+                </div>
+
+                <ContactLink href={PROFILE.phoneHref} icon={Phone}>
+                  {PROFILE.phone}
+                </ContactLink>
+                <ContactLink href={PROFILE.github} icon={Github} external>
+                  github
+                </ContactLink>
+                <ContactLink href={PROFILE.linkedin} icon={Linkedin} external>
+                  linkedin
+                </ContactLink>
+              </address>
+            </div>
+          </aside>
+
+          {/* ========================================================= */}
+          {/* RIGHT COLUMN: Scrollable Main Content                      */}
+          {/* ========================================================= */}
+          <main id="main" className="pt-16 lg:w-[58%] lg:py-20 xl:py-24 space-y-16 sm:space-y-20">
+
+            {/* IMPACT HIGHLIGHTS BY THE NUMBERS */}
+            <div>
+              <div className="reveal">
+                <div className="flex items-center gap-2 font-mono text-[10.5px] font-medium uppercase tracking-[0.2em] text-ink-4">
+                  <span className="text-brand">⚡ //</span>
+                  <span>Impact by the Numbers</span>
+                </div>
+                <div className="mt-2 h-px w-full bg-edge-strong" />
+              </div>
+              <ImpactStats />
+            </div>
+
+            {/* 01 // ABOUT */}
+            <Section id="about" num="01" label="About">
+              <div className="reveal space-y-4">
+                {SUMMARY.map((p) => (
+                  <p key={p.slice(0, 24)} className="text-[15px] leading-[1.7] text-ink-2">
+                    {p}
+                  </p>
+                ))}
+              </div>
+            </Section>
+
+            {/* 02 // EXPERIENCE */}
+            <Section id="experience" num="02" label="Experience">
+              <div className="space-y-9">
+                {EXPERIENCE.map((job) => (
+                  <article key={job.role + job.company} className="reveal group">
+                    <EntryHead
+                      title={job.role}
+                      subtitle={job.company}
+                      period={job.period}
+                      meta={job.meta}
+                    />
+                    <Bullets items={job.bullets} />
+                    <TechLine items={job.tech} />
+                  </article>
+                ))}
+              </div>
+            </Section>
+
+            {/* 03 // ARCHITECTURE & SYSTEM DESIGN */}
+            <Section id="architecture" num="03" label="System Design & Architecture">
+              <div className="reveal">
+                <p className="text-[15px] leading-[1.7] text-ink-2">
+                  Interactive architectural diagrams illustrating microservices decoupling, offline-first data synchronization, and RAG retrieval pipelines built across production and research systems.
+                </p>
+              </div>
+              <ArchitectureVisualizer />
+            </Section>
+
+            {/* 04 // SELECTED WORK */}
+            <Section id="work" num="04" label="Selected Projects">
+              {/* Category Filter Pills */}
+              <div className="reveal mb-6 flex flex-wrap items-center gap-1.5">
+                <span className="mr-1 flex items-center gap-1 font-mono text-[10.5px] uppercase tracking-wider text-ink-4">
+                  <Filter className="h-3 w-3" /> Filter:
+                </span>
+                {[
+                  { id: "all", label: "All Projects" },
+                  { id: "featured", label: "Featured" },
+                  { id: "web", label: "Full-Stack Web" },
+                  { id: "mobile", label: "Mobile & Flutter" },
+                  { id: "ai", label: "AI & Systems" },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setProjectCategory(tab.id)}
+                    className={`rounded-md px-2.5 py-1 font-mono text-[11px] transition-all ${
+                      projectCategory === tab.id
+                        ? "bg-fg text-bg font-medium shadow-sm"
+                        : "border border-edge bg-fg/[0.02] text-ink-3 hover:border-edge-strong hover:text-ink-1"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="divide-y divide-edge border-y border-edge">
+                {filteredProjects.map((p) => (
+                  <article key={p.name} className="reveal group py-6">
+                    <EntryHead
+                      title={
+                        p.link ? (
+                          <a
+                            href={p.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 transition-colors hover:text-brand"
+                          >
+                            <span>{p.name}</span>
+                            <ArrowUpRight
+                              aria-hidden="true"
+                              className="h-3.5 w-3.5 text-ink-4 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand"
+                            />
+                          </a>
+                        ) : (
+                          <span>{p.name}</span>
+                        )
+                      }
+                      subtitle={p.tagline}
+                      period={p.year}
+                    >
+                      {p.badge && (
+                        <span className="ml-2 rounded-full border border-edge-strong px-2 py-0.5 align-middle font-mono text-[9.5px] uppercase tracking-[0.12em] text-ink-4">
+                          {p.badge}
+                        </span>
+                      )}
+                    </EntryHead>
+
+                    <p className="mt-2.5 text-[14.5px] leading-[1.65] text-ink-2">{p.description}</p>
+                    <TechLine items={p.tech} />
+
+                    {/* Action buttons */}
+                    {(p.hasScreenshots || p.link) && (
+                      <div className="mt-4 flex flex-wrap items-center gap-3">
+                        {p.hasScreenshots && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsScreenshotOpen(true);
+                              setScreenshotIndex(0);
+                            }}
+                            className="inline-flex items-center gap-1.5 rounded-md border border-edge-strong bg-fg/[0.03] px-3 py-1.5 font-mono text-[11.5px] text-ink-2 transition-all hover:border-fg/40 hover:bg-fg/[0.06] hover:text-ink-1"
+                          >
+                            <Smartphone className="h-3.5 w-3.5 text-brand" />
+                            <span>View App Screenshots ({SANDALAN_SCREENSHOTS.length})</span>
+                          </button>
+                        )}
+
+                        {p.link && (
+                          <a
+                            href={p.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 font-mono text-[11px] text-ink-4 transition-colors hover:text-brand"
+                          >
+                            <span>{p.badge === "Google Play" ? "View on Google Play" : "Open project"}</span>
+                            <ArrowUpRight className="h-3 w-3" />
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </article>
+                ))}
+              </div>
+
+              <a
+                href={PROFILE.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="reveal mt-5 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-4 transition-colors hover:text-brand"
+              >
+                More repositories on GitHub <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+              </a>
+            </Section>
+
+            {/* 05 // HONORS & HACKATHONS */}
+            <Section id="honors" num="05" label="Honors & Recognition">
+              <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+                {HONORS.map((item) => (
+                  <div
+                    key={item.title}
+                    className="reveal group relative flex flex-col justify-between rounded-lg border border-edge bg-fg/[0.02] p-4 transition-all duration-200 hover:border-edge-strong hover:bg-fg/[0.04]"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="rounded-full border border-edge-strong px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.12em] text-brand">
+                          {item.badge}
+                        </span>
+                        <span className="font-mono text-[10.5px] text-ink-4">{item.period}</span>
+                      </div>
+
+                      <h3 className="mt-2.5 font-display text-[15px] font-semibold text-ink-1">
+                        {item.link ? (
+                          <a
+                            href={item.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 hover:text-brand transition-colors"
+                          >
+                            <span>{item.title}</span>
+                            <ArrowUpRight className="h-3.5 w-3.5 text-ink-4 group-hover:text-brand transition-colors" />
+                          </a>
+                        ) : (
+                          <span>{item.title}</span>
+                        )}
+                      </h3>
+                      <p className="font-mono text-[11px] text-ink-4 mt-0.5">{item.award}</p>
+                      <p className="mt-2 text-[13px] leading-relaxed text-ink-3">{item.detail}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Section>
+
+            {/* 06 // SKILLS & STACK */}
+            <Section id="skills" num="06" label="Technical Stack">
+              <div className="reveal grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-[130px_1fr] sm:gap-y-3.5">
+                {SKILLS.map(([label, items]) => (
+                  <Fragment key={label}>
+                    <div className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-4 sm:pt-1">
+                      {label}
+                    </div>
+                    <div className="text-[14px] leading-[1.6] text-ink-2">{items}</div>
+                  </Fragment>
+                ))}
+              </div>
+            </Section>
+
+            {/* EDUCATION */}
+            <Section label="Education">
+              <article className="reveal">
+                <EntryHead
+                  title={EDUCATION.school}
+                  subtitle={EDUCATION.degree}
+                  period={EDUCATION.period}
+                  meta={EDUCATION.meta}
+                />
+                <p className="mt-3 text-[14.5px] leading-[1.65] text-ink-2">{EDUCATION.notes}</p>
+              </article>
+            </Section>
+
+            {/* 07 // CONTACT */}
+            <Section id="contact" num="07" label="Contact & Collabs">
+              <div className="reveal">
+                <p className="text-[15px] leading-[1.7] text-ink-2">
+                  Open to full-time remote roles including night shift on US hours, contract work, and
+                  partnerships. Happy to talk about full-stack web, microservices architecture, Flutter mobile apps, or shipping products for the Philippine market.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-2.5">
+                  <a
+                    href={PROFILE.gmailCompose}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-md bg-fg px-4 py-2 text-[13.5px] font-medium text-bg transition-opacity hover:opacity-85"
+                  >
+                    <Mail className="h-3.5 w-3.5" aria-hidden="true" />
+                    Send a message
+                  </a>
+                  <button
+                    type="button"
+                    onClick={handleCopyEmail}
+                    className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
+                  >
+                    {copiedEmail ? (
+                      <Check className="h-3.5 w-3.5 text-brand" />
+                    ) : (
+                      <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+                    )}
+                    {copiedEmail ? "Email copied!" : "Copy email"}
+                  </button>
+                  <a
+                    href={PROFILE.resume}
+                    download
+                    className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
+                  >
+                    <Download className="h-3.5 w-3.5" aria-hidden="true" />
+                    Download résumé
+                  </a>
+                  <a
+                    href={PROFILE.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
+                  >
+                    <Linkedin className="h-3.5 w-3.5" aria-hidden="true" />
+                    LinkedIn
+                  </a>
                 </div>
               </div>
-            ))}
-          </div>
-        </Section>
+            </Section>
 
-        {/* 06 // SKILLS & STACK */}
-        <Section id="skills" num="06" label="Technical Stack">
-          <div className="reveal grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-[130px_1fr] sm:gap-y-3.5">
-            {SKILLS.map(([label, items]) => (
-              <Fragment key={label}>
-                <div className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-4 sm:pt-1">
-                  {label}
-                </div>
-                <div className="text-[14px] leading-[1.6] text-ink-2">{items}</div>
-              </Fragment>
-            ))}
-          </div>
-        </Section>
-
-        {/* EDUCATION */}
-        <Section label="Education">
-          <article className="reveal">
-            <EntryHead
-              title={EDUCATION.school}
-              subtitle={EDUCATION.degree}
-              period={EDUCATION.period}
-              meta={EDUCATION.meta}
-            />
-            <p className="mt-3 text-[14.5px] leading-[1.65] text-ink-2">{EDUCATION.notes}</p>
-          </article>
-        </Section>
-
-        {/* 07 // CONTACT */}
-        <Section id="contact" num="07" label="Contact & Collabs">
-          <div className="reveal">
-            <p className="text-[15px] leading-[1.7] text-ink-2">
-              Open to full-time remote roles including night shift on US hours, contract work, and
-              partnerships. Happy to talk about full-stack web, microservices architecture, Flutter mobile apps, or shipping products for the Philippine market.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-2.5">
-              <a
-                href={PROFILE.gmailCompose}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md bg-fg px-4 py-2 text-[13.5px] font-medium text-bg transition-opacity hover:opacity-85"
-              >
-                <Mail className="h-3.5 w-3.5" aria-hidden="true" />
-                Send a message
-              </a>
-              <button
-                type="button"
-                onClick={handleCopyEmail}
-                className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
-              >
-                {copiedEmail ? (
-                  <Check className="h-3.5 w-3.5 text-brand" />
-                ) : (
-                  <Copy className="h-3.5 w-3.5" aria-hidden="true" />
-                )}
-                {copiedEmail ? "Email copied!" : "Copy email"}
-              </button>
-              <a
-                href={PROFILE.resume}
-                download
-                className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
-              >
-                <Download className="h-3.5 w-3.5" aria-hidden="true" />
-                Download résumé
-              </a>
-              <a
-                href={PROFILE.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
-              >
-                <Linkedin className="h-3.5 w-3.5" aria-hidden="true" />
-                LinkedIn
-              </a>
-            </div>
-          </div>
-        </Section>
-      </main>
-
-      {/* FOOTER */}
-      <footer className="border-t border-edge">
-        <div className="mx-auto flex max-w-[760px] flex-wrap items-center justify-between gap-3 px-6 py-6 font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-4">
-          <span>© {year} Jet Timothy Cerezo</span>
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="transition-colors hover:text-ink-2"
-          >
-            Back to top ↑
-          </button>
+            {/* FOOTER */}
+            <footer className="border-t border-edge pt-8">
+              <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-4">
+                <span>© {year} Jet Timothy Cerezo</span>
+                <button
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                  className="transition-colors hover:text-ink-2"
+                >
+                  Back to top ↑
+                </button>
+              </div>
+            </footer>
+          </main>
         </div>
-      </footer>
+      </div>
 
       {/* MODALS & TOAST */}
       <ScreenshotModal
@@ -869,9 +968,6 @@ function App() {
         onClose={() => setIsToastOpen(false)}
         message={toastMessage}
       />
-
-      {/* CUSTOM FLOATING / MARGIN NAVIGATION RAIL */}
-      <NavigationRail />
     </div>
   );
 }
