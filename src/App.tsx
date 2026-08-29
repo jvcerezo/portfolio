@@ -22,26 +22,27 @@ import { ScreenshotModal, type ScreenshotItem } from "./components/ScreenshotMod
 import { Toast } from "./components/Toast";
 
 const NAV_ITEMS = [
-  { id: "about", label: "About" },
-  { id: "experience", label: "Experience" },
-  { id: "architecture", label: "Architecture" },
-  { id: "work", label: "Work" },
-  { id: "skills", label: "Skills" },
-  { id: "contact", label: "Contact" },
+  { id: "about", num: "01", label: "About" },
+  { id: "experience", num: "02", label: "Experience" },
+  { id: "architecture", num: "03", label: "Architecture" },
+  { id: "work", num: "04", label: "Projects" },
+  { id: "honors", num: "05", label: "Honors" },
+  { id: "skills", num: "06", label: "Stack" },
+  { id: "contact", num: "07", label: "Contact" },
 ];
 
 const NAV_IDS = NAV_ITEMS.map((n) => n.id);
 
 const PROFILE = {
   name: "Jet Timothy V. Cerezo",
-  title: "Full-Stack Software Engineer",
+  title: "Full-Stack Software Engineer · Microservices & Mobile",
   email: "jetjetcerezo@gmail.com",
   gmailCompose:
     "https://mail.google.com/mail/?view=cm&fs=1&to=jetjetcerezo@gmail.com&su=Hello%20Jet",
   phone: "+63 998 914 8907",
   phoneHref: "tel:+639989148907",
   location: "Los Baños, Laguna, Philippines",
-  availability: "UTC+8 · Open to US hours",
+  availability: "UTC+8 · Open to US Hours",
   github: "https://github.com/jvcerezo",
   linkedin: "https://www.linkedin.com/in/jet-timothy-cerezo-126903254",
   resume: "/JetCerezo_Resume.pdf",
@@ -56,7 +57,7 @@ const EXPERIENCE = [
   {
     role: "Junior Test Automation Engineer",
     company: "Billease",
-    meta: "Remote",
+    meta: "Remote · Fintech",
     period: "Apr 2025 — Present",
     bullets: [
       "Shipped 50+ merge requests and 30,000+ lines of code building automated test coverage and internal tooling for a high-scale consumer-fintech Android app.",
@@ -210,6 +211,45 @@ const PROJECTS: Project[] = [
   },
 ];
 
+const HONORS = [
+  {
+    title: "Codebreak 2.0 Hackathon Champion",
+    award: "1st Place · Tenext.ai Hackathon",
+    period: "2025",
+    detail:
+      "Engineered a full-stack RAG customer support intelligence platform in under 24 hours with live call scripts and post-call QA analytics.",
+    link: "https://www.facebook.com/photo/?fbid=706685865053901&set=a.263981095991049",
+    badge: "1st Place",
+  },
+  {
+    title: "UPLB Computer Science Honor Roll",
+    award: "Academic Excellence · UP Los Baños",
+    period: "2021 — 2025",
+    detail:
+      "Graduated BS Computer Science with Honor Roll distinction; recipient of the Provincial Government of Laguna Academic Scholarship & UP SLAS Scholarship.",
+    link: null,
+    badge: "Honor Roll",
+  },
+  {
+    title: "Code Wars Co-Head · Zero Downtime",
+    award: "Event Platform Engineering",
+    period: "2023 — 2025",
+    detail:
+      "Led a 7-member team delivering 3 hours of continuous live competition for 20 teams and 3 judges with zero downtime.",
+    link: null,
+    badge: "Leadership",
+  },
+  {
+    title: "Bioinformatics Thesis Affiliate · IRRI",
+    award: "Research Affiliate",
+    period: "2024 — 2025",
+    detail:
+      "Genomics data tooling affiliate at the International Rice Research Institute (IRRI), migrating legacy Java systems to Dockerized MERN microservices.",
+    link: null,
+    badge: "Research",
+  },
+];
+
 const SANDALAN_SCREENSHOTS: ScreenshotItem[] = [
   {
     src: "/sandalan/feature.png",
@@ -244,12 +284,12 @@ const SANDALAN_SCREENSHOTS: ScreenshotItem[] = [
 ];
 
 const SKILLS: [string, string][] = [
-  ["Languages", "JavaScript · TypeScript · PHP · SQL · Python · Java · C/C++ · Dart"],
+  ["Languages", "JavaScript · TypeScript · Java · Python · SQL · PHP · C/C++ · Dart"],
   ["Front End", "React · Next.js · jQuery · HTML5 · CSS3 · Tailwind CSS · Vite · Responsive UI/UX"],
   ["Back End", "Node.js · Express · Nest.js · REST APIs · JSON · Microservices · API Gateway · JWT / OAuth / SSO"],
-  ["Databases", "MySQL · MongoDB · PostgreSQL · SQLite · Supabase · Schema Design · Query Optimization"],
-  ["DevOps", "Docker · Docker Compose · CI/CD · Git · GitHub · GitLab · Vercel · AWS · Linux & Windows"],
-  ["Tools", "VS Code · Postman · Jira · Agile/Scrum · Code Review · Appium · BrowserStack · Unit & E2E Testing"],
+  ["Databases", "PostgreSQL · MongoDB · MySQL · SQLite · Supabase · Schema Design · Query Optimization"],
+  ["DevOps & CI", "Docker · Docker Compose · CI/CD · Git · GitHub · GitLab · Vercel · AWS · Linux & Windows"],
+  ["Automation & QA", "Appium · BrowserStack · Unit & E2E Testing · Postman · Jira · Agile/Scrum · Code Review"],
   ["Mobile & AI", "Flutter · Riverpod · Drift · Claude API · Gemini API · RAG Pipelines · Hugging Face · Groq"],
 ];
 
@@ -340,19 +380,22 @@ function useRevealOnScroll() {
 
 function Section({
   id,
+  num,
   label,
   children,
 }: {
   id?: string;
+  num?: string;
   label: string;
   children: ReactNode;
 }) {
   return (
     <section id={id} aria-label={label} className="scroll-mt-20 pt-14">
       <div className="reveal">
-        <h2 className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-ink-4">
-          {label}
-        </h2>
+        <div className="flex items-center gap-2 font-mono text-[10.5px] font-medium uppercase tracking-[0.2em] text-ink-4">
+          {num && <span className="text-brand">{num} //</span>}
+          <span>{label}</span>
+        </div>
         <div className="mt-2 h-px w-full bg-edge-strong" />
       </div>
       <div className="mt-6">{children}</div>
@@ -428,10 +471,11 @@ function ContactLink({
     <a
       href={href}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className="flex items-center gap-1.5 text-ink-2 transition-colors hover:text-brand"
+      className="inline-flex items-center gap-1.5 text-ink-2 transition-colors hover:text-brand"
     >
       <Icon className="h-3.5 w-3.5" aria-hidden="true" />
-      {children}
+      <span>{children}</span>
+      {external && <span className="text-[11px] text-ink-4">↗</span>}
     </a>
   );
 }
@@ -464,11 +508,10 @@ function App() {
     try {
       navigator.clipboard.writeText(PROFILE.email);
       setCopiedEmail(true);
-      setToastMessage("Email copied: " + PROFILE.email);
+      setToastMessage("Copied: " + PROFILE.email);
       setIsToastOpen(true);
       setTimeout(() => setCopiedEmail(false), 2000);
     } catch {
-      // Fallback
       setToastMessage("Email: " + PROFILE.email);
       setIsToastOpen(true);
     }
@@ -503,14 +546,14 @@ function App() {
             Jet Cerezo
           </button>
 
-          <nav aria-label="Sections" className="hidden items-center gap-5 sm:flex">
+          <nav aria-label="Sections" className="hidden items-center gap-4 sm:flex">
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
                 onClick={() => go(item.id)}
                 aria-current={active === item.id ? "true" : undefined}
-                className={`relative py-1 text-[13px] transition-colors ${
-                  active === item.id ? "text-ink-1" : "text-ink-4 hover:text-ink-2"
+                className={`relative py-1 text-[12.5px] transition-colors ${
+                  active === item.id ? "text-ink-1 font-medium" : "text-ink-4 hover:text-ink-2"
                 }`}
               >
                 {item.label}
@@ -549,7 +592,7 @@ function App() {
       </header>
 
       <main id="main" className="mx-auto max-w-[760px] px-6 pb-24">
-        {/* MASTHEAD */}
+        {/* MASTHEAD (Bento Hero) */}
         <div className="flex flex-col-reverse gap-8 pt-16 sm:flex-row sm:items-start sm:justify-between sm:gap-10">
           <div className="animate-reveal min-w-0 flex-1">
             <h1 className="font-display text-[30px] font-semibold leading-tight tracking-[-0.03em] text-ink-1 sm:text-[34px]">
@@ -589,10 +632,10 @@ function App() {
                 {PROFILE.phone}
               </ContactLink>
               <ContactLink href={PROFILE.github} icon={Github} external>
-                GitHub
+                github
               </ContactLink>
               <ContactLink href={PROFILE.linkedin} icon={Linkedin} external>
-                LinkedIn
+                linkedin
               </ContactLink>
             </address>
           </div>
@@ -605,7 +648,7 @@ function App() {
               width="240"
               height="240"
               fetchPriority="high"
-              className="h-24 w-24 rounded-full border border-edge object-cover shadow-sm sm:h-28 sm:w-28"
+              className="h-24 w-24 rounded-full border border-edge object-cover shadow-sm ring-4 ring-fg/[0.03] sm:h-28 sm:w-28"
             />
           </picture>
         </div>
@@ -613,16 +656,17 @@ function App() {
         {/* IMPACT HIGHLIGHTS BY THE NUMBERS */}
         <div className="mt-10 pt-4">
           <div className="reveal">
-            <h2 className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-ink-4">
-              Impact by the Numbers
-            </h2>
+            <div className="flex items-center gap-2 font-mono text-[10.5px] font-medium uppercase tracking-[0.2em] text-ink-4">
+              <span className="text-brand">⚡ //</span>
+              <span>Impact by the Numbers</span>
+            </div>
             <div className="mt-2 h-px w-full bg-edge-strong" />
           </div>
           <ImpactStats />
         </div>
 
-        {/* ABOUT */}
-        <Section id="about" label="Summary">
+        {/* 01 // ABOUT */}
+        <Section id="about" num="01" label="About">
           <div className="reveal space-y-4">
             {SUMMARY.map((p) => (
               <p key={p.slice(0, 24)} className="text-[15px] leading-[1.7] text-ink-2">
@@ -632,11 +676,11 @@ function App() {
           </div>
         </Section>
 
-        {/* EXPERIENCE */}
-        <Section id="experience" label="Experience">
+        {/* 02 // EXPERIENCE */}
+        <Section id="experience" num="02" label="Experience">
           <div className="space-y-9">
             {EXPERIENCE.map((job) => (
-              <article key={job.role + job.company} className="reveal">
+              <article key={job.role + job.company} className="reveal group">
                 <EntryHead
                   title={job.role}
                   subtitle={job.company}
@@ -650,8 +694,8 @@ function App() {
           </div>
         </Section>
 
-        {/* ARCHITECTURE & SYSTEM DESIGN */}
-        <Section id="architecture" label="System Design & Architecture">
+        {/* 03 // ARCHITECTURE & SYSTEM DESIGN */}
+        <Section id="architecture" num="03" label="System Design & Architecture">
           <div className="reveal">
             <p className="text-[15px] leading-[1.7] text-ink-2">
               Interactive architectural diagrams illustrating microservices decoupling, offline-first data synchronization, and RAG retrieval pipelines built across production and research systems.
@@ -660,15 +704,15 @@ function App() {
           <ArchitectureVisualizer />
         </Section>
 
-        {/* WORK */}
-        <Section id="work" label="Selected Work">
+        {/* 04 // SELECTED WORK */}
+        <Section id="work" num="04" label="Selected Projects">
           {/* Category Filter Pills */}
           <div className="reveal mb-6 flex flex-wrap items-center gap-1.5">
             <span className="mr-1 flex items-center gap-1 font-mono text-[10.5px] uppercase tracking-wider text-ink-4">
               <Filter className="h-3 w-3" /> Filter:
             </span>
             {[
-              { id: "all", label: "All Work" },
+              { id: "all", label: "All Projects" },
               { id: "featured", label: "Featured" },
               { id: "web", label: "Full-Stack Web" },
               { id: "mobile", label: "Mobile & Flutter" },
@@ -767,12 +811,51 @@ function App() {
           </a>
         </Section>
 
-        {/* SKILLS */}
-        <Section id="skills" label="Technical Skills">
-          <div className="reveal grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-[104px_1fr] sm:gap-y-3.5">
+        {/* 05 // HONORS & HACKATHONS */}
+        <Section id="honors" num="05" label="Honors & Recognition">
+          <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+            {HONORS.map((item) => (
+              <div
+                key={item.title}
+                className="reveal group relative flex flex-col justify-between rounded-lg border border-edge bg-fg/[0.02] p-4 transition-all duration-200 hover:border-edge-strong hover:bg-fg/[0.04]"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="rounded-full border border-edge-strong px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.12em] text-brand">
+                      {item.badge}
+                    </span>
+                    <span className="font-mono text-[10.5px] text-ink-4">{item.period}</span>
+                  </div>
+
+                  <h3 className="mt-2.5 font-display text-[15px] font-semibold text-ink-1">
+                    {item.link ? (
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 hover:text-brand transition-colors"
+                      >
+                        <span>{item.title}</span>
+                        <ArrowUpRight className="h-3.5 w-3.5 text-ink-4 group-hover:text-brand transition-colors" />
+                      </a>
+                    ) : (
+                      <span>{item.title}</span>
+                    )}
+                  </h3>
+                  <p className="font-mono text-[11px] text-ink-4 mt-0.5">{item.award}</p>
+                  <p className="mt-2 text-[13px] leading-relaxed text-ink-3">{item.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* 06 // SKILLS & STACK */}
+        <Section id="skills" num="06" label="Technical Stack">
+          <div className="reveal grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-[130px_1fr] sm:gap-y-3.5">
             {SKILLS.map(([label, items]) => (
               <Fragment key={label}>
-                <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-4 sm:pt-1">
+                <div className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-4 sm:pt-1">
                   {label}
                 </div>
                 <div className="text-[14px] leading-[1.6] text-ink-2">{items}</div>
@@ -782,7 +865,7 @@ function App() {
         </Section>
 
         {/* EDUCATION */}
-        <Section label="Education & Honors">
+        <Section label="Education">
           <article className="reveal">
             <EntryHead
               title={EDUCATION.school}
@@ -794,8 +877,8 @@ function App() {
           </article>
         </Section>
 
-        {/* CONTACT */}
-        <Section id="contact" label="Contact">
+        {/* 07 // CONTACT */}
+        <Section id="contact" num="07" label="Contact & Collabs">
           <div className="reveal">
             <p className="text-[15px] leading-[1.7] text-ink-2">
               Open to full-time remote roles including night shift on US hours, contract work, and
