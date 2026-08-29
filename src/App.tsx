@@ -20,6 +20,7 @@ import { ImpactStats } from "./components/ImpactStats";
 import { ArchitectureVisualizer } from "./components/ArchitectureVisualizer";
 import { ScreenshotModal, type ScreenshotItem } from "./components/ScreenshotModal";
 import { Toast } from "./components/Toast";
+import { NavigationRail } from "./components/NavigationRail";
 
 const PROFILE = {
   name: "Jet Timothy V. Cerezo",
@@ -868,6 +869,9 @@ function App() {
         onClose={() => setIsToastOpen(false)}
         message={toastMessage}
       />
+
+      {/* CUSTOM FLOATING / MARGIN NAVIGATION RAIL */}
+      <NavigationRail />
     </div>
   );
 }
