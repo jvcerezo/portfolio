@@ -1,186 +1,290 @@
-import { Fragment, useEffect, useState } from 'react';
-import type { ReactNode } from 'react';
+import { Fragment, useEffect, useState } from "react";
+import type { ReactNode } from "react";
 import {
-  Mail, Phone, MapPin, Github, Linkedin, Download, ArrowUpRight, Sun, Moon,
-} from 'lucide-react';
+  Mail,
+  Phone,
+  MapPin,
+  Github,
+  Linkedin,
+  Download,
+  ArrowUpRight,
+  Sun,
+  Moon,
+  Copy,
+  Check,
+  Smartphone,
+  Filter,
+} from "lucide-react";
+import { TimezoneWidget } from "./components/TimezoneWidget";
+import { ImpactStats } from "./components/ImpactStats";
+import { ArchitectureVisualizer } from "./components/ArchitectureVisualizer";
+import { ScreenshotModal, type ScreenshotItem } from "./components/ScreenshotModal";
+import { Toast } from "./components/Toast";
 
 const NAV_ITEMS = [
-  { id: 'about', label: 'About' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'work', label: 'Work' },
-  { id: 'contact', label: 'Contact' },
+  { id: "about", label: "About" },
+  { id: "experience", label: "Experience" },
+  { id: "architecture", label: "Architecture" },
+  { id: "work", label: "Work" },
+  { id: "skills", label: "Skills" },
+  { id: "contact", label: "Contact" },
 ];
 
-// Stable module-level identity — passing a fresh array into useScrollSpy on every
-// render would tear down and re-register the IntersectionObserver each time.
 const NAV_IDS = NAV_ITEMS.map((n) => n.id);
 
 const PROFILE = {
-  name: 'Jet Timothy V. Cerezo',
-  title: 'Full-Stack Software Engineer',
-  email: 'jetjetcerezo@gmail.com',
-  // mailto: hands off to whatever the OS default handler is — on Windows that is
-  // usually Outlook. Link straight into Gmail's compose view instead.
+  name: "Jet Timothy V. Cerezo",
+  title: "Full-Stack Software Engineer",
+  email: "jetjetcerezo@gmail.com",
   gmailCompose:
-    'https://mail.google.com/mail/?view=cm&fs=1&to=jetjetcerezo@gmail.com&su=Hello%20Jet',
-  phone: '+63 998 914 8907',
-  phoneHref: 'tel:+639989148907',
-  location: 'Los Baños, Laguna, Philippines',
-  availability: 'UTC+8 · Open to US hours',
-  github: 'https://github.com/jvcerezo',
-  linkedin: 'https://www.linkedin.com/in/jet-timothy-cerezo-126903254',
-  resume: '/JetCerezo_Resume.pdf',
+    "https://mail.google.com/mail/?view=cm&fs=1&to=jetjetcerezo@gmail.com&su=Hello%20Jet",
+  phone: "+63 998 914 8907",
+  phoneHref: "tel:+639989148907",
+  location: "Los Baños, Laguna, Philippines",
+  availability: "UTC+8 · Open to US hours",
+  github: "https://github.com/jvcerezo",
+  linkedin: "https://www.linkedin.com/in/jet-timothy-cerezo-126903254",
+  resume: "/JetCerezo_Resume.pdf",
 };
 
 const SUMMARY = [
-  'Full-stack software engineer with 2+ years building and shipping production web applications across front end and back end. I rebuilt a legacy PHP/MySQL research platform at IRRI into a MERN microservices architecture — seven Dockerized Node.js and Express services behind a single API gateway.',
-  'Most of what I ship, I ship end-to-end: designing the schema, wiring the REST API, polishing the UI, running the CI pipeline, and reading the logs after deploy. I work comfortably in Agile teams and across Linux and Windows.',
+  "Full-stack software engineer with 2+ years building and shipping production web and mobile applications across front end, back end, and QA automation. I rebuilt a legacy PHP/MySQL research platform at IRRI into a MERN microservices architecture — seven Dockerized Node.js and Express services behind a single API gateway.",
+  "Most of what I ship, I ship end-to-end: designing schemas, wiring REST APIs, building responsive UIs, running CI/CD pipelines, and reading production logs after deploy. I work comfortably in Agile teams and across Linux and Windows environments.",
 ];
 
 const EXPERIENCE = [
   {
-    role: 'Junior Test Automation Engineer',
-    company: 'Billease',
-    meta: 'Remote',
-    period: 'Apr 2025 — Present',
+    role: "Junior Test Automation Engineer",
+    company: "Billease",
+    meta: "Remote",
+    period: "Apr 2025 — Present",
     bullets: [
-      'Shipped 50+ merge requests and 30,000+ lines of code building automated test coverage and internal tooling for a high-scale consumer-fintech Android app.',
-      'Engineered and maintained CI/CD pipeline integrations for the core regression and emergency-hotfix suites, validating every production release across Linux CI runners.',
-      'Discovered and resolved 30+ critical, high-impact bugs using Appium and BrowserStack as the final technical gatekeeper before deployment.',
-      'Work in Agile/Scrum ceremonies — sprint planning, daily standups, and retrospectives — collaborating with developers and QA across every release cycle.',
+      "Shipped 50+ merge requests and 30,000+ lines of code building automated test coverage and internal tooling for a high-scale consumer-fintech Android app.",
+      "Engineered and maintained CI/CD pipeline integrations for the core regression and emergency-hotfix suites, validating every production release across Linux CI runners.",
+      "Discovered and resolved 30+ critical, high-impact bugs using Appium and BrowserStack as the final technical gatekeeper before deployment.",
+      "Integrated Claude/AI into the automation workflow to accelerate test script development and root-cause debugging.",
+      "Work in Agile/Scrum ceremonies — sprint planning, daily standups, and retrospectives — collaborating with developers and QA across every release cycle.",
     ],
-    tech: ['CI/CD', 'Appium', 'BrowserStack', 'Linux', 'Claude API'],
+    tech: ["CI/CD", "Appium", "BrowserStack", "Linux", "Claude API", "Fintech"],
   },
   {
-    role: 'Software Developer · Thesis Affiliate',
-    company: 'International Rice Research Institute (IRRI)',
-    meta: 'Los Baños, Laguna',
-    period: 'Jul 2024 — May 2025',
+    role: "Software Developer · Thesis Affiliate",
+    company: "International Rice Research Institute (IRRI)",
+    meta: "Los Baños, Laguna",
+    period: "Jul 2024 — May 2025",
     bullets: [
-      'Re-architected IRRI’s legacy SNPseek genomics platform into a MERN microservices system: seven independent Node.js/Express services behind a single API gateway, orchestrated with Docker Compose.',
-      'Worked hands-on across the existing PHP/MySQL Drupal stack, building a custom SSO/OAuth layer that bridged the legacy PHP application with the new Node services.',
-      'Designed MongoDB schemas and REST/JSON endpoints for large-scale genomic datasets, and built the React front end with multi-criteria filtering and interactive charts.',
+      "Re-architected IRRI’s legacy SNPseek genomics platform into a MERN microservices system: seven independent Node.js/Express services behind a single API gateway, orchestrated with Docker Compose.",
+      "Worked hands-on across the existing PHP/MySQL Drupal stack, building a custom SSO/OAuth layer that bridged the legacy PHP application with the new Node services.",
+      "Designed MongoDB schemas and REST/JSON endpoints for large-scale genomic datasets, and built the React front end with multi-criteria filtering and interactive charts.",
     ],
-    tech: ['PHP', 'MySQL', 'MongoDB', 'Node.js', 'Express', 'React', 'Docker', 'SSO'],
+    tech: ["Node.js", "Express", "React", "MongoDB", "Docker", "PHP", "MySQL", "OAuth/SSO"],
   },
   {
-    role: 'Full-Stack Developer',
-    company: 'Freelance / Project-Based',
-    meta: 'Remote',
-    period: 'Aug 2024 — Oct 2024',
+    role: "Full-Stack Developer",
+    company: "Freelance / Project-Based",
+    meta: "Remote",
+    period: "Aug 2024 — Oct 2024",
     bullets: [
-      'Built a story-based interactive web game on the MERN stack with a 3-person team; owned front end, back end, and UI/UX through to client delivery.',
+      "Built a story-based interactive web game on the MERN stack with a 3-person team; owned front end, back end, and UI/UX through to client delivery.",
     ],
-    tech: ['MongoDB', 'Express', 'React', 'Node.js'],
+    tech: ["MongoDB", "Express", "React", "Node.js"],
   },
   {
-    role: 'Code Wars Co-Head · Project Manager',
-    company: 'UPLB Computer Science Society',
-    meta: 'Los Baños, Laguna',
-    period: 'Oct 2023 — Jul 2025',
+    role: "Code Wars Co-Head · Project Manager",
+    company: "UPLB Computer Science Society",
+    meta: "Los Baños, Laguna",
+    period: "Oct 2023 — Jul 2025",
     bullets: [
-      'Led a 7-member development team on the competitive-programming event platform, overseeing feature development, bug tracking, testing, and deployment.',
-      'Ran the live platform for 20 teams, 3 judges, and 3 continuous hours of zero-downtime service.',
+      "Led a 7-member development team on the competitive-programming event platform, overseeing feature development, bug tracking, testing, and deployment.",
+      "Ran the live platform for 20 teams, 3 judges, and 3 continuous hours of zero-downtime service.",
     ],
-    tech: ['Leadership', 'Deployment', 'Testing'],
+    tech: ["Leadership", "Deployment", "Testing", "Event Ops"],
   },
 ];
 
-const PROJECTS = [
+interface Project {
+  name: string;
+  tagline: string;
+  year: string;
+  description: string;
+  tech: string[];
+  link: string | null;
+  badge: string | null;
+  category: "web" | "mobile" | "ai" | "fullstack";
+  featured?: boolean;
+  hasScreenshots?: boolean;
+}
+
+const PROJECTS: Project[] = [
   {
-    name: 'Sandalan',
-    tagline: 'Filipino adulting and finance app, live on Google Play',
-    year: '2024 — 2025',
+    name: "Sandalan",
+    tagline: "Filipino adulting and finance app, live on Google Play",
+    year: "2024 — 2025",
     description:
-      'Solo-built and shipped: 38+ bank integrations, tax calculators, OCR receipt scanning, and an AI chat assistant. Architected an offline-first sync engine with conflict resolution and incremental replication across 13 tables spanning PostgreSQL and SQLite, secured with row-level security. Currently migrating the product to a single Next.js 16 and TypeScript codebase — deployed to web and packaged for Android and iOS with Capacitor — using Supabase SSR auth, TanStack Query offline persistence, and Dexie/IndexedDB.',
-    tech: ['Flutter', 'Dart', 'Supabase', 'PostgreSQL', 'Next.js', 'TypeScript', 'Capacitor'],
-    link: 'https://play.google.com/store/apps/details?id=com.jvcerezo.exitplan',
-    badge: 'Google Play',
+      "Solo-built and shipped: 38+ bank integrations, tax calculators, OCR receipt scanning, and an AI chat assistant. Architected an offline-first sync engine with conflict resolution, incremental replication, and retry/failure recovery across 13 tables spanning PostgreSQL (Supabase) and local SQLite (Drift), secured with row-level security and encryption.",
+    tech: ["Flutter", "Dart", "Riverpod", "Supabase", "PostgreSQL", "SQLite (Drift)", "OCR", "AI"],
+    link: "https://play.google.com/store/apps/details?id=com.jvcerezo.exitplan",
+    badge: "Google Play",
+    category: "mobile",
+    featured: true,
+    hasScreenshots: true,
   },
   {
-    name: 'SNPseek MERN',
-    tagline: 'Genomics microservices platform · IRRI',
-    year: '2024 — 2025',
+    name: "SNPseek MERN",
+    tagline: "Genomics microservices platform · IRRI",
+    year: "2024 — 2025",
     description:
-      'Rewrite of IRRI’s legacy PHP/MySQL SNPseek platform into seven independent Node.js/Express services behind an API gateway, orchestrated with Docker Compose. Advanced multi-criteria filtering and interactive charts over large genomic datasets.',
-    tech: ['React', 'Node.js', 'Express', 'MongoDB', 'Docker'],
-    link: 'https://snpseek-mern.vercel.app',
-    badge: null,
+      "Rewrite of IRRI’s legacy PHP/MySQL SNPseek platform into seven independent Node.js/Express services behind an API gateway, orchestrated with Docker Compose. Advanced multi-criteria filtering and interactive charts over large genomic datasets.",
+    tech: ["React", "Node.js", "Express", "MongoDB", "Docker", "API Gateway", "SSO"],
+    link: "https://snpseek-mern.vercel.app",
+    badge: "IRRI Research",
+    category: "fullstack",
+    featured: true,
   },
   {
-    name: 'Codebreak 2.0',
-    tagline: 'RAG-based AI support platform — 1st place, Tenext.ai hackathon',
-    year: '2025',
+    name: "Codebreak 2.0",
+    tagline: "RAG-based AI support platform — 1st place, Tenext.ai hackathon",
+    year: "2025",
     description:
-      'Full-stack AI platform for customer-support agents with a RAG assistant, automated live call scripts, and post-call QA analytics. Owned REST APIs, microservices, deployment, and AI integration end-to-end, shipping a working MVP in under 24 hours.',
-    tech: ['Node.js', 'Microservices', 'RAG', 'REST APIs'],
-    link: 'https://www.facebook.com/photo/?fbid=706685865053901&set=a.263981095991049',
-    badge: '1st place',
+      "Full-stack AI platform for customer-support agents with a RAG assistant, automated live call scripts, and post-call QA analytics. Owned REST APIs, microservices, deployment, and AI integration end-to-end, shipping a working MVP in under 24 hours.",
+    tech: ["Node.js", "Microservices", "RAG", "REST APIs", "Claude API", "Groq"],
+    link: "https://www.facebook.com/photo/?fbid=706685865053901&set=a.263981095991049",
+    badge: "1st Place Winner",
+    category: "ai",
+    featured: true,
   },
   {
-    name: 'PICSEL',
-    tagline: 'Reservation system · 20-developer team',
-    year: '2024',
+    name: "IskOS",
+    tagline: "Academic OS for UPLB Students",
+    year: "2024 — 2025",
     description:
-      'Built back-end components over 5 months in a 20-developer team; integrated Google authentication and shipped across 7 features with peer code review.',
-    tech: ['Node.js', 'PostgreSQL', 'OAuth'],
+      "Unified academic dashboard for University of the Philippines Los Baños students with course tracking, schedule management, and Google Calendar sync.",
+    tech: ["React", "TypeScript", "Supabase", "Google Calendar API", "Tailwind CSS"],
+    link: "https://isk-os.vercel.app",
+    badge: "In Dev",
+    category: "web",
+  },
+  {
+    name: "PICSEL",
+    tagline: "Reservation system · 20-developer team",
+    year: "2024",
+    description:
+      "Built back-end components over 5 months in a 20-developer team; integrated Google authentication and shipped across 7 features with peer code review.",
+    tech: ["Node.js", "PostgreSQL", "OAuth", "Team Leadership"],
     link: null,
     badge: null,
+    category: "fullstack",
   },
   {
-    name: 'SOSC3',
-    tagline: 'Civic tech advocacy platform',
-    year: '2023',
+    name: "SOSC3 Advocacy",
+    tagline: "Civic tech advocacy platform",
+    year: "2023",
     description:
-      'Social advocacy app for community engagement and awareness campaigns, built during UPLB Computer Science Society events.',
-    tech: ['React', 'Tailwind CSS', 'Vercel'],
-    link: 'https://sosc3-advocacy-app.vercel.app',
+      "Social advocacy web application for community engagement and awareness campaigns, built during UPLB Computer Science Society events.",
+    tech: ["React", "Tailwind CSS", "Vercel"],
+    link: "https://sosc3-advocacy-app.vercel.app",
     badge: null,
+    category: "web",
+  },
+  {
+    name: "Maralit Dental Clinic",
+    tagline: "Healthcare appointment & patient record management",
+    year: "2024",
+    description:
+      "Full-stack dental clinic appointment scheduling and patient records management system with automated status tracking.",
+    tech: ["React", "Node.js", "MongoDB", "Tailwind CSS"],
+    link: "https://mdcas-fe.vercel.app",
+    badge: null,
+    category: "web",
+  },
+  {
+    name: "Diet Plan Calculator",
+    tagline: "Personalized nutrition planner",
+    year: "2023",
+    description:
+      "Health application calculating personalized nutrition recommendations, macro breakdowns, and calorie targets.",
+    tech: ["React", "Node.js", "Express", "MERN"],
+    link: "https://diet-plan-calculator.vercel.app",
+    badge: null,
+    category: "web",
+  },
+];
+
+const SANDALAN_SCREENSHOTS: ScreenshotItem[] = [
+  {
+    src: "/sandalan/feature.png",
+    title: "Sandalan Overview & Feature Graphic",
+    description:
+      "The all-in-one Filipino adulting and financial companion with 38+ bank integrations, government guides, and AI assistant.",
+  },
+  {
+    src: "/sandalan/screen-1.png",
+    title: "Step-by-Step Government Guides",
+    description:
+      "Interactive, offline-accessible walkthroughs for securing TIN, SSS, PhilSys, Pag-IBIG, and PhilHealth documents.",
+  },
+  {
+    src: "/sandalan/screen-2.png",
+    title: "Expense Tracker & Financial Calculators",
+    description:
+      "Comprehensive budget tracking across 13 offline-synced database tables with local encryption.",
+  },
+  {
+    src: "/sandalan/screen-3.png",
+    title: "1,000+ Government Office Directory",
+    description:
+      "Instant search and navigation to government agencies nationwide, fully functional without an active internet connection.",
+  },
+  {
+    src: "/sandalan/screen-4.png",
+    title: "Taglish AI Assistant & OCR Receipt Scanner",
+    description:
+      "Automated receipt parsing with OCR and conversational guidance tailored specifically to Philippine adulting requirements.",
   },
 ];
 
 const SKILLS: [string, string][] = [
-  ['Languages', 'JavaScript · TypeScript · PHP · SQL · Python · Java · C/C++ · Dart'],
-  ['Front End', 'React · Next.js · jQuery · HTML5 · CSS3 · Tailwind CSS · Vite'],
-  ['Back End', 'Node.js · Express · Nest.js · REST APIs · JSON · Microservices · API gateway & middleware · JWT / OAuth / SSO'],
-  ['Databases', 'MySQL · MongoDB · PostgreSQL · SQLite · Supabase · Schema design · Query optimization'],
-  ['DevOps', 'Docker · Docker Compose · CI/CD · Git · GitHub · GitLab · Vercel · AWS · Linux & Windows'],
-  ['Tools', 'VS Code · Postman · Jira · Agile/Scrum · Code review · Unit & E2E testing'],
-  ['Mobile & AI', 'Flutter · Riverpod · Drift · Claude API · Gemini API · RAG · Hugging Face · Groq'],
+  ["Languages", "JavaScript · TypeScript · PHP · SQL · Python · Java · C/C++ · Dart"],
+  ["Front End", "React · Next.js · jQuery · HTML5 · CSS3 · Tailwind CSS · Vite · Responsive UI/UX"],
+  ["Back End", "Node.js · Express · Nest.js · REST APIs · JSON · Microservices · API Gateway · JWT / OAuth / SSO"],
+  ["Databases", "MySQL · MongoDB · PostgreSQL · SQLite · Supabase · Schema Design · Query Optimization"],
+  ["DevOps", "Docker · Docker Compose · CI/CD · Git · GitHub · GitLab · Vercel · AWS · Linux & Windows"],
+  ["Tools", "VS Code · Postman · Jira · Agile/Scrum · Code Review · Appium · BrowserStack · Unit & E2E Testing"],
+  ["Mobile & AI", "Flutter · Riverpod · Drift · Claude API · Gemini API · RAG Pipelines · Hugging Face · Groq"],
 ];
 
 const EDUCATION = {
-  school: 'University of the Philippines Los Baños',
-  degree: 'Bachelor of Science, Computer Science',
-  period: '2021 — 2025',
-  meta: 'Los Baños, Laguna',
+  school: "University of the Philippines Los Baños",
+  degree: "Bachelor of Science, Computer Science",
+  period: "2021 — 2025",
+  meta: "Los Baños, Laguna",
   notes:
-    'Graduated Honor Roll; Provincial Government of Laguna Scholarship Recipient. Coursework: Operating Systems, Computer Networks, Cybersecurity, Data Structures & Algorithms, Database Systems.',
+    "Graduated Honor Roll; Provincial Government of Laguna Scholarship Recipient. Coursework: Operating Systems, Computer Networks, Cybersecurity, Data Structures & Algorithms, Database Systems.",
 };
 
-type Theme = 'light' | 'dark';
+type Theme = "light" | "dark";
 
 function useTheme(): [Theme, () => void] {
   const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window === 'undefined') return 'dark';
-    const stored = window.localStorage.getItem('theme') as Theme | null;
-    return stored === 'light' || stored === 'dark' ? stored : 'dark';
+    if (typeof window === "undefined") return "dark";
+    const stored = window.localStorage.getItem("theme") as Theme | null;
+    return stored === "light" || stored === "dark" ? stored : "dark";
   });
 
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.toggle('dark', theme === 'dark');
+    root.classList.toggle("dark", theme === "dark");
     root.style.colorScheme = theme;
     try {
-      window.localStorage.setItem('theme', theme);
+      window.localStorage.setItem("theme", theme);
     } catch {}
   }, [theme]);
 
-  return [theme, () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))];
+  return [theme, () => setTheme((t) => (t === "dark" ? "light" : "dark"))];
 }
 
 function useScrollSpy(ids: string[]) {
-  const [active, setActive] = useState<string>('');
+  const [active, setActive] = useState<string>("");
   const [atEnd, setAtEnd] = useState(false);
 
   useEffect(() => {
@@ -190,7 +294,7 @@ function useScrollSpy(ids: string[]) {
           if (e.isIntersecting) setActive(e.target.id);
         });
       },
-      { rootMargin: '-25% 0px -60% 0px', threshold: 0 }
+      { rootMargin: "-25% 0px -60% 0px", threshold: 0 }
     );
     ids.forEach((id) => {
       const el = document.getElementById(id);
@@ -199,19 +303,17 @@ function useScrollSpy(ids: string[]) {
     return () => observer.disconnect();
   }, [ids]);
 
-  // The final section sits too close to the document end to ever reach the
-  // observer band, so bottom-of-page always resolves to the last nav item.
   useEffect(() => {
     const onScroll = () => {
       const doc = document.documentElement;
       setAtEnd(window.innerHeight + window.scrollY >= doc.scrollHeight - 2);
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     onScroll();
     return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
     };
   }, []);
 
@@ -224,14 +326,14 @@ function useRevealOnScroll() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
+            entry.target.classList.add("in-view");
             observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.05, rootMargin: '0px 0px -32px 0px' }
+      { threshold: 0.05, rootMargin: "0px 0px -32px 0px" }
     );
-    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 }
@@ -258,7 +360,6 @@ function Section({
   );
 }
 
-/* Title on the left, date flush right — the resume's two-column entry head. */
 function EntryHead({
   title,
   subtitle,
@@ -292,7 +393,7 @@ function EntryHead({
 function TechLine({ items }: { items: string[] }) {
   return (
     <p className="mt-3 font-mono text-[10.5px] leading-relaxed tracking-[0.06em] text-ink-4">
-      {items.join('  ·  ')}
+      {items.join("  ·  ")}
     </p>
   );
 }
@@ -326,7 +427,7 @@ function ContactLink({
   return (
     <a
       href={href}
-      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className="flex items-center gap-1.5 text-ink-2 transition-colors hover:text-brand"
     >
       <Icon className="h-3.5 w-3.5" aria-hidden="true" />
@@ -339,17 +440,41 @@ function App() {
   const [theme, toggleTheme] = useTheme();
   const active = useScrollSpy(NAV_IDS);
   const [scrolled, setScrolled] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [isToastOpen, setIsToastOpen] = useState(false);
+  const [isScreenshotOpen, setIsScreenshotOpen] = useState(false);
+  const [screenshotIndex, setScreenshotIndex] = useState(0);
+  const [projectCategory, setProjectCategory] = useState<string>("all");
+
   useRevealOnScroll();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   const year = new Date().getFullYear();
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(PROFILE.email);
+    setCopiedEmail(true);
+    setToastMessage("Email address copied to clipboard!");
+    setIsToastOpen(true);
+    setTimeout(() => setCopiedEmail(false), 2000);
+  };
+
+  const filteredProjects = PROJECTS.filter((p) => {
+    if (projectCategory === "all") return true;
+    if (projectCategory === "featured") return p.featured;
+    if (projectCategory === "web") return p.category === "web" || p.category === "fullstack";
+    if (projectCategory === "mobile") return p.category === "mobile";
+    if (projectCategory === "ai") return p.category === "ai";
+    return true;
+  });
 
   return (
     <div className="min-h-screen bg-bg text-ink-1">
@@ -359,46 +484,46 @@ function App() {
 
       {/* TOP BAR */}
       <header
-        className={`sticky top-0 z-50 bg-bg/85 backdrop-blur-md transition-colors ${
-          scrolled ? 'border-b border-edge' : 'border-b border-transparent'
+        className={`sticky top-0 z-40 bg-bg/85 backdrop-blur-md transition-colors ${
+          scrolled ? "border-b border-edge" : "border-b border-transparent"
         }`}
       >
         <div className="mx-auto flex h-14 max-w-[760px] items-center justify-between gap-4 px-6">
           <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             className="font-display text-[14px] font-semibold tracking-tight text-ink-1 transition-colors hover:text-ink-3"
           >
             Jet Cerezo
           </button>
 
-          <nav aria-label="Sections" className="hidden items-center gap-6 sm:flex">
+          <nav aria-label="Sections" className="hidden items-center gap-5 sm:flex">
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
                 onClick={() => go(item.id)}
-                aria-current={active === item.id ? 'true' : undefined}
+                aria-current={active === item.id ? "true" : undefined}
                 className={`relative py-1 text-[13px] transition-colors ${
-                  active === item.id ? 'text-ink-1' : 'text-ink-4 hover:text-ink-2'
+                  active === item.id ? "text-ink-1" : "text-ink-4 hover:text-ink-2"
                 }`}
               >
                 {item.label}
                 <span
                   aria-hidden="true"
                   className={`absolute -bottom-0.5 left-0 h-px w-full origin-left bg-brand transition-transform duration-300 ${
-                    active === item.id ? 'scale-x-100' : 'scale-x-0'
+                    active === item.id ? "scale-x-100" : "scale-x-0"
                   }`}
                 />
               </button>
             ))}
           </nav>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             <button
               onClick={toggleTheme}
-              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
               className="flex h-8 w-8 items-center justify-center rounded-md text-ink-3 transition-colors hover:bg-fg/5 hover:text-ink-1"
             >
-              {theme === 'dark' ? (
+              {theme === "dark" ? (
                 <Sun className="h-4 w-4" aria-hidden="true" />
               ) : (
                 <Moon className="h-4 w-4" aria-hidden="true" />
@@ -425,21 +550,30 @@ function App() {
             </h1>
             <p className="mt-1 text-[16px] text-ink-3">{PROFILE.title}</p>
 
-            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1.5 font-mono text-[11px] text-ink-4">
-              <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-brand animate-dot" aria-hidden="true" />
-                Available for work
-              </span>
-              <span className="flex items-center gap-1.5">
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <TimezoneWidget />
+              <span className="flex items-center gap-1.5 font-mono text-[11px] text-ink-4">
                 <MapPin className="h-3 w-3" aria-hidden="true" />
                 {PROFILE.location}
               </span>
-              <span>{PROFILE.availability}</span>
             </div>
 
             <address className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13.5px] not-italic">
+              <button
+                onClick={handleCopyEmail}
+                className="flex items-center gap-1.5 text-ink-2 transition-colors hover:text-brand"
+                title="Click to copy email address"
+              >
+                {copiedEmail ? (
+                  <Check className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
+                ) : (
+                  <Copy className="h-3.5 w-3.5 text-ink-4" aria-hidden="true" />
+                )}
+                <span>{PROFILE.email}</span>
+              </button>
+
               <ContactLink href={PROFILE.gmailCompose} icon={Mail} external>
-                {PROFILE.email}
+                Gmail
               </ContactLink>
               <ContactLink href={PROFILE.phoneHref} icon={Phone}>
                 {PROFILE.phone}
@@ -453,14 +587,28 @@ function App() {
             </address>
           </div>
 
-          <img
-            src="/profile.jpg"
-            alt="Jet Timothy Cerezo, full-stack software engineer"
-            width="240"
-            height="240"
-            fetchPriority="high"
-            className="animate-reveal h-24 w-24 shrink-0 rounded-full border border-edge object-cover sm:h-28 sm:w-28"
-          />
+          <picture className="animate-reveal shrink-0">
+            <source srcSet="/profile.webp" type="image/webp" />
+            <img
+              src="/profile.jpg"
+              alt="Jet Timothy Cerezo, full-stack software engineer"
+              width="240"
+              height="240"
+              fetchPriority="high"
+              className="h-24 w-24 rounded-full border border-edge object-cover shadow-sm sm:h-28 sm:w-28"
+            />
+          </picture>
+        </div>
+
+        {/* IMPACT HIGHLIGHTS BY THE NUMBERS */}
+        <div className="mt-10 pt-4">
+          <div className="reveal">
+            <h2 className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-ink-4">
+              Impact by the Numbers
+            </h2>
+            <div className="mt-2 h-px w-full bg-edge-strong" />
+          </div>
+          <ImpactStats />
         </div>
 
         {/* ABOUT */}
@@ -492,10 +640,46 @@ function App() {
           </div>
         </Section>
 
+        {/* ARCHITECTURE & SYSTEM DESIGN */}
+        <Section id="architecture" label="System Design & Architecture">
+          <div className="reveal">
+            <p className="text-[15px] leading-[1.7] text-ink-2">
+              Interactive architectural diagrams illustrating microservices decoupling, offline-first data synchronization, and RAG retrieval pipelines built across production and research systems.
+            </p>
+          </div>
+          <ArchitectureVisualizer />
+        </Section>
+
         {/* WORK */}
         <Section id="work" label="Selected Work">
+          {/* Category Filter Pills */}
+          <div className="reveal mb-6 flex flex-wrap items-center gap-1.5">
+            <span className="mr-1 flex items-center gap-1 font-mono text-[10.5px] uppercase tracking-wider text-ink-4">
+              <Filter className="h-3 w-3" /> Filter:
+            </span>
+            {[
+              { id: "all", label: "All Work" },
+              { id: "featured", label: "Featured" },
+              { id: "web", label: "Full-Stack Web" },
+              { id: "mobile", label: "Mobile & Flutter" },
+              { id: "ai", label: "AI & Systems" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setProjectCategory(tab.id)}
+                className={`rounded-md px-2.5 py-1 font-mono text-[11px] transition-all ${
+                  projectCategory === tab.id
+                    ? "bg-fg text-bg font-medium shadow-sm"
+                    : "border border-edge bg-fg/[0.02] text-ink-3 hover:border-edge-strong hover:text-ink-1"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
           <div className="divide-y divide-edge border-y border-edge">
-            {PROJECTS.map((p) => {
+            {filteredProjects.map((p) => {
               const inner = (
                 <>
                   <EntryHead title={p.name} subtitle={p.tagline} period={p.year}>
@@ -513,6 +697,31 @@ function App() {
                   </EntryHead>
                   <p className="mt-2.5 text-[14.5px] leading-[1.65] text-ink-2">{p.description}</p>
                   <TechLine items={p.tech} />
+
+                  {/* Sandalan screenshot trigger */}
+                  {p.hasScreenshots && (
+                    <div className="mt-4 flex flex-wrap items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setIsScreenshotOpen(true);
+                          setScreenshotIndex(0);
+                        }}
+                        className="inline-flex items-center gap-1.5 rounded-md border border-edge-strong bg-fg/[0.03] px-3 py-1.5 font-mono text-[11.5px] text-ink-2 transition-all hover:border-fg/40 hover:bg-fg/[0.06] hover:text-ink-1"
+                      >
+                        <Smartphone className="h-3.5 w-3.5 text-brand" />
+                        <span>View App Screenshots ({SANDALAN_SCREENSHOTS.length})</span>
+                      </button>
+
+                      {p.link && (
+                        <span className="font-mono text-[11px] text-ink-4">
+                          Available on Google Play
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </>
               );
 
@@ -540,12 +749,12 @@ function App() {
             rel="noopener noreferrer"
             className="reveal mt-5 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-4 transition-colors hover:text-brand"
           >
-            More on GitHub <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+            More repositories on GitHub <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
           </a>
         </Section>
 
         {/* SKILLS */}
-        <Section label="Technical Skills">
+        <Section id="skills" label="Technical Skills">
           <div className="reveal grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-[104px_1fr] sm:gap-y-3.5">
             {SKILLS.map(([label, items]) => (
               <Fragment key={label}>
@@ -559,7 +768,7 @@ function App() {
         </Section>
 
         {/* EDUCATION */}
-        <Section label="Education">
+        <Section label="Education & Honors">
           <article className="reveal">
             <EntryHead
               title={EDUCATION.school}
@@ -576,18 +785,28 @@ function App() {
           <div className="reveal">
             <p className="text-[15px] leading-[1.7] text-ink-2">
               Open to full-time remote roles including night shift on US hours, contract work, and
-              partnerships. Happy to talk about full-stack web, microservices, or shipping products
-              for the Filipino market.
+              partnerships. Happy to talk about full-stack web, microservices architecture, Flutter mobile apps, or shipping products for the Philippine market.
             </p>
             <div className="mt-6 flex flex-wrap gap-2.5">
+              <button
+                onClick={handleCopyEmail}
+                className="inline-flex items-center gap-2 rounded-md bg-fg px-4 py-2 text-[13.5px] font-medium text-bg transition-opacity hover:opacity-85"
+              >
+                {copiedEmail ? (
+                  <Check className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
+                ) : (
+                  <Copy className="h-3.5 w-3.5 text-ink-4" aria-hidden="true" />
+                )}
+                Copy email
+              </button>
               <a
                 href={PROFILE.gmailCompose}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md bg-fg px-4 py-2 text-[13.5px] font-medium text-bg transition-opacity hover:opacity-85"
+                className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
               >
                 <Mail className="h-3.5 w-3.5" aria-hidden="true" />
-                Send a message
+                Compose in Gmail
               </a>
               <a
                 href={PROFILE.resume}
@@ -616,13 +835,29 @@ function App() {
         <div className="mx-auto flex max-w-[760px] flex-wrap items-center justify-between gap-3 px-6 py-6 font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-4">
           <span>© {year} Jet Timothy Cerezo</span>
           <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             className="transition-colors hover:text-ink-2"
           >
             Back to top ↑
           </button>
         </div>
       </footer>
+
+      {/* MODALS & TOAST */}
+      <ScreenshotModal
+        isOpen={isScreenshotOpen}
+        onClose={() => setIsScreenshotOpen(false)}
+        items={SANDALAN_SCREENSHOTS}
+        currentIndex={screenshotIndex}
+        onIndexChange={setScreenshotIndex}
+        playStoreUrl="https://play.google.com/store/apps/details?id=com.jvcerezo.exitplan"
+      />
+
+      <Toast
+        isOpen={isToastOpen}
+        onClose={() => setIsToastOpen(false)}
+        message={toastMessage}
+      />
     </div>
   );
 }
