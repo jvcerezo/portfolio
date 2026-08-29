@@ -400,15 +400,15 @@ function Section({
   children: ReactNode;
 }) {
   return (
-    <section id={id} aria-label={label} className="scroll-mt-16 pt-6 first:pt-0">
+    <section id={id} aria-label={label} className="scroll-mt-12">
       <div className="reveal">
         <div className="flex items-center gap-2 font-mono text-[10.5px] font-medium uppercase tracking-[0.2em] text-ink-4">
           {num && <span className="text-brand">{num} //</span>}
           <span>{label}</span>
         </div>
-        <div className="mt-2 h-px w-full bg-edge-strong" />
+        <div className="mt-1.5 h-px w-full bg-edge-strong" />
       </div>
-      <div className="mt-6">{children}</div>
+      <div className="mt-4">{children}</div>
     </section>
   );
 }
@@ -672,7 +672,7 @@ function App() {
           {/* ========================================================= */}
           {/* RIGHT COLUMN: Scrollable Main Content                      */}
           {/* ========================================================= */}
-          <main id="main" className="pt-16 lg:w-[58%] lg:py-20 xl:py-24 space-y-16 sm:space-y-20">
+          <main id="main" className="pt-12 lg:w-[58%] lg:py-20 xl:py-24 space-y-10 sm:space-y-12">
 
             {/* KEY HIGHLIGHTS */}
             <div>
@@ -681,14 +681,14 @@ function App() {
                   <span className="text-brand">⚡ //</span>
                   <span>Key Highlights</span>
                 </div>
-                <div className="mt-2 h-px w-full bg-edge-strong" />
+                <div className="mt-1.5 h-px w-full bg-edge-strong" />
               </div>
               <ImpactStats />
             </div>
 
             {/* 01 // ABOUT */}
             <Section id="about" num="01" label="About">
-              <div className="reveal space-y-4">
+              <div className="reveal space-y-3">
                 {SUMMARY.map((p) => (
                   <p key={p.slice(0, 24)} className="text-[15px] leading-[1.7] text-ink-2">
                     {p}
@@ -699,7 +699,7 @@ function App() {
 
             {/* 02 // EXPERIENCE */}
             <Section id="experience" num="02" label="Experience">
-              <div className="space-y-9">
+              <div className="space-y-6 sm:space-y-7">
                 {EXPERIENCE.map((job) => (
                   <article key={job.role + job.company} className="reveal group">
                     <EntryHead
@@ -728,7 +728,7 @@ function App() {
             {/* 04 // SELECTED WORK */}
             <Section id="work" num="04" label="Selected Projects">
               {/* Category Filter Pills */}
-              <div className="reveal mb-6 flex flex-wrap items-center gap-1.5">
+              <div className="reveal mb-4 flex flex-wrap items-center gap-1.5">
                 <span className="mr-1 flex items-center gap-1 font-mono text-[10.5px] uppercase tracking-wider text-ink-4">
                   <Filter className="h-3 w-3" /> Filter:
                 </span>
@@ -755,7 +755,7 @@ function App() {
 
               <div className="divide-y divide-edge border-y border-edge">
                 {filteredProjects.map((p) => (
-                  <article key={p.name} className="reveal group py-6">
+                  <article key={p.name} className="reveal group py-4 sm:py-5">
                     <EntryHead
                       title={
                         p.link ? (
@@ -834,7 +834,7 @@ function App() {
 
             {/* 05 // HONORS & HACKATHONS */}
             <Section id="honors" num="05" label="Honors & Recognition">
-              <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {HONORS.map((item) => (
                   <div
                     key={item.title}
@@ -873,7 +873,7 @@ function App() {
 
             {/* 06 // SKILLS & STACK */}
             <Section id="skills" num="06" label="Technical Stack">
-              <div className="reveal grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-[130px_1fr] sm:gap-y-3.5">
+              <div className="reveal grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-[130px_1fr] sm:gap-y-2.5">
                 {SKILLS.map(([label, items]) => (
                   <Fragment key={label}>
                     <div className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-4 sm:pt-1">
@@ -905,7 +905,7 @@ function App() {
                   Open to full-time remote roles including night shift on US hours, contract work, and
                   partnerships. Happy to talk about full-stack web, microservices architecture, Flutter mobile apps, or shipping products for the Philippine market.
                 </p>
-                <div className="mt-6 flex flex-wrap gap-2.5">
+                <div className="mt-4.5 flex flex-wrap gap-2.5">
                   <a
                     href={PROFILE.gmailCompose}
                     target="_blank"

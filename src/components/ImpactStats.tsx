@@ -48,7 +48,7 @@ const METRICS = [
 
 export function ImpactStats() {
   return (
-    <div className="reveal mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-3.5">
+    <div className="reveal mt-3.5 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-3.5">
       {METRICS.map((metric) => {
         const Icon = metric.icon;
         return (
