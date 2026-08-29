@@ -8,21 +8,18 @@ import {
   Linkedin,
   Download,
   ArrowUpRight,
-  ArrowRight,
   Sun,
   Moon,
   Copy,
   Check,
   Smartphone,
   Filter,
-  Sparkles,
 } from "lucide-react";
 import { TimezoneWidget } from "./components/TimezoneWidget";
 import { ImpactStats } from "./components/ImpactStats";
 import { ArchitectureVisualizer } from "./components/ArchitectureVisualizer";
 import { ScreenshotModal, type ScreenshotItem } from "./components/ScreenshotModal";
 import { Toast } from "./components/Toast";
-import { ShowcasePage } from "./components/ShowcasePage";
 
 const NAV_ITEMS = [
   { id: "about", num: "01", label: "About" },
@@ -494,13 +491,6 @@ function ContactLink({
 }
 
 function App() {
-  const [view, setView] = useState<"home" | "showcase">(() => {
-    if (typeof window === "undefined") return "home";
-    return window.location.pathname.startsWith("/showcase") || window.location.hash === "#showcase"
-      ? "showcase"
-      : "home";
-  });
-
   const [theme, toggleTheme] = useTheme();
   const active = useScrollSpy(NAV_IDS);
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -511,34 +501,6 @@ function App() {
   const [projectCategory, setProjectCategory] = useState<string>("all");
 
   useRevealOnScroll();
-
-  useEffect(() => {
-    const handlePopState = () => {
-      if (window.location.pathname.startsWith("/showcase") || window.location.hash === "#showcase") {
-        setView("showcase");
-      } else {
-        setView("home");
-      }
-    };
-    window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
-  }, []);
-
-  const navigateToShowcase = () => {
-    try {
-      window.history.pushState({}, "", "/showcase");
-    } catch {}
-    setView("showcase");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const navigateToHome = () => {
-    try {
-      window.history.pushState({}, "", "/");
-    } catch {}
-    setView("home");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   const year = new Date().getFullYear();
 
@@ -569,16 +531,6 @@ function App() {
     if (projectCategory === "ai") return p.category === "ai";
     return true;
   });
-
-  if (view === "showcase") {
-    return (
-      <ShowcasePage
-        onBack={navigateToHome}
-        theme={theme}
-        toggleTheme={toggleTheme}
-      />
-    );
-  }
 
   return (
     <div className="min-h-screen bg-bg text-ink-1">
@@ -630,22 +582,8 @@ function App() {
                 Building high-scale microservices, offline-first mobile apps, and automated test pipelines for production software.
               </p>
 
-              {/* SHOWCASE & DEMOS LAUNCHER (Sidebar) */}
-              <button
-                onClick={navigateToShowcase}
-                className="mt-6 flex w-full max-w-xs items-center justify-between rounded-lg border border-brand/30 bg-brand/[0.04] p-3 text-left font-mono transition-all hover:border-brand hover:bg-brand/[0.08]"
-              >
-                <div className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-brand" />
-                  <span className="text-[12px] font-semibold text-ink-1">Showcase & Demos</span>
-                </div>
-                <span className="rounded bg-brand/20 px-1.5 py-0.5 text-[9.5px] uppercase tracking-wider text-brand font-bold">
-                  Interactive
-                </span>
-              </button>
-
               {/* SIDE NAVIGATOR LINKS (Desktop) */}
-              <nav className="mt-8 hidden lg:block" aria-label="In-page jump links">
+              <nav className="mt-10 hidden lg:block" aria-label="In-page jump links">
                 <ul className="space-y-3 font-mono text-[12px] uppercase tracking-[0.14em]">
                   {NAV_ITEMS.map((item) => {
                     const isActive = active === item.id;
@@ -789,29 +727,6 @@ function App() {
 
             {/* 04 // SELECTED WORK */}
             <Section id="work" num="04" label="Selected Projects">
-              {/* Showcase Lab Banner Link */}
-              <div className="reveal mb-8 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-brand/30 bg-brand/[0.03] p-4 sm:p-5">
-                <div>
-                  <div className="flex items-center gap-1.5 font-mono text-[10.5px] uppercase tracking-wider text-brand font-semibold">
-                    <Sparkles className="h-3.5 w-3.5" />
-                    <span>Interactive Engineering Lab</span>
-                  </div>
-                  <h4 className="mt-1 font-display text-[15.5px] font-semibold text-ink-1">
-                    Test-drive live simulators & interactive app prototypes
-                  </h4>
-                  <p className="mt-1 text-[13px] text-ink-3">
-                    Try Sandalan’s Taglish AI & OCR engine, IRRI’s microservices gateway, and the Codebreak 2.0 RAG pipeline.
-                  </p>
-                </div>
-                <button
-                  onClick={navigateToShowcase}
-                  className="inline-flex items-center gap-2 rounded-md bg-fg px-4 py-2 font-mono text-[12px] font-semibold text-bg transition-opacity hover:opacity-85"
-                >
-                  <span>Open Showcase Lab</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </button>
-              </div>
-
               {/* Category Filter Pills */}
               <div className="reveal mb-6 flex flex-wrap items-center gap-1.5">
                 <span className="mr-1 flex items-center gap-1 font-mono text-[10.5px] uppercase tracking-wider text-ink-4">
