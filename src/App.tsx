@@ -35,7 +35,7 @@ const NAV_IDS = NAV_ITEMS.map((n) => n.id);
 
 const PROFILE = {
   name: "Jet Timothy V. Cerezo",
-  title: "Full-Stack Software Engineer",
+  title: "Software Engineer",
   email: "jetjetcerezo@gmail.com",
   gmailCompose:
     "https://mail.google.com/mail/?view=cm&fs=1&to=jetjetcerezo@gmail.com&su=Hello%20Jet",
@@ -548,9 +548,8 @@ function App() {
                   />
                 </picture>
                 <div>
-                  <div className="flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-ink-4">
-                    <span className="h-1.5 w-1.5 rounded-full bg-brand animate-dot" aria-hidden="true" />
-                    <span>Portfolio // {year}</span>
+                  <div className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-ink-4">
+                    Portfolio // {year}
                   </div>
                   <div className="mt-1">
                     <TimezoneWidget />
