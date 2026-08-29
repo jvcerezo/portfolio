@@ -40,7 +40,7 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
   </g>
 
   <!-- Subtitle -->
-  <text x="72" y="435" font-size="32" font-family="'Helvetica Neue','Arial',sans-serif" font-weight="500" fill="#ffffff" fill-opacity="0.64" letter-spacing="-0.5">Software Developer  ·  Full-stack  ·  Philippines</text>
+  <text x="72" y="435" font-size="32" font-family="'Helvetica Neue','Arial',sans-serif" font-weight="500" fill="#ffffff" fill-opacity="0.64" letter-spacing="-0.5">Software Engineer  ·  Mobile &amp; Microservices  ·  Philippines</text>
 
   <!-- Tech chips -->
   <g font-family="ui-monospace,'SF Mono','Menlo','Consolas','Courier New',monospace" font-size="13" letter-spacing="2.5" fill="#ffffff" fill-opacity="0.82">

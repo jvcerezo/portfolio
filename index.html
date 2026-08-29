@@ -1,83 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <!-- Icons -->
-    <link rel="icon" type="image/png" href="/jtc-logo.png" />
-    <link rel="apple-touch-icon" href="/jtc-logo.png" />
-
-    <!-- Canonical -->
+    <!-- Canonical URL -->
     <link rel="canonical" href="https://jettimothycerezo.dev/" />
 
-    <!-- Preconnect to font CDN for faster first paint -->
+    <!-- Icons & Manifest -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/jtc-logo.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/jtc-logo.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Web App & Theme Meta -->
+    <meta name="application-name" content="Jet Timothy Cerezo" />
+    <meta name="apple-mobile-web-app-title" content="Jet Cerezo" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f8f6f0" media="(prefers-color-scheme: light)" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- Preconnect to font CDN -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!--
-      Loaded here rather than via @import in index.css: an @import inside the
-      stylesheet is only discovered after the CSS downloads and parses, which
-      serialises the font request behind it and defeats the preconnect above.
-    -->
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
     />
 
-    <!-- Preload above-the-fold image for better LCP -->
+    <!-- Preload above-the-fold assets -->
+    <link rel="preload" as="image" href="/profile.webp" type="image/webp" />
     <link rel="preload" as="image" href="/profile.jpg" />
 
-    <!-- Primary meta -->
-    <title>Jet Timothy Cerezo | Software Engineer</title>
+    <!-- Primary Search Engine Meta -->
+    <title>Jet Timothy Cerezo — Software Engineer (React, Node.js, Flutter)</title>
     <meta
       name="description"
-      content="Filipino software engineer with 2+ years building production web apps. React, Next.js, Node.js, Express, Java, MongoDB, and PostgreSQL. Rebuilt IRRI's legacy Java monolith platform into Dockerized MERN microservices. Creator of Sandalan, live on Google Play. UPLB Computer Science, Batch 2025."
+      content="Software Engineer with 2+ years building production systems. Creator of Sandalan on Google Play (38+ bank integrations), IRRI MERN microservices rewrite, AI hackathon champion, and fintech test automation at Billease. UPLB CS."
     />
     <meta name="author" content="Jet Timothy Cerezo" />
     <meta
       name="keywords"
-      content="Jet Timothy Cerezo, Jet Cerezo, jvcerezo, software engineer, remote software engineer Philippines, React developer, Next.js, Node.js, Express, Nest.js, MERN stack, MongoDB, MySQL, PostgreSQL, Java, TypeScript, JavaScript, microservices, Docker, REST API, Filipino developer, UPLB Computer Science, Billease, Sandalan, Flutter developer, Appium, portfolio"
+      content="Jet Timothy Cerezo, Jet Cerezo, jvcerezo, software engineer, full stack developer Philippines, remote software engineer Philippines, React developer, Next.js, Node.js, Express, Nest.js, MERN stack, MongoDB, PostgreSQL, Supabase, Java, TypeScript, JavaScript, microservices, Docker, REST API, Filipino developer, UPLB Computer Science, Billease, Sandalan, Flutter developer, Appium, AI developer, RAG"
     />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <meta name="googlebot" content="index, follow" />
-    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#f8f6f0" media="(prefers-color-scheme: light)" />
-    <meta name="color-scheme" content="light dark" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large" />
 
-    <!-- Geo -->
+    <!-- Geo Targeting -->
     <meta name="geo.region" content="PH-LAG" />
     <meta name="geo.placename" content="Los Baños, Laguna, Philippines" />
+    <meta name="geo.position" content="14.1720;121.2417" />
+    <meta name="ICBM" content="14.1720, 121.2417" />
 
-    <!-- Open Graph -->
+    <!-- Open Graph (Facebook, LinkedIn, Discord) -->
     <meta property="og:type" content="profile" />
     <meta property="og:url" content="https://jettimothycerezo.dev/" />
     <meta property="og:site_name" content="Jet Timothy Cerezo" />
     <meta property="og:title" content="Jet Timothy Cerezo — Software Engineer" />
     <meta
       property="og:description"
-      content="Filipino software engineer shipping web apps end-to-end. React, Next.js, Node.js, Express, Java, and MongoDB. Microservices rewrite at IRRI. Creator of Sandalan, live on Google Play."
+      content="Software Engineer with 2+ years building production systems. Sandalan on Google Play, IRRI MERN microservices rewrite, and Tenext.ai AI Hackathon 1st place winner."
     />
     <meta property="og:image" content="https://jettimothycerezo.dev/og-image.png" />
+    <meta property="og:image:secure_url" content="https://jettimothycerezo.dev/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Jet Timothy Cerezo, software developer from the Philippines" />
+    <meta property="og:image:alt" content="Jet Timothy Cerezo — Software Engineer Portfolio" />
     <meta property="og:locale" content="en_PH" />
     <meta property="profile:first_name" content="Jet Timothy" />
     <meta property="profile:last_name" content="Cerezo" />
     <meta property="profile:username" content="jvcerezo" />
 
-    <!-- Twitter Card -->
+    <!-- Twitter Card Meta -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://jettimothycerezo.dev/" />
-    <meta name="twitter:title" content="Jet Timothy Cerezo — Full-Stack Software Engineer" />
+    <meta name="twitter:title" content="Jet Timothy Cerezo — Software Engineer" />
     <meta
       name="twitter:description"
-      content="Filipino full-stack engineer. React, Next.js, Node.js, MySQL and MongoDB. Shipping Sandalan on Google Play."
+      content="Software Engineer building high-scale microservices, Flutter mobile apps, and full-stack systems. Creator of Sandalan on Google Play."
     />
     <meta name="twitter:image" content="https://jettimothycerezo.dev/og-image.png" />
-    <meta name="twitter:image:alt" content="Jet Timothy Cerezo portfolio" />
+    <meta name="twitter:image:alt" content="Jet Timothy Cerezo Portfolio Preview" />
 
-    <!-- Theme init (before paint, avoids FOUC) -->
+    <!-- Theme initialization script (before paint to avoid FOUC) -->
     <script>
       (function () {
         try {
@@ -89,233 +98,148 @@
       })();
     </script>
 
-    <!-- Structured data: Person -->
+    <!-- Structured Data: JSON-LD Graph -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Jet Timothy Cerezo",
-        "givenName": "Jet Timothy",
-        "familyName": "Cerezo",
-        "alternateName": ["Jet Cerezo", "jvcerezo"],
-        "description": "Filipino full-stack software engineer with 2+ years building production web applications across React, Next.js, Node.js, Express, MySQL, MongoDB and PostgreSQL. Junior Test Automation Engineer at Billease and creator of Sandalan, a Filipino adulting and finance app live on Google Play.",
-        "jobTitle": "Junior Test Automation Engineer",
-        "worksFor": {
-          "@type": "Organization",
-          "name": "Billease"
-        },
-        "url": "https://jettimothycerezo.dev",
-        "image": "https://jettimothycerezo.dev/profile.jpg",
-        "sameAs": [
-          "https://github.com/jvcerezo",
-          "https://www.linkedin.com/in/jet-timothy-cerezo-126903254"
-        ],
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Los Baños",
-          "addressRegion": "Laguna",
-          "addressCountry": "PH"
-        },
-        "email": "mailto:jetjetcerezo@gmail.com",
-        "telephone": "+63-998-914-8907",
-        "nationality": {
-          "@type": "Country",
-          "name": "Philippines"
-        },
-        "alumniOf": [
+        "@graph": [
           {
-            "@type": "CollegeOrUniversity",
-            "name": "University of the Philippines Los Baños",
-            "url": "https://uplb.edu.ph"
-          }
-        ],
-        "award": [
-          "Codebreak 2.0 Hackathon Champion (Tenext.ai, 2025)",
-          "UPLB CS Honor Roll"
-        ],
-        "knowsAbout": [
-          "Full-stack web development",
-          "JavaScript",
-          "TypeScript",
-          "PHP",
-          "SQL",
-          "React",
-          "Next.js",
-          "jQuery",
-          "Node.js",
-          "Express",
-          "Nest.js",
-          "REST APIs",
-          "Microservices",
-          "API gateway",
-          "MySQL",
-          "MongoDB",
-          "PostgreSQL",
-          "Supabase",
-          "MERN stack",
-          "Docker",
-          "Docker Compose",
-          "CI/CD",
-          "Linux",
-          "OAuth",
-          "Single sign-on",
-          "Agile software development",
-          "Flutter",
-          "Dart",
-          "Test Automation",
-          "Appium",
-          "BrowserStack",
-          "Retrieval-augmented generation"
-        ],
-        "seeks": {
-          "@type": "Demand",
-          "name": "Remote full-stack software engineering roles, including night-shift US hours"
-        }
-      }
-    </script>
-
-    <!-- Structured data: WebSite -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "url": "https://jettimothycerezo.dev/",
-        "name": "Jet Timothy Cerezo",
-        "description": "Portfolio of Jet Timothy Cerezo, Filipino full-stack software developer.",
-        "inLanguage": "en",
-        "author": {
-          "@type": "Person",
-          "name": "Jet Timothy Cerezo"
-        }
-      }
-    </script>
-
-    <!-- Structured data: Sandalan (SoftwareApplication) -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "MobileApplication",
-        "name": "Sandalan: Adulting Guide",
-        "alternateName": "Sandalan",
-        "description": "A Filipino adulting and finance app. Step-by-step government guides (TIN, SSS, PhilSys, PhilHealth, Pag-IBIG), 1,000+ government office locations, expense tracking, and a Taglish AI assistant.",
-        "applicationCategory": "LifestyleApplication",
-        "operatingSystem": "Android",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "PHP"
-        },
-        "url": "https://play.google.com/store/apps/details?id=com.jvcerezo.exitplan",
-        "downloadUrl": "https://play.google.com/store/apps/details?id=com.jvcerezo.exitplan",
-        "author": {
-          "@type": "Person",
-          "name": "Jet Timothy Cerezo",
-          "url": "https://jettimothycerezo.dev"
-        }
-      }
-    </script>
-
-    <!-- Structured data: Breadcrumb -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://jettimothycerezo.dev/#home" },
-          { "@type": "ListItem", "position": 2, "name": "About", "item": "https://jettimothycerezo.dev/#about" },
-          { "@type": "ListItem", "position": 3, "name": "Featured", "item": "https://jettimothycerezo.dev/#sandalan" },
-          { "@type": "ListItem", "position": 4, "name": "Work", "item": "https://jettimothycerezo.dev/#work" },
-          { "@type": "ListItem", "position": 5, "name": "Contact", "item": "https://jettimothycerezo.dev/#contact" }
-        ]
-      }
-    </script>
-
-    <!-- Structured data: Portfolio Projects (ItemList of CreativeWork) -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "ItemList",
-        "name": "Selected Work by Jet Timothy Cerezo",
-        "itemListOrder": "ItemListOrderAscending",
-        "numberOfItems": 7,
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "item": {
-              "@type": "MobileApplication",
-              "name": "Sandalan",
-              "description": "A Filipino adulting and finance app. 15,000+ lines of Flutter, offline-first bidirectional sync engine, 38+ bank integrations, OCR receipt scanning, and a Taglish AI assistant.",
-              "applicationCategory": "LifestyleApplication",
-              "operatingSystem": "Android",
-              "url": "https://play.google.com/store/apps/details?id=com.jvcerezo.exitplan",
-              "author": { "@type": "Person", "name": "Jet Timothy Cerezo" }
-            }
+            "@type": "ProfilePage",
+            "@id": "https://jettimothycerezo.dev/#webpage",
+            "url": "https://jettimothycerezo.dev/",
+            "name": "Jet Timothy Cerezo — Software Engineer",
+            "isPartOf": { "@id": "https://jettimothycerezo.dev/#website" },
+            "about": { "@id": "https://jettimothycerezo.dev/#person" },
+            "mainEntity": { "@id": "https://jettimothycerezo.dev/#person" },
+            "description": "Portfolio of Jet Timothy Cerezo, Software Engineer with 2+ years building web, mobile, and QA automation systems.",
+            "inLanguage": "en"
           },
           {
-            "@type": "ListItem",
-            "position": 2,
-            "item": {
-              "@type": "WebApplication",
-              "name": "SNPseek MERN",
-              "description": "Rewrite of IRRI's legacy Java monolith SNPseek platform into seven Node.js/Express microservices behind an API gateway, orchestrated with Docker Compose.",
-              "applicationCategory": "SciencesApplication",
-              "operatingSystem": "Web",
-              "url": "https://snpseek-mern.vercel.app",
-              "author": { "@type": "Person", "name": "Jet Timothy Cerezo" }
-            }
+            "@type": "WebSite",
+            "@id": "https://jettimothycerezo.dev/#website",
+            "url": "https://jettimothycerezo.dev/",
+            "name": "Jet Timothy Cerezo",
+            "publisher": { "@id": "https://jettimothycerezo.dev/#person" },
+            "inLanguage": "en"
           },
           {
-            "@type": "ListItem",
-            "position": 3,
-            "item": {
-              "@type": "WebApplication",
-              "name": "SOSC3 Advocacy",
-              "description": "Civic tech advocacy platform for community engagement and awareness campaigns.",
-              "applicationCategory": "SocialNetworkingApplication",
-              "operatingSystem": "Web",
-              "url": "https://sosc3-advocacy-app.vercel.app",
-              "author": { "@type": "Person", "name": "Jet Timothy Cerezo" }
-            }
+            "@type": "Person",
+            "@id": "https://jettimothycerezo.dev/#person",
+            "name": "Jet Timothy Cerezo",
+            "givenName": "Jet Timothy",
+            "familyName": "Cerezo",
+            "alternateName": ["Jet Cerezo", "jvcerezo"],
+            "jobTitle": "Software Engineer",
+            "description": "Software Engineer with 2+ years shipping production web and mobile apps. Creator of Sandalan on Google Play, thesis affiliate at IRRI for genomic microservices rewrite, and test automation engineer at Billease.",
+            "url": "https://jettimothycerezo.dev",
+            "image": "https://jettimothycerezo.dev/profile.jpg",
+            "email": "mailto:jetjetcerezo@gmail.com",
+            "telephone": "+63-998-914-8907",
+            "sameAs": [
+              "https://github.com/jvcerezo",
+              "https://www.linkedin.com/in/jet-timothy-cerezo-126903254",
+              "https://play.google.com/store/apps/details?id=com.jvcerezo.exitplan"
+            ],
+            "worksFor": {
+              "@type": "Organization",
+              "name": "Billease"
+            },
+            "alumniOf": {
+              "@type": "CollegeOrUniversity",
+              "name": "University of the Philippines Los Baños",
+              "url": "https://uplb.edu.ph"
+            },
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Los Baños",
+              "addressRegion": "Laguna",
+              "addressCountry": "PH"
+            },
+            "award": [
+              "1st Place Champion — Tenext.ai Codebreak 2.0 Hackathon (2025)",
+              "Honor Roll Distinction — UPLB Department of Computer Science (2021-2025)",
+              "Provincial Government of Laguna Academic Scholar"
+            ],
+            "knowsAbout": [
+              "Software Engineering",
+              "Full-Stack Web Development",
+              "Microservices Architecture",
+              "API Gateway Design",
+              "React",
+              "Next.js",
+              "Node.js",
+              "Express",
+              "Nest.js",
+              "Java",
+              "Flutter",
+              "Dart",
+              "PostgreSQL",
+              "MongoDB",
+              "Supabase",
+              "SQLite (Drift)",
+              "Docker",
+              "Docker Compose",
+              "CI/CD Pipelines",
+              "Test Automation",
+              "Appium",
+              "BrowserStack",
+              "Linux CI",
+              "Retrieval-Augmented Generation (RAG)",
+              "Claude API",
+              "Gemini API"
+            ]
           },
           {
-            "@type": "ListItem",
-            "position": 4,
-            "item": {
-              "@type": "WebApplication",
-              "name": "Diet Plan Calculator",
-              "description": "Personalized diet planner with calorie targets and meal recommendations. MERN stack.",
-              "applicationCategory": "HealthApplication",
-              "operatingSystem": "Web",
-              "url": "https://diet-plan-calculator.vercel.app",
-              "author": { "@type": "Person", "name": "Jet Timothy Cerezo" }
-            }
+            "@type": "MobileApplication",
+            "@id": "https://jettimothycerezo.dev/#sandalan",
+            "name": "Sandalan: Adulting Guide & Personal Finance",
+            "alternateName": "Sandalan",
+            "description": "All-in-one Filipino adulting and financial companion. Features 38+ bank integrations, offline-first bidirectional sync between SQLite and Supabase PostgreSQL, step-by-step government document guides, OCR receipt scanning, and Taglish AI assistant.",
+            "applicationCategory": "FinanceApplication",
+            "operatingSystem": "Android",
+            "url": "https://play.google.com/store/apps/details?id=com.jvcerezo.exitplan",
+            "downloadUrl": "https://play.google.com/store/apps/details?id=com.jvcerezo.exitplan",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "PHP"
+            },
+            "author": { "@id": "https://jettimothycerezo.dev/#person" }
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://jettimothycerezo.dev/#snpseek",
+            "name": "SNPseek MERN Genomics Platform",
+            "description": "Microservices rewrite of IRRI's legacy Java monolith genomics platform into 7 decoupled Node.js services behind an Express API gateway, backed by MongoDB and Docker Compose.",
+            "applicationCategory": "ScienceApplication",
+            "operatingSystem": "Web",
+            "url": "https://snpseek-mern.vercel.app",
+            "author": { "@id": "https://jettimothycerezo.dev/#person" }
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://jettimothycerezo.dev/#codebreak",
+            "name": "Codebreak 2.0 AI Support Intelligence",
+            "description": "1st Place Champion project at Tenext.ai 2025 AI Hackathon. Full-stack RAG assistant for customer support agents with real-time call scripts and automated QA analytics.",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web",
+            "url": "https://www.facebook.com/photo/?fbid=706685865053901&set=a.263981095991049",
+            "author": { "@id": "https://jettimothycerezo.dev/#person" }
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://jettimothycerezo.dev/#breadcrumbs",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "About", "item": "https://jettimothycerezo.dev/#about" },
+              { "@type": "ListItem", "position": 2, "name": "Experience", "item": "https://jettimothycerezo.dev/#experience" },
+              { "@type": "ListItem", "position": 3, "name": "Architecture", "item": "https://jettimothycerezo.dev/#architecture" },
+              { "@type": "ListItem", "position": 4, "name": "Projects", "item": "https://jettimothycerezo.dev/#work" },
+              { "@type": "ListItem", "position": 5, "name": "Honors", "item": "https://jettimothycerezo.dev/#honors" },
+              { "@type": "ListItem", "position": 6, "name": "Stack", "item": "https://jettimothycerezo.dev/#skills" },
+              { "@type": "ListItem", "position": 7, "name": "Contact", "item": "https://jettimothycerezo.dev/#contact" }
+            ]
           }
         ]
-      }
-    </script>
-
-    <!-- Structured data: ProfessionalService (for local search) -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "ProfessionalService",
-        "name": "Jet Timothy Cerezo — Software Developer",
-        "description": "Freelance and contract software development. Full-stack web and Flutter mobile apps, test automation, and product engineering for early-stage builders.",
-        "url": "https://jettimothycerezo.dev",
-        "image": "https://jettimothycerezo.dev/og-image.png",
-        "telephone": "+63-998-914-8907",
-        "email": "jetjetcerezo@gmail.com",
-        "priceRange": "$$",
-        "areaServed": { "@type": "Country", "name": "Philippines" },
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Los Baños",
-          "addressRegion": "Laguna",
-          "addressCountry": "PH"
-        },
-        "provider": { "@type": "Person", "name": "Jet Timothy Cerezo" },
-        "serviceType": ["Full-stack web development", "Flutter mobile development", "Test automation", "React and Next.js engineering", "Supabase and PostgreSQL backends"]
       }
     </script>
   </head>
