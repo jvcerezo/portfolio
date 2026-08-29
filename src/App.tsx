@@ -16,6 +16,7 @@ import {
   Filter,
 } from "lucide-react";
 import { TimezoneWidget } from "./components/TimezoneWidget";
+import { ImpactStats } from "./components/ImpactStats";
 import { ArchitectureVisualizer } from "./components/ArchitectureVisualizer";
 import { ScreenshotModal, type ScreenshotItem } from "./components/ScreenshotModal";
 import { Toast } from "./components/Toast";
@@ -660,6 +661,18 @@ function App() {
           {/* RIGHT COLUMN: Scrollable Main Content                      */}
           {/* ========================================================= */}
           <main id="main" className="pt-16 lg:w-[58%] lg:py-20 xl:py-24 space-y-16 sm:space-y-20">
+
+            {/* KEY HIGHLIGHTS */}
+            <div>
+              <div className="reveal">
+                <div className="flex items-center gap-2 font-mono text-[10.5px] font-medium uppercase tracking-[0.2em] text-ink-4">
+                  <span className="text-brand">⚡ //</span>
+                  <span>Key Highlights</span>
+                </div>
+                <div className="mt-2 h-px w-full bg-edge-strong" />
+              </div>
+              <ImpactStats />
+            </div>
 
             {/* 01 // ABOUT */}
             <Section id="about" num="01" label="About">
