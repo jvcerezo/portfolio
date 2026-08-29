@@ -37,10 +37,7 @@ export function TimezoneWidget() {
 
   return (
     <div className="inline-flex items-center gap-2 rounded-full border border-edge bg-fg/[0.03] px-3 py-1 font-mono text-[11px] text-ink-3">
-      <span className="relative flex h-2 w-2">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-75" />
-        <span className="relative inline-flex h-2 w-2 rounded-full bg-brand" />
-      </span>
+      <span className="h-1.5 w-1.5 rounded-full bg-brand" />
       <span className="flex items-center gap-1">
         <Clock className="h-3 w-3 text-ink-4" aria-hidden="true" />
         <span>{time ? `${time} PHT` : 'UTC+8'}</span>

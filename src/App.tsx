@@ -328,18 +328,30 @@ function useScrollSpy(ids: string[]) {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + window.innerHeight * 0.35;
+      const doc = document.documentElement;
+      const scrollBottom = window.innerHeight + window.scrollY;
+      const isAtBottom = scrollBottom >= doc.scrollHeight - 90;
+
+      if (isAtBottom && ids.length > 0) {
+        setActive(ids[ids.length - 1]);
+        return;
+      }
+
       const sectionElements = ids
         .map((id) => ({ id, el: document.getElementById(id) }))
-        .filter((item) => item.el !== null);
+        .filter((item): item is { id: string; el: HTMLElement } => item.el !== null);
+
+      const threshold = window.innerHeight * 0.35;
 
       for (let i = sectionElements.length - 1; i >= 0; i--) {
         const item = sectionElements[i];
-        if (item.el && item.el.offsetTop <= scrollPosition) {
+        const rect = item.el.getBoundingClientRect();
+        if (rect.top <= threshold) {
           setActive(item.id);
           return;
         }
       }
+
       if (sectionElements.length > 0) {
         setActive(sectionElements[0].id);
       }
