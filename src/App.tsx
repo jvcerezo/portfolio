@@ -121,7 +121,7 @@ const PROJECTS: Project[] = [
     tagline: "Filipino adulting and finance app, live on Google Play",
     year: "2024 — 2025",
     description:
-      "Solo-built and shipped: 38+ bank integrations, tax calculators, OCR receipt scanning, and an AI chat assistant. Architected an offline-first sync engine with conflict resolution, incremental replication, and retry/failure recovery across 13 tables spanning PostgreSQL (Supabase) and local SQLite (Drift), secured with row-level security and encryption.",
+      "Solo-built and shipped: 38+ bank integrations, tax calculators, OCR receipt scanning, and an AI chat assistant. Architected an offline-first bidirectional sync engine with conflict resolution, incremental replication, and retry/failure recovery between local SQLite (Drift) and PostgreSQL (Supabase), secured with row-level security and local encryption.",
     tech: ["Flutter", "Dart", "Riverpod", "Supabase", "PostgreSQL", "SQLite (Drift)", "OCR", "AI"],
     link: "https://play.google.com/store/apps/details?id=com.jvcerezo.exitplan",
     badge: "Google Play",
@@ -227,7 +227,7 @@ const SANDALAN_SCREENSHOTS: ScreenshotItem[] = [
     src: "/sandalan/screen-2.png",
     title: "Expense Tracker & Financial Calculators",
     description:
-      "Comprehensive budget tracking across 13 offline-synced database tables with local encryption.",
+      "Comprehensive budget tracking with offline-first synchronization and local database encryption.",
   },
   {
     src: "/sandalan/screen-3.png",
@@ -459,12 +459,19 @@ function App() {
   const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   const year = new Date().getFullYear();
 
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(PROFILE.email);
-    setCopiedEmail(true);
-    setToastMessage("Email address copied to clipboard!");
-    setIsToastOpen(true);
-    setTimeout(() => setCopiedEmail(false), 2000);
+  const handleCopyEmail = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    try {
+      navigator.clipboard.writeText(PROFILE.email);
+      setCopiedEmail(true);
+      setToastMessage("Email copied: " + PROFILE.email);
+      setIsToastOpen(true);
+      setTimeout(() => setCopiedEmail(false), 2000);
+    } catch {
+      // Fallback
+      setToastMessage("Email: " + PROFILE.email);
+      setIsToastOpen(true);
+    }
   };
 
   const filteredProjects = PROJECTS.filter((p) => {
@@ -559,22 +566,25 @@ function App() {
             </div>
 
             <address className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13.5px] not-italic">
-              <button
-                onClick={handleCopyEmail}
-                className="flex items-center gap-1.5 text-ink-2 transition-colors hover:text-brand"
-                title="Click to copy email address"
-              >
-                {copiedEmail ? (
-                  <Check className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
-                ) : (
-                  <Copy className="h-3.5 w-3.5 text-ink-4" aria-hidden="true" />
-                )}
-                <span>{PROFILE.email}</span>
-              </button>
+              <div className="flex items-center gap-1">
+                <ContactLink href={PROFILE.gmailCompose} icon={Mail} external>
+                  {PROFILE.email}
+                </ContactLink>
+                <button
+                  type="button"
+                  onClick={handleCopyEmail}
+                  aria-label="Copy email address"
+                  className="flex h-5 w-5 items-center justify-center rounded text-ink-4 transition-colors hover:bg-fg/10 hover:text-ink-1"
+                  title="Copy email to clipboard"
+                >
+                  {copiedEmail ? (
+                    <Check className="h-3 w-3 text-brand" />
+                  ) : (
+                    <Copy className="h-3 w-3" />
+                  )}
+                </button>
+              </div>
 
-              <ContactLink href={PROFILE.gmailCompose} icon={Mail} external>
-                Gmail
-              </ContactLink>
               <ContactLink href={PROFILE.phoneHref} icon={Phone}>
                 {PROFILE.phone}
               </ContactLink>
@@ -679,33 +689,47 @@ function App() {
           </div>
 
           <div className="divide-y divide-edge border-y border-edge">
-            {filteredProjects.map((p) => {
-              const inner = (
-                <>
-                  <EntryHead title={p.name} subtitle={p.tagline} period={p.year}>
-                    {p.link && (
-                      <ArrowUpRight
-                        aria-hidden="true"
-                        className="ml-1.5 inline h-3.5 w-3.5 align-baseline text-ink-4 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand"
-                      />
-                    )}
-                    {p.badge && (
-                      <span className="ml-2 rounded-full border border-edge-strong px-2 py-0.5 align-middle font-mono text-[9.5px] uppercase tracking-[0.12em] text-ink-4">
-                        {p.badge}
-                      </span>
-                    )}
-                  </EntryHead>
-                  <p className="mt-2.5 text-[14.5px] leading-[1.65] text-ink-2">{p.description}</p>
-                  <TechLine items={p.tech} />
+            {filteredProjects.map((p) => (
+              <article key={p.name} className="reveal group py-6">
+                <EntryHead
+                  title={
+                    p.link ? (
+                      <a
+                        href={p.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 transition-colors hover:text-brand"
+                      >
+                        <span>{p.name}</span>
+                        <ArrowUpRight
+                          aria-hidden="true"
+                          className="h-3.5 w-3.5 text-ink-4 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand"
+                        />
+                      </a>
+                    ) : (
+                      <span>{p.name}</span>
+                    )
+                  }
+                  subtitle={p.tagline}
+                  period={p.year}
+                >
+                  {p.badge && (
+                    <span className="ml-2 rounded-full border border-edge-strong px-2 py-0.5 align-middle font-mono text-[9.5px] uppercase tracking-[0.12em] text-ink-4">
+                      {p.badge}
+                    </span>
+                  )}
+                </EntryHead>
 
-                  {/* Sandalan screenshot trigger */}
-                  {p.hasScreenshots && (
-                    <div className="mt-4 flex flex-wrap items-center gap-3">
+                <p className="mt-2.5 text-[14.5px] leading-[1.65] text-ink-2">{p.description}</p>
+                <TechLine items={p.tech} />
+
+                {/* Action buttons */}
+                {(p.hasScreenshots || p.link) && (
+                  <div className="mt-4 flex flex-wrap items-center gap-3">
+                    {p.hasScreenshots && (
                       <button
                         type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
+                        onClick={() => {
                           setIsScreenshotOpen(true);
                           setScreenshotIndex(0);
                         }}
@@ -714,33 +738,23 @@ function App() {
                         <Smartphone className="h-3.5 w-3.5 text-brand" />
                         <span>View App Screenshots ({SANDALAN_SCREENSHOTS.length})</span>
                       </button>
+                    )}
 
-                      {p.link && (
-                        <span className="font-mono text-[11px] text-ink-4">
-                          Available on Google Play
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </>
-              );
-
-              return p.link ? (
-                <a
-                  key={p.name}
-                  href={p.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="reveal group block py-6 transition-colors hover:bg-fg/[0.03]"
-                >
-                  {inner}
-                </a>
-              ) : (
-                <article key={p.name} className="reveal py-6">
-                  {inner}
-                </article>
-              );
-            })}
+                    {p.link && (
+                      <a
+                        href={p.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 font-mono text-[11px] text-ink-4 transition-colors hover:text-brand"
+                      >
+                        <span>{p.badge === "Google Play" ? "View on Google Play" : "Open project"}</span>
+                        <ArrowUpRight className="h-3 w-3" />
+                      </a>
+                    )}
+                  </div>
+                )}
+              </article>
+            ))}
           </div>
 
           <a
@@ -788,26 +802,27 @@ function App() {
               partnerships. Happy to talk about full-stack web, microservices architecture, Flutter mobile apps, or shipping products for the Philippine market.
             </p>
             <div className="mt-6 flex flex-wrap gap-2.5">
-              <button
-                onClick={handleCopyEmail}
-                className="inline-flex items-center gap-2 rounded-md bg-fg px-4 py-2 text-[13.5px] font-medium text-bg transition-opacity hover:opacity-85"
-              >
-                {copiedEmail ? (
-                  <Check className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
-                ) : (
-                  <Copy className="h-3.5 w-3.5 text-ink-4" aria-hidden="true" />
-                )}
-                Copy email
-              </button>
               <a
                 href={PROFILE.gmailCompose}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
+                className="inline-flex items-center gap-2 rounded-md bg-fg px-4 py-2 text-[13.5px] font-medium text-bg transition-opacity hover:opacity-85"
               >
                 <Mail className="h-3.5 w-3.5" aria-hidden="true" />
-                Compose in Gmail
+                Send a message
               </a>
+              <button
+                type="button"
+                onClick={handleCopyEmail}
+                className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
+              >
+                {copiedEmail ? (
+                  <Check className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
+                ) : (
+                  <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+                )}
+                {copiedEmail ? "Email copied!" : "Copy email"}
+              </button>
               <a
                 href={PROFILE.resume}
                 download

@@ -33,9 +33,9 @@ const STATS = [
   },
   {
     icon: Database,
-    value: '13 Tables',
-    label: 'Offline Sync Engine',
-    detail: 'Drift SQLite ↔ PostgreSQL with RLS',
+    value: '38+',
+    label: 'Bank & System Integrations',
+    detail: 'Automated banking & offline sync in Sandalan',
   },
 ];
 

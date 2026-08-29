@@ -117,7 +117,7 @@ export function ArchitectureVisualizer() {
                 Sandalan Offline-First Two-Way Sync Engine
               </h4>
               <span className="font-mono text-[11px] text-ink-4">
-                13 Synced Tables · SQLite Drift ↔ Supabase Postgres
+                Bidirectional Sync · SQLite Drift ↔ Supabase PostgreSQL
               </span>
             </div>
             <p className="text-[13.5px] leading-relaxed text-ink-2">

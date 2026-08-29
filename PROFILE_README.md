@@ -114,7 +114,7 @@ I build end-to-end: schema, backend, frontend, mobile, store listing, and the po
 | | |
 | --- | --- |
 | **15,000+** | lines of Flutter shipped in Sandalan |
-| **13** | synced Drift + Supabase tables |
+| **Offline-first** | bidirectional Drift SQLite + Supabase sync engine |
 | **38+** | bank integrations in Sandalan |
 | **30+** | critical bugs surfaced at Billease |
 | **50+** | merge requests and 30k+ lines of automation at Billease |
