@@ -21,18 +21,6 @@ import { ArchitectureVisualizer } from "./components/ArchitectureVisualizer";
 import { ScreenshotModal, type ScreenshotItem } from "./components/ScreenshotModal";
 import { Toast } from "./components/Toast";
 
-const NAV_ITEMS = [
-  { id: "about", num: "01", label: "About" },
-  { id: "experience", num: "02", label: "Experience" },
-  { id: "architecture", num: "03", label: "Architecture" },
-  { id: "work", num: "04", label: "Projects" },
-  { id: "honors", num: "05", label: "Honors" },
-  { id: "skills", num: "06", label: "Stack" },
-  { id: "contact", num: "07", label: "Contact" },
-];
-
-const NAV_IDS = NAV_ITEMS.map((n) => n.id);
-
 const PROFILE = {
   name: "Jet Timothy V. Cerezo",
   title: "Full-Stack Software Engineer · Microservices & Mobile",
@@ -323,43 +311,6 @@ function useTheme(): [Theme, () => void] {
   return [theme, () => setTheme((t) => (t === "dark" ? "light" : "dark"))];
 }
 
-function useScrollSpy(ids: string[]) {
-  const [active, setActive] = useState<string>("");
-  const [atEnd, setAtEnd] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActive(e.target.id);
-        });
-      },
-      { rootMargin: "-25% 0px -60% 0px", threshold: 0 }
-    );
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
-  }, [ids]);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const doc = document.documentElement;
-      setAtEnd(window.innerHeight + window.scrollY >= doc.scrollHeight - 2);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    onScroll();
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
-
-  return atEnd ? ids[ids.length - 1] : active;
-}
-
 function useRevealOnScroll() {
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -390,7 +341,7 @@ function Section({
   children: ReactNode;
 }) {
   return (
-    <section id={id} aria-label={label} className="scroll-mt-20 pt-14">
+    <section id={id} aria-label={label} className="scroll-mt-12 pt-14">
       <div className="reveal">
         <div className="flex items-center gap-2 font-mono text-[10.5px] font-medium uppercase tracking-[0.2em] text-ink-4">
           {num && <span className="text-brand">{num} //</span>}
@@ -482,8 +433,6 @@ function ContactLink({
 
 function App() {
   const [theme, toggleTheme] = useTheme();
-  const active = useScrollSpy(NAV_IDS);
-  const [scrolled, setScrolled] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [isToastOpen, setIsToastOpen] = useState(false);
@@ -493,14 +442,6 @@ function App() {
 
   useRevealOnScroll();
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   const year = new Date().getFullYear();
 
   const handleCopyEmail = (e?: React.MouseEvent) => {
@@ -532,70 +473,41 @@ function App() {
         Skip to content
       </a>
 
-      {/* TOP BAR */}
-      <header
-        className={`sticky top-0 z-40 bg-bg/85 backdrop-blur-md transition-colors ${
-          scrolled ? "border-b border-edge" : "border-b border-transparent"
-        }`}
-      >
-        <div className="mx-auto flex h-14 max-w-[760px] items-center justify-between gap-4 px-6">
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="font-display text-[14px] font-semibold tracking-tight text-ink-1 transition-colors hover:text-ink-3"
-          >
-            Jet Cerezo
-          </button>
+      <main id="main" className="mx-auto max-w-[760px] px-6 pb-24">
+        {/* TOP UTILITY ROW */}
+        <div className="flex items-center justify-between pt-8 sm:pt-12">
+          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-4">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand animate-dot" aria-hidden="true" />
+            <span>Portfolio // {year}</span>
+          </div>
 
-          <nav aria-label="Sections" className="hidden items-center gap-4 sm:flex">
-            {NAV_ITEMS.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => go(item.id)}
-                aria-current={active === item.id ? "true" : undefined}
-                className={`relative py-1 text-[12.5px] transition-colors ${
-                  active === item.id ? "text-ink-1 font-medium" : "text-ink-4 hover:text-ink-2"
-                }`}
-              >
-                {item.label}
-                <span
-                  aria-hidden="true"
-                  className={`absolute -bottom-0.5 left-0 h-px w-full origin-left bg-brand transition-transform duration-300 ${
-                    active === item.id ? "scale-x-100" : "scale-x-0"
-                  }`}
-                />
-              </button>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             <button
               onClick={toggleTheme}
               aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-              className="flex h-8 w-8 items-center justify-center rounded-md text-ink-3 transition-colors hover:bg-fg/5 hover:text-ink-1"
+              className="flex h-8 w-8 items-center justify-center rounded-md border border-edge bg-fg/[0.02] text-ink-3 transition-colors hover:border-edge-strong hover:bg-fg/5 hover:text-ink-1"
             >
               {theme === "dark" ? (
-                <Sun className="h-4 w-4" aria-hidden="true" />
+                <Sun className="h-3.5 w-3.5" aria-hidden="true" />
               ) : (
-                <Moon className="h-4 w-4" aria-hidden="true" />
+                <Moon className="h-3.5 w-3.5" aria-hidden="true" />
               )}
             </button>
             <a
               href={PROFILE.resume}
               download
-              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[13px] text-ink-3 transition-colors hover:bg-fg/5 hover:text-ink-1"
+              className="inline-flex items-center gap-1.5 rounded-md border border-edge bg-fg/[0.02] px-3 py-1.5 font-mono text-[11.5px] text-ink-2 transition-all hover:border-edge-strong hover:bg-fg/5 hover:text-ink-1"
             >
-              <Download className="h-3.5 w-3.5" aria-hidden="true" />
-              <span className="hidden sm:inline">Résumé</span>
+              <Download className="h-3 w-3" aria-hidden="true" />
+              <span>Résumé</span>
             </a>
           </div>
         </div>
-      </header>
 
-      <main id="main" className="mx-auto max-w-[760px] px-6 pb-24">
         {/* MASTHEAD (Bento Hero) */}
-        <div className="flex flex-col-reverse gap-8 pt-16 sm:flex-row sm:items-start sm:justify-between sm:gap-10">
+        <div className="flex flex-col-reverse gap-8 pt-8 sm:flex-row sm:items-start sm:justify-between sm:gap-10">
           <div className="animate-reveal min-w-0 flex-1">
-            <h1 className="font-display text-[30px] font-semibold leading-tight tracking-[-0.03em] text-ink-1 sm:text-[34px]">
+            <h1 className="font-display text-[32px] font-semibold leading-tight tracking-[-0.03em] text-ink-1 sm:text-[36px]">
               {PROFILE.name}
             </h1>
             <p className="mt-1 text-[16px] text-ink-3">{PROFILE.title}</p>
@@ -900,7 +812,7 @@ function App() {
                 className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
               >
                 {copiedEmail ? (
-                  <Check className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
+                  <Check className="h-3.5 w-3.5 text-brand" />
                 ) : (
                   <Copy className="h-3.5 w-3.5" aria-hidden="true" />
                 )}
