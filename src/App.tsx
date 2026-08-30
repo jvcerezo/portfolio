@@ -28,15 +28,18 @@ const NAV_ITEMS = [
   { id: "about", num: "01", label: "About" },
   { id: "experience", num: "02", label: "Experience" },
   { id: "architecture", num: "03", label: "Architecture" },
-  { id: "demo", num: "04", label: "Mobile Sandbox" },
-  { id: "work", num: "05", label: "Projects" },
-  { id: "honors", num: "06", label: "Honors" },
-  { id: "skills", num: "07", label: "Stack" },
-  { id: "offer", num: "08", label: "Offer Builder" },
-  { id: "contact", num: "09", label: "Contact" },
+  { id: "work", num: "04", label: "Projects" },
+  { id: "honors", num: "05", label: "Honors" },
+  { id: "skills", num: "06", label: "Stack" },
+  { id: "contact", num: "07", label: "Contact" },
 ];
 
-const NAV_IDS = NAV_ITEMS.map((n) => n.id);
+const LAB_ITEMS = [
+  { id: "demo", num: "AA", label: "Mobile Sandbox" },
+  { id: "offer", num: "BB", label: "Offer Builder" },
+];
+
+const NAV_IDS = [...NAV_ITEMS, ...LAB_ITEMS].map((n) => n.id);
 
 const PROFILE = {
   name: "Jet Timothy V. Cerezo",
@@ -588,15 +591,15 @@ function App() {
               </p>
 
               {/* SIDE NAVIGATOR LINKS (Desktop) */}
-              <nav className="mt-10 hidden lg:block" aria-label="In-page jump links">
-                <ul className="space-y-3 font-mono text-[12px] uppercase tracking-[0.14em]">
+              <nav className="mt-8 hidden lg:block" aria-label="In-page jump links">
+                <ul className="space-y-2.5 font-mono text-[12px] uppercase tracking-[0.14em]">
                   {NAV_ITEMS.map((item) => {
                     const isActive = active === item.id;
                     return (
                       <li key={item.id}>
                         <button
                           onClick={() => go(item.id)}
-                          className={`group flex items-center gap-3 py-1 text-left transition-all ${
+                          className={`group flex items-center gap-3 py-0.5 text-left transition-all ${
                             isActive ? "text-ink-1 font-semibold" : "text-ink-4 hover:text-ink-2"
                           }`}
                         >
@@ -614,6 +617,40 @@ function App() {
                     );
                   })}
                 </ul>
+
+                {/* SEPARATED INTERACTIVE LAB SUB-NAV (AA, BB) */}
+                <div className="mt-6 pt-4 border-t border-edge/80">
+                  <div className="flex items-center gap-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-brand mb-2">
+                    <span>⚡ // Interactive Labs</span>
+                  </div>
+                  <ul className="space-y-2 font-mono text-[11.5px] uppercase tracking-[0.14em]">
+                    {LAB_ITEMS.map((item) => {
+                      const isActive = active === item.id;
+                      return (
+                        <li key={item.id}>
+                          <button
+                            onClick={() => go(item.id)}
+                            className={`group flex items-center gap-2.5 py-0.5 text-left transition-all ${
+                              isActive ? "text-ink-1 font-semibold" : "text-ink-4 hover:text-ink-2"
+                            }`}
+                          >
+                            <span
+                              className={`h-px transition-all duration-300 ${
+                                isActive
+                                  ? "w-6 bg-brand"
+                                  : "w-2.5 bg-edge-strong group-hover:w-4 group-hover:bg-ink-3"
+                              }`}
+                            />
+                            <span className={isActive ? "text-brand font-bold" : "text-ink-4 font-medium"}>
+                              {item.num}
+                            </span>
+                            <span>{item.label}</span>
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
               </nav>
             </div>
 
@@ -730,18 +767,8 @@ function App() {
               <ArchitectureVisualizer />
             </Section>
 
-            {/* 04 // LIVE MOBILE APP DEMO & SANDBOX */}
-            <Section id="demo" num="04" label="Mobile App Engine & Sandbox">
-              <div className="reveal mb-4">
-                <p className="text-[15px] leading-[1.7] text-ink-2">
-                  Interactive testbed for <strong>Sandalan</strong> (live on Google Play). Test offline-first SQLite sync reconciliation, Philippine statutory tax calculations, OCR receipt scanning, and Taglish AI assistance in real time.
-                </p>
-              </div>
-              <LiveMobileShowcase />
-            </Section>
-
-            {/* 05 // SELECTED WORK */}
-            <Section id="work" num="05" label="Selected Projects">
+            {/* 04 // SELECTED WORK */}
+            <Section id="work" num="04" label="Selected Projects">
               {/* Category Filter Pills */}
               <div className="reveal mb-4 flex flex-wrap items-center gap-1.5">
                 <span className="mr-1 flex items-center gap-1 font-mono text-[10.5px] uppercase tracking-wider text-ink-4">
@@ -813,7 +840,7 @@ function App() {
                             className="inline-flex items-center gap-1.5 rounded-md bg-brand/10 border border-brand/40 px-3 py-1.5 font-mono text-[11.5px] font-semibold text-brand transition-all hover:bg-brand hover:text-bg shadow-xs"
                           >
                             <Play className="h-3.5 w-3.5 fill-current" />
-                            <span>Launch Live App Sandbox</span>
+                            <span>Launch Live App Sandbox (AA)</span>
                           </button>
                         )}
 
@@ -858,8 +885,8 @@ function App() {
               </a>
             </Section>
 
-            {/* 06 // HONORS & HACKATHONS */}
-            <Section id="honors" num="06" label="Honors & Recognition">
+            {/* 05 // HONORS & HACKATHONS */}
+            <Section id="honors" num="05" label="Honors & Recognition">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {HONORS.map((item) => (
                   <div
@@ -897,8 +924,8 @@ function App() {
               </div>
             </Section>
 
-            {/* 07 // SKILLS & STACK */}
-            <Section id="skills" num="07" label="Technical Stack">
+            {/* 06 // SKILLS & STACK */}
+            <Section id="skills" num="06" label="Technical Stack">
               <div className="reveal grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-[130px_1fr] sm:gap-y-2.5">
                 {SKILLS.map(([label, items]) => (
                   <Fragment key={label}>
@@ -924,18 +951,8 @@ function App() {
               </article>
             </Section>
 
-            {/* 08 // INTERACTIVE OFFER & SALARY BUILDER */}
-            <Section id="offer" num="08" label="Interactive Offer & Salary Builder">
-              <div className="reveal mb-4">
-                <p className="text-[15px] leading-[1.7] text-ink-2">
-                  Planning an offer or partnership? Use this interactive simulator to configure target compensation, remote/night-shift arrangements, and perks to preview real-time terms and instant acceptance estimates.
-                </p>
-              </div>
-              <OfferCalculator />
-            </Section>
-
-            {/* 09 // CONTACT */}
-            <Section id="contact" num="09" label="Contact & Collabs">
+            {/* 07 // CONTACT */}
+            <Section id="contact" num="07" label="Contact & Collabs">
               <div className="reveal">
                 <p className="text-[15px] leading-[1.7] text-ink-2">
                   Open to full-time remote roles including night shift on US hours, contract work, and
@@ -983,6 +1000,40 @@ function App() {
                 </div>
               </div>
             </Section>
+
+            {/* ========================================================= */}
+            {/* SEPARATED INTERACTIVE LABS & PLAYGROUNDS (AA, BB)         */}
+            {/* ========================================================= */}
+            <div className="pt-6 border-t-2 border-dashed border-edge space-y-10">
+              <div className="reveal">
+                <div className="flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-brand">
+                  <span>⚡ LAB // Interactive Sandboxes & Tools</span>
+                </div>
+                <p className="mt-1 text-[13.5px] text-ink-3">
+                  Live playgrounds, mobile runtime simulations, and compensation calculators.
+                </p>
+              </div>
+
+              {/* AA // LIVE MOBILE APP DEMO & SANDBOX */}
+              <Section id="demo" num="AA" label="Mobile App Engine & Sandbox">
+                <div className="reveal mb-4">
+                  <p className="text-[15px] leading-[1.7] text-ink-2">
+                    Interactive testbed for <strong>Sandalan</strong> (live on Google Play). Test offline-first SQLite sync reconciliation, Philippine statutory tax calculations, OCR receipt scanning, and Taglish AI assistance in real time.
+                  </p>
+                </div>
+                <LiveMobileShowcase />
+              </Section>
+
+              {/* BB // INTERACTIVE OFFER & SALARY BUILDER */}
+              <Section id="offer" num="BB" label="Interactive Offer & Salary Builder">
+                <div className="reveal mb-4">
+                  <p className="text-[15px] leading-[1.7] text-ink-2">
+                    Planning an offer or partnership? Use this interactive simulator to configure target compensation, remote/night-shift arrangements, and perks to preview real-time terms and instant acceptance estimates.
+                  </p>
+                </div>
+                <OfferCalculator />
+              </Section>
+            </div>
 
             {/* FOOTER */}
             <footer className="border-t border-edge pt-8">
