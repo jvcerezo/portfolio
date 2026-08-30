@@ -60,7 +60,7 @@ export function OfferCalculator() {
   };
 
   return (
-    <div className="reveal overflow-hidden rounded-xl border border-edge bg-fg/[0.02]">
+    <div className="overflow-hidden rounded-xl border border-edge bg-fg/[0.02]">
       {/* Header bar */}
       <div className="flex items-center justify-between border-b border-edge bg-fg/[0.02] px-4 py-2.5">
         <div className="flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-4">

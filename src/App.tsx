@@ -397,7 +397,7 @@ function useScrollSpy(ids: string[]) {
   return active;
 }
 
-function useRevealOnScroll() {
+function useRevealOnScroll(dependency?: any) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -410,9 +410,23 @@ function useRevealOnScroll() {
       },
       { threshold: 0.05, rootMargin: "0px 0px -32px 0px" }
     );
-    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+
+    const timer = setTimeout(() => {
+      document.querySelectorAll(".reveal").forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight + 100) {
+          el.classList.add("in-view");
+        } else {
+          observer.observe(el);
+        }
+      });
+    }, 40);
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [dependency]);
 }
 
 function Section({
@@ -528,7 +542,7 @@ function App() {
   const [screenshotIndex, setScreenshotIndex] = useState(0);
   const [projectCategory, setProjectCategory] = useState<string>("all");
 
-  useRevealOnScroll();
+  useRevealOnScroll(currentPage);
 
   const year = new Date().getFullYear();
 
@@ -543,7 +557,7 @@ function App() {
         if (hash && NAV_IDS.includes(hash)) {
           setTimeout(() => {
             document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
-          }, 60);
+          }, 80);
         }
       }
     };
@@ -556,12 +570,13 @@ function App() {
   const navigateTo = (page: "portfolio" | "demo" | "offer", sectionId?: string) => {
     if (page === "portfolio") {
       setCurrentPage("portfolio");
-      window.location.hash = sectionId || "";
       if (sectionId) {
+        window.location.hash = sectionId;
         setTimeout(() => {
           document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
-        }, 60);
+        }, 80);
       } else {
+        window.location.hash = "";
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
     } else {
