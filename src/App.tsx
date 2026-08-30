@@ -14,11 +14,14 @@ import {
   Check,
   Smartphone,
   Filter,
+  Play,
 } from "lucide-react";
 import { TimezoneWidget } from "./components/TimezoneWidget";
 import { ImpactStats } from "./components/ImpactStats";
 import { ArchitectureVisualizer } from "./components/ArchitectureVisualizer";
 import { ScreenshotModal, type ScreenshotItem } from "./components/ScreenshotModal";
+import { OfferCalculator } from "./components/OfferCalculator";
+import { LiveMobileDemoModal } from "./components/LiveMobileDemoModal";
 import { Toast } from "./components/Toast";
 
 const NAV_ITEMS = [
@@ -28,7 +31,8 @@ const NAV_ITEMS = [
   { id: "work", num: "04", label: "Projects" },
   { id: "honors", num: "05", label: "Honors" },
   { id: "skills", num: "06", label: "Stack" },
-  { id: "contact", num: "07", label: "Contact" },
+  { id: "offer", num: "07", label: "Offer Builder" },
+  { id: "contact", num: "08", label: "Contact" },
 ];
 
 const NAV_IDS = NAV_ITEMS.map((n) => n.id);
@@ -497,6 +501,7 @@ function App() {
   const [toastMessage, setToastMessage] = useState("");
   const [isToastOpen, setIsToastOpen] = useState(false);
   const [isScreenshotOpen, setIsScreenshotOpen] = useState(false);
+  const [isLiveDemoOpen, setIsLiveDemoOpen] = useState(false);
   const [screenshotIndex, setScreenshotIndex] = useState(0);
   const [projectCategory, setProjectCategory] = useState<string>("all");
 
@@ -789,8 +794,19 @@ function App() {
                     <TechLine items={p.tech} />
 
                     {/* Action buttons */}
-                    {(p.hasScreenshots || p.link) && (
+                    {(p.hasScreenshots || p.link || p.name === "Sandalan") && (
                       <div className="mt-4 flex flex-wrap items-center gap-3">
+                        {p.name === "Sandalan" && (
+                          <button
+                            type="button"
+                            onClick={() => setIsLiveDemoOpen(true)}
+                            className="inline-flex items-center gap-1.5 rounded-md bg-brand/10 border border-brand/40 px-3 py-1.5 font-mono text-[11.5px] font-semibold text-brand transition-all hover:bg-brand hover:text-bg shadow-xs"
+                          >
+                            <Play className="h-3.5 w-3.5 fill-current" />
+                            <span>Run Real Android APK Demo</span>
+                          </button>
+                        )}
+
                         {p.hasScreenshots && (
                           <button
                             type="button"
@@ -898,8 +914,18 @@ function App() {
               </article>
             </Section>
 
-            {/* 07 // CONTACT */}
-            <Section id="contact" num="07" label="Contact & Collabs">
+            {/* 07 // INTERACTIVE OFFER & SALARY BUILDER */}
+            <Section id="offer" num="07" label="Interactive Offer & Salary Builder">
+              <div className="reveal mb-4">
+                <p className="text-[15px] leading-[1.7] text-ink-2">
+                  Planning an offer or partnership? Use this interactive simulator to configure target compensation, remote/night-shift arrangements, and perks to preview real-time terms and instant acceptance estimates.
+                </p>
+              </div>
+              <OfferCalculator />
+            </Section>
+
+            {/* 08 // CONTACT */}
+            <Section id="contact" num="08" label="Contact & Collabs">
               <div className="reveal">
                 <p className="text-[15px] leading-[1.7] text-ink-2">
                   Open to full-time remote roles including night shift on US hours, contract work, and
@@ -965,6 +991,12 @@ function App() {
       </div>
 
       {/* MODALS & TOAST */}
+      <LiveMobileDemoModal
+        isOpen={isLiveDemoOpen}
+        onClose={() => setIsLiveDemoOpen(false)}
+        playStoreUrl="https://play.google.com/store/apps/details?id=com.jvcerezo.exitplan"
+      />
+
       <ScreenshotModal
         isOpen={isScreenshotOpen}
         onClose={() => setIsScreenshotOpen(false)}
