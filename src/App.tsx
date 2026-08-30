@@ -8,6 +8,7 @@ import {
   Linkedin,
   Download,
   ArrowUpRight,
+  ArrowLeft,
   Sun,
   Moon,
   Copy,
@@ -39,7 +40,7 @@ const LAB_ITEMS = [
   { id: "offer", num: "BB", label: "Offer Builder" },
 ];
 
-const NAV_IDS = [...NAV_ITEMS, ...LAB_ITEMS].map((n) => n.id);
+const NAV_IDS = NAV_ITEMS.map((n) => n.id);
 
 const PROFILE = {
   name: "Jet Timothy V. Cerezo",
@@ -519,6 +520,7 @@ function ContactLink({
 function App() {
   const [theme, toggleTheme] = useTheme();
   const active = useScrollSpy(NAV_IDS);
+  const [currentPage, setCurrentPage] = useState<"portfolio" | "demo" | "offer">("portfolio");
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [isToastOpen, setIsToastOpen] = useState(false);
@@ -529,6 +531,45 @@ function App() {
   useRevealOnScroll();
 
   const year = new Date().getFullYear();
+
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (hash === "demo" || hash === "offer") {
+        setCurrentPage(hash);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        setCurrentPage("portfolio");
+        if (hash && NAV_IDS.includes(hash)) {
+          setTimeout(() => {
+            document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
+          }, 60);
+        }
+      }
+    };
+
+    handleHash();
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
+
+  const navigateTo = (page: "portfolio" | "demo" | "offer", sectionId?: string) => {
+    if (page === "portfolio") {
+      setCurrentPage("portfolio");
+      window.location.hash = sectionId || "";
+      if (sectionId) {
+        setTimeout(() => {
+          document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
+        }, 60);
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } else {
+      setCurrentPage(page);
+      window.location.hash = page;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   const go = (id: string) => {
     const el = document.getElementById(id);
@@ -564,103 +605,66 @@ function App() {
         Skip to content
       </a>
 
-      <div className="mx-auto min-h-screen max-w-[1180px] px-6 py-12 md:px-12 md:py-16 lg:px-16 lg:py-0">
-        <div className="lg:flex lg:justify-between lg:gap-14 xl:gap-20">
-
-          {/* ========================================================= */}
-          {/* LEFT COLUMN: Sticky Side Navigator                        */}
-          {/* ========================================================= */}
-          <aside className="lg:sticky lg:top-0 lg:flex lg:w-[42%] lg:flex-col lg:py-20 xl:py-24">
-            <div>
-              {/* Profile Avatar & Top Status */}
-              <div className="flex items-center gap-4">
-                <picture className="animate-reveal shrink-0">
-                  <source srcSet="/profile.webp" type="image/webp" />
-                  <img
-                    src="/profile.jpg"
-                    alt="Jet Timothy Cerezo"
-                    width="120"
-                    height="120"
-                    fetchPriority="high"
-                    className="h-16 w-16 rounded-full border border-edge object-cover shadow-sm ring-4 ring-fg/[0.03] sm:h-20 sm:w-20"
-                  />
-                </picture>
-                <div>
-                  <div className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-ink-4">
-                    Portfolio // {year}
-                  </div>
-                  <div className="mt-1">
-                    <TimezoneWidget />
+      {/* ============================================================= */}
+      {/* VIEW 1: DEDICATED FULL-PAGE LABS (AA: DEMO / BB: OFFER)       */}
+      {/* ============================================================= */}
+      {currentPage !== "portfolio" ? (
+        <div className="mx-auto min-h-screen max-w-[1400px] px-6 py-8 md:px-12 md:py-12 lg:px-16 lg:py-16">
+          <div className="lg:flex lg:justify-between lg:gap-12 xl:gap-16 items-start">
+            {/* Leftmost Sidebar on Lab Pages */}
+            <aside className="lg:sticky lg:top-12 lg:w-[280px] shrink-0 space-y-6">
+              <div>
+                {/* Mini profile header */}
+                <div className="flex items-center gap-3">
+                  <picture className="animate-reveal shrink-0">
+                    <source srcSet="/profile.webp" type="image/webp" />
+                    <img
+                      src="/profile.jpg"
+                      alt="Jet Timothy Cerezo"
+                      width="80"
+                      height="80"
+                      className="h-12 w-12 rounded-full border border-edge object-cover shadow-sm"
+                    />
+                  </picture>
+                  <div>
+                    <h2 className="font-display text-[15px] font-semibold text-ink-1 leading-tight">
+                      {PROFILE.name}
+                    </h2>
+                    <p className="text-[12px] text-ink-3">{PROFILE.title}</p>
                   </div>
                 </div>
-              </div>
 
-              {/* Name & Title */}
-              <h1 className="mt-6 font-display text-[32px] font-semibold leading-tight tracking-[-0.03em] text-ink-1 sm:text-[38px]">
-                {PROFILE.name}
-              </h1>
-              <p className="mt-1 text-[16px] font-medium text-ink-2">{PROFILE.title}</p>
-              <div className="mt-2.5 flex items-center gap-1.5 font-mono text-[11px] text-ink-4">
-                <MapPin className="h-3 w-3" aria-hidden="true" />
-                <span>{PROFILE.location}</span>
-              </div>
-              <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-ink-3">
-                Building high-scale microservices, offline-first mobile apps, and automated test pipelines for production software.
-              </p>
+                {/* Back button */}
+                <div className="mt-5">
+                  <button
+                    onClick={() => navigateTo("portfolio")}
+                    className="w-full flex items-center justify-center gap-2 rounded-md border border-edge bg-fg/[0.02] px-3.5 py-2 font-mono text-[11.5px] text-ink-2 transition-all hover:border-edge-strong hover:bg-fg/5 hover:text-ink-1"
+                  >
+                    <ArrowLeft className="h-3.5 w-3.5" />
+                    <span>Back to Résumé</span>
+                  </button>
+                </div>
 
-              {/* SIDE NAVIGATOR LINKS (Desktop) */}
-              <nav className="mt-7 hidden lg:block" aria-label="In-page jump links">
-                <ul className="space-y-2 font-mono text-[12px] uppercase tracking-[0.14em]">
-                  {NAV_ITEMS.map((item) => {
-                    const isActive = active === item.id;
-                    return (
-                      <li key={item.id}>
-                        <button
-                          onClick={() => go(item.id)}
-                          className={`group flex items-center gap-3 py-0.5 text-left transition-all ${
-                            isActive ? "text-ink-1 font-semibold" : "text-ink-4 hover:text-ink-2"
-                          }`}
-                        >
-                          <span
-                            className={`h-px transition-all duration-300 ${
-                              isActive
-                                ? "w-8 bg-brand"
-                                : "w-3.5 bg-edge-strong group-hover:w-6 group-hover:bg-ink-3"
-                            }`}
-                          />
-                          <span className={isActive ? "text-brand" : "text-ink-4"}>{item.num}</span>
-                          <span>{item.label}</span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-
-                {/* SEPARATED INTERACTIVE LAB SUB-NAV (AA, BB) */}
-                <div className="mt-5 pt-4 border-t border-edge">
-                  <div className="flex items-center gap-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-ink-4 mb-2">
+                {/* Lab Page Selector */}
+                <div className="mt-6 pt-5 border-t border-edge">
+                  <div className="font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-ink-4 mb-2.5">
                     <span className="text-brand">//</span>
                     <span>Interactive Labs</span>
                   </div>
                   <ul className="space-y-1.5 font-mono text-[11.5px] uppercase tracking-[0.14em]">
                     {LAB_ITEMS.map((item) => {
-                      const isActive = active === item.id;
+                      const isSelected = currentPage === item.id;
                       return (
                         <li key={item.id}>
                           <button
-                            onClick={() => go(item.id)}
-                            className={`group flex items-center gap-2.5 py-0.5 text-left transition-all ${
-                              isActive ? "text-ink-1 font-semibold" : "text-ink-4 hover:text-ink-2"
+                            onClick={() => navigateTo(item.id as any)}
+                            className={`w-full flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-left transition-all ${
+                              isSelected
+                                ? "bg-fg text-bg font-semibold shadow-xs"
+                                : "text-ink-3 hover:text-ink-1 hover:bg-fg/[0.03]"
                             }`}
                           >
-                            <span
-                              className={`h-px transition-all duration-300 ${
-                                isActive
-                                  ? "w-6 bg-brand"
-                                  : "w-2.5 bg-edge-strong group-hover:w-4 group-hover:bg-ink-3"
-                              }`}
-                            />
-                            <span className={isActive ? "text-brand font-bold" : "text-ink-4 font-medium"}>
+                            <span className={isSelected ? "text-bg font-bold" : "text-brand font-medium"}>
                               {item.num}
                             </span>
                             <span>{item.label}</span>
@@ -670,394 +674,560 @@ function App() {
                     })}
                   </ul>
                 </div>
-              </nav>
-            </div>
-
-            {/* BOTTOM UTILITY: Theme, Resume, Socials */}
-            <div className="mt-6 pt-5 border-t border-edge">
-              <div className="flex items-center gap-2.5">
-                <button
-                  onClick={toggleTheme}
-                  aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-                  className="flex h-8 w-8 items-center justify-center rounded-md border border-edge bg-fg/[0.02] text-ink-3 transition-colors hover:border-edge-strong hover:bg-fg/5 hover:text-ink-1"
-                >
-                  {theme === "dark" ? (
-                    <Sun className="h-3.5 w-3.5" aria-hidden="true" />
-                  ) : (
-                    <Moon className="h-3.5 w-3.5" aria-hidden="true" />
-                  )}
-                </button>
-                <a
-                  href={PROFILE.resume}
-                  download
-                  className="inline-flex items-center gap-1.5 rounded-md border border-edge bg-fg/[0.02] px-3 py-1.5 font-mono text-[11.5px] text-ink-2 transition-all hover:border-edge-strong hover:bg-fg/5 hover:text-ink-1"
-                >
-                  <Download className="h-3 w-3" aria-hidden="true" />
-                  <span>Download Résumé</span>
-                </a>
               </div>
 
-              <address className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13.5px] not-italic">
-                <div className="flex items-center gap-1">
-                  <ContactLink href={PROFILE.gmailCompose} icon={Mail} external>
-                    {PROFILE.email}
-                  </ContactLink>
+              {/* Bottom Utility */}
+              <div className="pt-5 border-t border-edge">
+                <div className="flex items-center gap-2.5">
                   <button
-                    type="button"
-                    onClick={handleCopyEmail}
-                    aria-label="Copy email address"
-                    className="flex h-5 w-5 items-center justify-center rounded text-ink-4 transition-colors hover:bg-fg/10 hover:text-ink-1"
-                    title="Copy email to clipboard"
+                    onClick={toggleTheme}
+                    aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                    className="flex h-8 w-8 items-center justify-center rounded-md border border-edge bg-fg/[0.02] text-ink-3 transition-colors hover:border-edge-strong hover:bg-fg/5 hover:text-ink-1"
                   >
-                    {copiedEmail ? (
-                      <Check className="h-3 w-3 text-brand" />
+                    {theme === "dark" ? (
+                      <Sun className="h-3.5 w-3.5" aria-hidden="true" />
                     ) : (
-                      <Copy className="h-3 w-3" />
+                      <Moon className="h-3.5 w-3.5" aria-hidden="true" />
                     )}
-                  </button>
-                </div>
-
-                <ContactLink href={PROFILE.phoneHref} icon={Phone}>
-                  {PROFILE.phone}
-                </ContactLink>
-                <ContactLink href={PROFILE.github} icon={Github} external>
-                  github
-                </ContactLink>
-                <ContactLink href={PROFILE.linkedin} icon={Linkedin} external>
-                  linkedin
-                </ContactLink>
-              </address>
-            </div>
-          </aside>
-
-          {/* ========================================================= */}
-          {/* RIGHT COLUMN: Scrollable Main Content                      */}
-          {/* ========================================================= */}
-          <main id="main" className="pt-12 lg:w-[58%] lg:py-20 xl:py-24 space-y-10 sm:space-y-12">
-
-            {/* KEY HIGHLIGHTS */}
-            <div>
-              <div className="reveal">
-                <div className="flex items-center gap-2 font-mono text-[10.5px] font-medium uppercase tracking-[0.2em] text-ink-4">
-                  <span className="text-brand">//</span>
-                  <span>Key Highlights</span>
-                </div>
-                <div className="mt-1.5 h-px w-full bg-edge-strong" />
-              </div>
-              <ImpactStats />
-            </div>
-
-            {/* 01 // ABOUT */}
-            <Section id="about" num="01" label="About">
-              <div className="reveal space-y-3">
-                {SUMMARY.map((p) => (
-                  <p key={p.slice(0, 24)} className="text-[15px] leading-[1.7] text-ink-2">
-                    {p}
-                  </p>
-                ))}
-              </div>
-            </Section>
-
-            {/* 02 // EXPERIENCE */}
-            <Section id="experience" num="02" label="Experience">
-              <div className="space-y-6 sm:space-y-7">
-                {EXPERIENCE.map((job) => (
-                  <article key={job.role + job.company} className="reveal group">
-                    <EntryHead
-                      title={job.role}
-                      subtitle={job.company}
-                      period={job.period}
-                      meta={job.meta}
-                    />
-                    <Bullets items={job.bullets} />
-                    <TechLine items={job.tech} />
-                  </article>
-                ))}
-              </div>
-            </Section>
-
-            {/* 03 // ARCHITECTURE & SYSTEM DESIGN */}
-            <Section id="architecture" num="03" label="System Design & Architecture">
-              <div className="reveal">
-                <p className="text-[15px] leading-[1.7] text-ink-2">
-                  Interactive architectural diagrams illustrating microservices decoupling, offline-first data synchronization, and RAG retrieval pipelines built across production and research systems.
-                </p>
-              </div>
-              <ArchitectureVisualizer />
-            </Section>
-
-            {/* 04 // SELECTED WORK */}
-            <Section id="work" num="04" label="Selected Projects">
-              {/* Category Filter Pills */}
-              <div className="reveal mb-4 flex flex-wrap items-center gap-1.5">
-                <span className="mr-1 flex items-center gap-1 font-mono text-[10.5px] uppercase tracking-wider text-ink-4">
-                  <Filter className="h-3 w-3" /> Filter:
-                </span>
-                {[
-                  { id: "all", label: "All Projects" },
-                  { id: "featured", label: "Featured" },
-                  { id: "web", label: "Full-Stack Web" },
-                  { id: "mobile", label: "Mobile & Flutter" },
-                  { id: "ai", label: "AI & Systems" },
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setProjectCategory(tab.id)}
-                    className={`rounded-md px-2.5 py-1 font-mono text-[11px] transition-all ${
-                      projectCategory === tab.id
-                        ? "bg-fg text-bg font-medium shadow-sm"
-                        : "border border-edge bg-fg/[0.02] text-ink-3 hover:border-edge-strong hover:text-ink-1"
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-
-              <div className="divide-y divide-edge border-y border-edge">
-                {filteredProjects.map((p) => (
-                  <article key={p.name} className="reveal group py-4 sm:py-5">
-                    <EntryHead
-                      title={
-                        p.link ? (
-                          <a
-                            href={p.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 transition-colors hover:text-brand"
-                          >
-                            <span>{p.name}</span>
-                            <ArrowUpRight
-                              aria-hidden="true"
-                              className="h-3.5 w-3.5 text-ink-4 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand"
-                            />
-                          </a>
-                        ) : (
-                          <span>{p.name}</span>
-                        )
-                      }
-                      subtitle={p.tagline}
-                      period={p.year}
-                    >
-                      {p.badge && (
-                        <span className="ml-2 rounded-full border border-edge-strong px-2 py-0.5 align-middle font-mono text-[9.5px] uppercase tracking-[0.12em] text-ink-4">
-                          {p.badge}
-                        </span>
-                      )}
-                    </EntryHead>
-
-                    <p className="mt-2.5 text-[14.5px] leading-[1.65] text-ink-2">{p.description}</p>
-                    <TechLine items={p.tech} />
-
-                    {/* Action buttons */}
-                    {(p.hasScreenshots || p.link || p.name === "Sandalan") && (
-                      <div className="mt-4 flex flex-wrap items-center gap-3">
-                        {p.name === "Sandalan" && (
-                          <button
-                            type="button"
-                            onClick={() => go("demo")}
-                            className="inline-flex items-center gap-1.5 rounded-md bg-brand/10 border border-brand/40 px-3 py-1.5 font-mono text-[11.5px] font-semibold text-brand transition-all hover:bg-brand hover:text-bg shadow-xs"
-                          >
-                            <Play className="h-3.5 w-3.5 fill-current" />
-                            <span>Launch Live App Sandbox (AA)</span>
-                          </button>
-                        )}
-
-                        {p.hasScreenshots && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setIsScreenshotOpen(true);
-                              setScreenshotIndex(0);
-                            }}
-                            className="inline-flex items-center gap-1.5 rounded-md border border-edge-strong bg-fg/[0.03] px-3 py-1.5 font-mono text-[11.5px] text-ink-2 transition-all hover:border-fg/40 hover:bg-fg/[0.06] hover:text-ink-1"
-                          >
-                            <Smartphone className="h-3.5 w-3.5 text-brand" />
-                            <span>View App Screenshots ({SANDALAN_SCREENSHOTS.length})</span>
-                          </button>
-                        )}
-
-                        {p.link && (
-                          <a
-                            href={p.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 font-mono text-[11px] text-ink-4 transition-colors hover:text-brand"
-                          >
-                            <span>{p.badge === "Google Play" ? "View on Google Play" : "Open project"}</span>
-                            <ArrowUpRight className="h-3 w-3" />
-                          </a>
-                        )}
-                      </div>
-                    )}
-                  </article>
-                ))}
-              </div>
-
-              <a
-                href={PROFILE.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="reveal mt-5 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-4 transition-colors hover:text-brand"
-              >
-                More repositories on GitHub <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
-              </a>
-            </Section>
-
-            {/* 05 // HONORS & HACKATHONS */}
-            <Section id="honors" num="05" label="Honors & Recognition">
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {HONORS.map((item) => (
-                  <div
-                    key={item.title}
-                    className="reveal group relative flex flex-col justify-between rounded-lg border border-edge bg-fg/[0.02] p-4 transition-all duration-200 hover:border-edge-strong hover:bg-fg/[0.04]"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="rounded-full border border-edge-strong px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.12em] text-brand">
-                          {item.badge}
-                        </span>
-                        <span className="font-mono text-[10.5px] text-ink-4">{item.period}</span>
-                      </div>
-
-                      <h3 className="mt-2.5 font-display text-[15px] font-semibold text-ink-1">
-                        {item.link ? (
-                          <a
-                            href={item.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 hover:text-brand transition-colors"
-                          >
-                            <span>{item.title}</span>
-                            <ArrowUpRight className="h-3.5 w-3.5 text-ink-4 group-hover:text-brand transition-colors" />
-                          </a>
-                        ) : (
-                          <span>{item.title}</span>
-                        )}
-                      </h3>
-                      <p className="font-mono text-[11px] text-ink-4 mt-0.5">{item.award}</p>
-                      <p className="mt-2 text-[13px] leading-relaxed text-ink-3">{item.detail}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Section>
-
-            {/* 06 // SKILLS & STACK */}
-            <Section id="skills" num="06" label="Technical Stack">
-              <div className="reveal grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-[130px_1fr] sm:gap-y-2.5">
-                {SKILLS.map(([label, items]) => (
-                  <Fragment key={label}>
-                    <div className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-4 sm:pt-1">
-                      {label}
-                    </div>
-                    <div className="text-[14px] leading-[1.6] text-ink-2">{items}</div>
-                  </Fragment>
-                ))}
-              </div>
-            </Section>
-
-            {/* EDUCATION */}
-            <Section label="Education">
-              <article className="reveal">
-                <EntryHead
-                  title={EDUCATION.school}
-                  subtitle={EDUCATION.degree}
-                  period={EDUCATION.period}
-                  meta={EDUCATION.meta}
-                />
-                <p className="mt-3 text-[14.5px] leading-[1.65] text-ink-2">{EDUCATION.notes}</p>
-              </article>
-            </Section>
-
-            {/* 07 // CONTACT */}
-            <Section id="contact" num="07" label="Contact & Collabs">
-              <div className="reveal">
-                <p className="text-[15px] leading-[1.7] text-ink-2">
-                  Open to full-time remote roles including night shift on US hours, contract work, and
-                  partnerships. Happy to talk about full-stack web, microservices architecture, Flutter mobile apps, or shipping products for the Philippine market.
-                </p>
-                <div className="mt-4.5 flex flex-wrap gap-2.5">
-                  <a
-                    href={PROFILE.gmailCompose}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-md bg-fg px-4 py-2 text-[13.5px] font-medium text-bg transition-opacity hover:opacity-85"
-                  >
-                    <Mail className="h-3.5 w-3.5" aria-hidden="true" />
-                    Send a message
-                  </a>
-                  <button
-                    type="button"
-                    onClick={handleCopyEmail}
-                    className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
-                  >
-                    {copiedEmail ? (
-                      <Check className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
-                    ) : (
-                      <Copy className="h-3.5 w-3.5" aria-hidden="true" />
-                    )}
-                    {copiedEmail ? "Email copied!" : "Copy email"}
                   </button>
                   <a
                     href={PROFILE.resume}
                     download
-                    className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
+                    className="inline-flex items-center gap-1.5 rounded-md border border-edge bg-fg/[0.02] px-3 py-1.5 font-mono text-[11.5px] text-ink-2 transition-all hover:border-edge-strong hover:bg-fg/5 hover:text-ink-1"
                   >
-                    <Download className="h-3.5 w-3.5" aria-hidden="true" />
-                    Download résumé
-                  </a>
-                  <a
-                    href={PROFILE.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
-                  >
-                    <Linkedin className="h-3.5 w-3.5" aria-hidden="true" />
-                    LinkedIn
+                    <Download className="h-3 w-3" aria-hidden="true" />
+                    <span>Download Résumé</span>
                   </a>
                 </div>
               </div>
-            </Section>
+            </aside>
 
-            {/* ========================================================= */}
-            {/* SEPARATED INTERACTIVE LABS & TOOLS (AA, BB)               */}
-            {/* ========================================================= */}
-            <div className="pt-10 border-t border-edge space-y-10 sm:space-y-12">
-              <div className="reveal">
-                <div className="flex items-center gap-2 font-mono text-[10.5px] font-medium uppercase tracking-[0.2em] text-ink-4">
-                  <span className="text-brand">//</span>
-                  <span>Interactive Labs & Tools</span>
-                </div>
-                <div className="mt-1.5 h-px w-full bg-edge-strong" />
-              </div>
-
-              {/* AA // SANDALAN DEMO */}
-              <Section id="demo" num="AA" label="Sandalan Engine & Tax Calculator">
-                <LiveMobileShowcase />
-              </Section>
-
-              {/* BB // QUICK OFFER BUILDER */}
-              <Section id="offer" num="BB" label="Quick Offer & Compensation Builder">
-                <OfferCalculator />
-              </Section>
-            </div>
-
-            {/* FOOTER */}
-            <footer className="border-t border-edge pt-8">
-              <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-4">
-                <span>© {year} Jet Timothy Cerezo</span>
+            {/* Expansive Main Content Area */}
+            <main className="flex-1 min-w-0 space-y-6">
+              {/* Mobile Back Button */}
+              <div className="lg:hidden">
                 <button
-                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                  className="transition-colors hover:text-ink-2"
+                  onClick={() => navigateTo("portfolio")}
+                  className="inline-flex items-center gap-2 rounded-md border border-edge bg-fg/[0.02] px-3 py-1.5 font-mono text-[11.5px] text-ink-2 hover:text-ink-1"
                 >
-                  Back to top ↑
+                  <ArrowLeft className="h-3.5 w-3.5" />
+                  <span>Back to Résumé</span>
                 </button>
               </div>
-            </footer>
-          </main>
+
+              {currentPage === "demo" && (
+                <div className="space-y-6 animate-reveal">
+                  <div>
+                    <div className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-brand">
+                      Interactive Lab // AA
+                    </div>
+                    <h1 className="mt-1 font-display text-[26px] sm:text-[32px] font-semibold text-ink-1">
+                      Sandalan · Mobile App Engine & Showcase
+                    </h1>
+                    <p className="mt-2 text-[14.5px] text-ink-3 max-w-2xl leading-relaxed">
+                      Production-grade Filipino adulting & financial companion on Google Play. Built with Flutter 3.29, Riverpod 2.6, encrypted Drift SQLite, Supabase RLS, and TRAIN Law Philippine statutory tax calculations.
+                    </p>
+                  </div>
+
+                  <LiveMobileShowcase />
+                </div>
+              )}
+
+              {currentPage === "offer" && (
+                <div className="space-y-6 animate-reveal">
+                  <div>
+                    <div className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-brand">
+                      Interactive Lab // BB
+                    </div>
+                    <h1 className="mt-1 font-display text-[26px] sm:text-[32px] font-semibold text-ink-1">
+                      Quick Offer & Compensation Builder
+                    </h1>
+                    <p className="mt-2 text-[14.5px] text-ink-3 max-w-2xl leading-relaxed">
+                      Interactive compensation proposal generator in PHP (₱). Select target role, remote/hybrid arrangements, and equipment packages to instantly generate a tailored job offer letter.
+                    </p>
+                  </div>
+
+                  <OfferCalculator />
+                </div>
+              )}
+
+              {/* Footer */}
+              <footer className="border-t border-edge pt-8 mt-12">
+                <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-4">
+                  <span>© {year} Jet Timothy Cerezo</span>
+                  <button
+                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                    className="transition-colors hover:text-ink-2"
+                  >
+                    Back to top ↑
+                  </button>
+                </div>
+              </footer>
+            </main>
+          </div>
         </div>
-      </div>
+      ) : (
+        /* ============================================================= */
+        /* VIEW 2: STANDARD MAIN PORTFOLIO FLOW (01-07)                 */
+        /* ============================================================= */
+        <div className="mx-auto min-h-screen max-w-[1180px] px-6 py-12 md:px-12 md:py-16 lg:px-16 lg:py-0">
+          <div className="lg:flex lg:justify-between lg:gap-14 xl:gap-20">
+
+            {/* LEFT COLUMN: Sticky Side Navigator */}
+            <aside className="lg:sticky lg:top-0 lg:flex lg:w-[42%] lg:flex-col lg:py-20 xl:py-24">
+              <div>
+                {/* Profile Avatar & Top Status */}
+                <div className="flex items-center gap-4">
+                  <picture className="animate-reveal shrink-0">
+                    <source srcSet="/profile.webp" type="image/webp" />
+                    <img
+                      src="/profile.jpg"
+                      alt="Jet Timothy Cerezo"
+                      width="120"
+                      height="120"
+                      fetchPriority="high"
+                      className="h-16 w-16 rounded-full border border-edge object-cover shadow-sm ring-4 ring-fg/[0.03] sm:h-20 sm:w-20"
+                    />
+                  </picture>
+                  <div>
+                    <div className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-ink-4">
+                      Portfolio // {year}
+                    </div>
+                    <div className="mt-1">
+                      <TimezoneWidget />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Name & Title */}
+                <h1 className="mt-6 font-display text-[32px] font-semibold leading-tight tracking-[-0.03em] text-ink-1 sm:text-[38px]">
+                  {PROFILE.name}
+                </h1>
+                <p className="mt-1 text-[16px] font-medium text-ink-2">{PROFILE.title}</p>
+                <div className="mt-2.5 flex items-center gap-1.5 font-mono text-[11px] text-ink-4">
+                  <MapPin className="h-3 w-3" aria-hidden="true" />
+                  <span>{PROFILE.location}</span>
+                </div>
+                <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-ink-3">
+                  Building high-scale microservices, offline-first mobile apps, and automated test pipelines for production software.
+                </p>
+
+                {/* SIDE NAVIGATOR LINKS (Desktop) */}
+                <nav className="mt-7 hidden lg:block" aria-label="In-page jump links">
+                  <ul className="space-y-2 font-mono text-[12px] uppercase tracking-[0.14em]">
+                    {NAV_ITEMS.map((item) => {
+                      const isActive = active === item.id;
+                      return (
+                        <li key={item.id}>
+                          <button
+                            onClick={() => go(item.id)}
+                            className={`group flex items-center gap-3 py-0.5 text-left transition-all ${
+                              isActive ? "text-ink-1 font-semibold" : "text-ink-4 hover:text-ink-2"
+                            }`}
+                          >
+                            <span
+                              className={`h-px transition-all duration-300 ${
+                                isActive
+                                  ? "w-8 bg-brand"
+                                  : "w-3.5 bg-edge-strong group-hover:w-6 group-hover:bg-ink-3"
+                              }`}
+                            />
+                            <span className={isActive ? "text-brand" : "text-ink-4"}>{item.num}</span>
+                            <span>{item.label}</span>
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+
+                  {/* SEPARATED INTERACTIVE LAB SUB-NAV (AA, BB) */}
+                  <div className="mt-5 pt-4 border-t border-edge">
+                    <div className="flex items-center gap-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-ink-4 mb-2">
+                      <span className="text-brand">//</span>
+                      <span>Interactive Labs</span>
+                    </div>
+                    <ul className="space-y-1.5 font-mono text-[11.5px] uppercase tracking-[0.14em]">
+                      {LAB_ITEMS.map((item) => (
+                        <li key={item.id}>
+                          <button
+                            onClick={() => navigateTo(item.id as any)}
+                            className="group flex items-center gap-2.5 py-0.5 text-left transition-all text-ink-4 hover:text-ink-2"
+                          >
+                            <span className="h-px transition-all duration-300 w-2.5 bg-edge-strong group-hover:w-4 group-hover:bg-ink-3" />
+                            <span className="text-ink-4 font-medium group-hover:text-brand">
+                              {item.num}
+                            </span>
+                            <span>{item.label}</span>
+                            <ArrowUpRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity ml-0.5" />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </nav>
+              </div>
+
+              {/* BOTTOM UTILITY: Theme, Resume, Socials */}
+              <div className="mt-6 pt-5 border-t border-edge">
+                <div className="flex items-center gap-2.5">
+                  <button
+                    onClick={toggleTheme}
+                    aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                    className="flex h-8 w-8 items-center justify-center rounded-md border border-edge bg-fg/[0.02] text-ink-3 transition-colors hover:border-edge-strong hover:bg-fg/5 hover:text-ink-1"
+                  >
+                    {theme === "dark" ? (
+                      <Sun className="h-3.5 w-3.5" aria-hidden="true" />
+                    ) : (
+                      <Moon className="h-3.5 w-3.5" aria-hidden="true" />
+                    )}
+                  </button>
+                  <a
+                    href={PROFILE.resume}
+                    download
+                    className="inline-flex items-center gap-1.5 rounded-md border border-edge bg-fg/[0.02] px-3 py-1.5 font-mono text-[11.5px] text-ink-2 transition-all hover:border-edge-strong hover:bg-fg/5 hover:text-ink-1"
+                  >
+                    <Download className="h-3 w-3" aria-hidden="true" />
+                    <span>Download Résumé</span>
+                  </a>
+                </div>
+
+                <address className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13.5px] not-italic">
+                  <div className="flex items-center gap-1">
+                    <ContactLink href={PROFILE.gmailCompose} icon={Mail} external>
+                      {PROFILE.email}
+                    </ContactLink>
+                    <button
+                      type="button"
+                      onClick={handleCopyEmail}
+                      aria-label="Copy email address"
+                      className="flex h-5 w-5 items-center justify-center rounded text-ink-4 transition-colors hover:bg-fg/10 hover:text-ink-1"
+                      title="Copy email to clipboard"
+                    >
+                      {copiedEmail ? (
+                        <Check className="h-3 w-3 text-brand" />
+                      ) : (
+                        <Copy className="h-3 w-3" />
+                      )}
+                    </button>
+                  </div>
+
+                  <ContactLink href={PROFILE.phoneHref} icon={Phone}>
+                    {PROFILE.phone}
+                  </ContactLink>
+                  <ContactLink href={PROFILE.github} icon={Github} external>
+                    github
+                  </ContactLink>
+                  <ContactLink href={PROFILE.linkedin} icon={Linkedin} external>
+                    linkedin
+                  </ContactLink>
+                </address>
+              </div>
+            </aside>
+
+            {/* RIGHT COLUMN: Scrollable Main Content */}
+            <main id="main" className="pt-12 lg:w-[58%] lg:py-20 xl:py-24 space-y-10 sm:space-y-12">
+
+              {/* KEY HIGHLIGHTS */}
+              <div>
+                <div className="reveal">
+                  <div className="flex items-center gap-2 font-mono text-[10.5px] font-medium uppercase tracking-[0.2em] text-ink-4">
+                    <span className="text-brand">//</span>
+                    <span>Key Highlights</span>
+                  </div>
+                  <div className="mt-1.5 h-px w-full bg-edge-strong" />
+                </div>
+                <ImpactStats />
+              </div>
+
+              {/* 01 // ABOUT */}
+              <Section id="about" num="01" label="About">
+                <div className="reveal space-y-3">
+                  {SUMMARY.map((p) => (
+                    <p key={p.slice(0, 24)} className="text-[15px] leading-[1.7] text-ink-2">
+                      {p}
+                    </p>
+                  ))}
+                </div>
+              </Section>
+
+              {/* 02 // EXPERIENCE */}
+              <Section id="experience" num="02" label="Experience">
+                <div className="space-y-6 sm:space-y-7">
+                  {EXPERIENCE.map((job) => (
+                    <article key={job.role + job.company} className="reveal group">
+                      <EntryHead
+                        title={job.role}
+                        subtitle={job.company}
+                        period={job.period}
+                        meta={job.meta}
+                      />
+                      <Bullets items={job.bullets} />
+                      <TechLine items={job.tech} />
+                    </article>
+                  ))}
+                </div>
+              </Section>
+
+              {/* 03 // ARCHITECTURE & SYSTEM DESIGN */}
+              <Section id="architecture" num="03" label="System Design & Architecture">
+                <div className="reveal">
+                  <p className="text-[15px] leading-[1.7] text-ink-2">
+                    Interactive architectural diagrams illustrating microservices decoupling, offline-first data synchronization, and RAG retrieval pipelines built across production and research systems.
+                  </p>
+                </div>
+                <ArchitectureVisualizer />
+              </Section>
+
+              {/* 04 // SELECTED WORK */}
+              <Section id="work" num="04" label="Selected Projects">
+                {/* Category Filter Pills */}
+                <div className="reveal mb-4 flex flex-wrap items-center gap-1.5">
+                  <span className="mr-1 flex items-center gap-1 font-mono text-[10.5px] uppercase tracking-wider text-ink-4">
+                    <Filter className="h-3 w-3" /> Filter:
+                  </span>
+                  {[
+                    { id: "all", label: "All Projects" },
+                    { id: "featured", label: "Featured" },
+                    { id: "web", label: "Full-Stack Web" },
+                    { id: "mobile", label: "Mobile & Flutter" },
+                    { id: "ai", label: "AI & Systems" },
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setProjectCategory(tab.id)}
+                      className={`rounded-md px-2.5 py-1 font-mono text-[11px] transition-all ${
+                        projectCategory === tab.id
+                          ? "bg-fg text-bg font-medium shadow-sm"
+                          : "border border-edge bg-fg/[0.02] text-ink-3 hover:border-edge-strong hover:text-ink-1"
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="divide-y divide-edge border-y border-edge">
+                  {filteredProjects.map((p) => (
+                    <article key={p.name} className="reveal group py-4 sm:py-5">
+                      <EntryHead
+                        title={
+                          p.link ? (
+                            <a
+                              href={p.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 transition-colors hover:text-brand"
+                            >
+                              <span>{p.name}</span>
+                              <ArrowUpRight
+                                aria-hidden="true"
+                                className="h-3.5 w-3.5 text-ink-4 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand"
+                              />
+                            </a>
+                          ) : (
+                            <span>{p.name}</span>
+                          )
+                        }
+                        subtitle={p.tagline}
+                        period={p.year}
+                      >
+                        {p.badge && (
+                          <span className="ml-2 rounded-full border border-edge-strong px-2 py-0.5 align-middle font-mono text-[9.5px] uppercase tracking-[0.12em] text-ink-4">
+                            {p.badge}
+                          </span>
+                        )}
+                      </EntryHead>
+
+                      <p className="mt-2.5 text-[14.5px] leading-[1.65] text-ink-2">{p.description}</p>
+                      <TechLine items={p.tech} />
+
+                      {/* Action buttons */}
+                      {(p.hasScreenshots || p.link || p.name === "Sandalan") && (
+                        <div className="mt-4 flex flex-wrap items-center gap-3">
+                          {p.name === "Sandalan" && (
+                            <button
+                              type="button"
+                              onClick={() => navigateTo("demo")}
+                              className="inline-flex items-center gap-1.5 rounded-md bg-brand/10 border border-brand/40 px-3 py-1.5 font-mono text-[11.5px] font-semibold text-brand transition-all hover:bg-brand hover:text-bg shadow-xs"
+                            >
+                              <Play className="h-3.5 w-3.5 fill-current" />
+                              <span>Launch Dedicated Showcase (AA)</span>
+                            </button>
+                          )}
+
+                          {p.hasScreenshots && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setIsScreenshotOpen(true);
+                                setScreenshotIndex(0);
+                              }}
+                              className="inline-flex items-center gap-1.5 rounded-md border border-edge-strong bg-fg/[0.03] px-3 py-1.5 font-mono text-[11.5px] text-ink-2 transition-all hover:border-fg/40 hover:bg-fg/[0.06] hover:text-ink-1"
+                            >
+                              <Smartphone className="h-3.5 w-3.5 text-brand" />
+                              <span>View App Screenshots ({SANDALAN_SCREENSHOTS.length})</span>
+                            </button>
+                          )}
+
+                          {p.link && (
+                            <a
+                              href={p.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 font-mono text-[11px] text-ink-4 transition-colors hover:text-brand"
+                            >
+                              <span>{p.badge === "Google Play" ? "View on Google Play" : "Open project"}</span>
+                              <ArrowUpRight className="h-3 w-3" />
+                            </a>
+                          )}
+                        </div>
+                      )}
+                    </article>
+                  ))}
+                </div>
+
+                <a
+                  href={PROFILE.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="reveal mt-5 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-4 transition-colors hover:text-brand"
+                >
+                  More repositories on GitHub <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+                </a>
+              </Section>
+
+              {/* 05 // HONORS & HACKATHONS */}
+              <Section id="honors" num="05" label="Honors & Recognition">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {HONORS.map((item) => (
+                    <div
+                      key={item.title}
+                      className="reveal group relative flex flex-col justify-between rounded-lg border border-edge bg-fg/[0.02] p-4 transition-all duration-200 hover:border-edge-strong hover:bg-fg/[0.04]"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="rounded-full border border-edge-strong px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.12em] text-brand">
+                            {item.badge}
+                          </span>
+                          <span className="font-mono text-[10.5px] text-ink-4">{item.period}</span>
+                        </div>
+
+                        <h3 className="mt-2.5 font-display text-[15px] font-semibold text-ink-1">
+                          {item.link ? (
+                            <a
+                              href={item.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 hover:text-brand transition-colors"
+                            >
+                              <span>{item.title}</span>
+                              <ArrowUpRight className="h-3.5 w-3.5 text-ink-4 group-hover:text-brand transition-colors" />
+                            </a>
+                          ) : (
+                            <span>{item.title}</span>
+                          )}
+                        </h3>
+                        <p className="font-mono text-[11px] text-ink-4 mt-0.5">{item.award}</p>
+                        <p className="mt-2 text-[13px] leading-relaxed text-ink-3">{item.detail}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Section>
+
+              {/* 06 // SKILLS & STACK */}
+              <Section id="skills" num="06" label="Technical Stack">
+                <div className="reveal grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-[130px_1fr] sm:gap-y-2.5">
+                  {SKILLS.map(([label, items]) => (
+                    <Fragment key={label}>
+                      <div className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-4 sm:pt-1">
+                        {label}
+                      </div>
+                      <div className="text-[14px] leading-[1.6] text-ink-2">{items}</div>
+                    </Fragment>
+                  ))}
+                </div>
+              </Section>
+
+              {/* EDUCATION */}
+              <Section label="Education">
+                <article className="reveal">
+                  <EntryHead
+                    title={EDUCATION.school}
+                    subtitle={EDUCATION.degree}
+                    period={EDUCATION.period}
+                    meta={EDUCATION.meta}
+                  />
+                  <p className="mt-3 text-[14.5px] leading-[1.65] text-ink-2">{EDUCATION.notes}</p>
+                </article>
+              </Section>
+
+              {/* 07 // CONTACT */}
+              <Section id="contact" num="07" label="Contact & Collabs">
+                <div className="reveal">
+                  <p className="text-[15px] leading-[1.7] text-ink-2">
+                    Open to full-time remote roles including night shift on US hours, contract work, and
+                    partnerships. Happy to talk about full-stack web, microservices architecture, Flutter mobile apps, or shipping products for the Philippine market.
+                  </p>
+                  <div className="mt-4.5 flex flex-wrap gap-2.5">
+                    <a
+                      href={PROFILE.gmailCompose}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-md bg-fg px-4 py-2 text-[13.5px] font-medium text-bg transition-opacity hover:opacity-85"
+                    >
+                      <Mail className="h-3.5 w-3.5" aria-hidden="true" />
+                      Send a message
+                    </a>
+                    <button
+                      type="button"
+                      onClick={handleCopyEmail}
+                      className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
+                    >
+                      {copiedEmail ? (
+                        <Check className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
+                      ) : (
+                        <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+                      )}
+                      {copiedEmail ? "Email copied!" : "Copy email"}
+                    </button>
+                    <a
+                      href={PROFILE.resume}
+                      download
+                      className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
+                    >
+                      <Download className="h-3.5 w-3.5" aria-hidden="true" />
+                      Download résumé
+                    </a>
+                    <a
+                      href={PROFILE.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-md border border-edge-strong px-4 py-2 text-[13.5px] text-ink-2 transition-colors hover:border-fg/40 hover:text-ink-1"
+                    >
+                      <Linkedin className="h-3.5 w-3.5" aria-hidden="true" />
+                      LinkedIn
+                    </a>
+                  </div>
+                </div>
+              </Section>
+
+              {/* FOOTER */}
+              <footer className="border-t border-edge pt-8">
+                <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-4">
+                  <span>© {year} Jet Timothy Cerezo</span>
+                  <button
+                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                    className="transition-colors hover:text-ink-2"
+                  >
+                    Back to top ↑
+                  </button>
+                </div>
+              </footer>
+            </main>
+          </div>
+        </div>
+      )}
 
       {/* MODALS & TOAST */}
       <ScreenshotModal
