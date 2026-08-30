@@ -35,7 +35,7 @@ const NAV_ITEMS = [
 ];
 
 const LAB_ITEMS = [
-  { id: "demo", num: "AA", label: "Mobile Sandbox" },
+  { id: "demo", num: "AA", label: "Sandalan Demo" },
   { id: "offer", num: "BB", label: "Offer Builder" },
 ];
 
@@ -1002,35 +1002,22 @@ function App() {
             </Section>
 
             {/* ========================================================= */}
-            {/* SEPARATED INTERACTIVE LABS & PLAYGROUNDS (AA, BB)         */}
+            {/* SEPARATED INTERACTIVE LABS & TOOLS (AA, BB)               */}
             {/* ========================================================= */}
-            <div className="pt-6 border-t-2 border-dashed border-edge space-y-10">
+            <div className="pt-6 border-t-2 border-dashed border-edge space-y-8">
               <div className="reveal">
                 <div className="flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-brand">
                   <span>⚡ LAB // Interactive Sandboxes & Tools</span>
                 </div>
-                <p className="mt-1 text-[13.5px] text-ink-3">
-                  Live playgrounds, mobile runtime simulations, and compensation calculators.
-                </p>
               </div>
 
-              {/* AA // LIVE MOBILE APP DEMO & SANDBOX */}
-              <Section id="demo" num="AA" label="Mobile App Engine & Sandbox">
-                <div className="reveal mb-4">
-                  <p className="text-[15px] leading-[1.7] text-ink-2">
-                    Interactive testbed for <strong>Sandalan</strong> (live on Google Play). Test offline-first SQLite sync reconciliation, Philippine statutory tax calculations, OCR receipt scanning, and Taglish AI assistance in real time.
-                  </p>
-                </div>
+              {/* AA // SANDALAN DEMO */}
+              <Section id="demo" num="AA" label="Sandalan Engine & Tax Calculator">
                 <LiveMobileShowcase />
               </Section>
 
-              {/* BB // INTERACTIVE OFFER & SALARY BUILDER */}
-              <Section id="offer" num="BB" label="Interactive Offer & Salary Builder">
-                <div className="reveal mb-4">
-                  <p className="text-[15px] leading-[1.7] text-ink-2">
-                    Planning an offer or partnership? Use this interactive simulator to configure target compensation, remote/night-shift arrangements, and perks to preview real-time terms and instant acceptance estimates.
-                  </p>
-                </div>
+              {/* BB // QUICK OFFER BUILDER */}
+              <Section id="offer" num="BB" label="Quick Offer & Compensation Builder">
                 <OfferCalculator />
               </Section>
             </div>
