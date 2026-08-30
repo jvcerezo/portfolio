@@ -19,20 +19,21 @@ import {
 import { TimezoneWidget } from "./components/TimezoneWidget";
 import { ImpactStats } from "./components/ImpactStats";
 import { ArchitectureVisualizer } from "./components/ArchitectureVisualizer";
+import { LiveMobileShowcase } from "./components/LiveMobileShowcase";
 import { ScreenshotModal, type ScreenshotItem } from "./components/ScreenshotModal";
 import { OfferCalculator } from "./components/OfferCalculator";
-import { LiveMobileDemoModal } from "./components/LiveMobileDemoModal";
 import { Toast } from "./components/Toast";
 
 const NAV_ITEMS = [
   { id: "about", num: "01", label: "About" },
   { id: "experience", num: "02", label: "Experience" },
   { id: "architecture", num: "03", label: "Architecture" },
-  { id: "work", num: "04", label: "Projects" },
-  { id: "honors", num: "05", label: "Honors" },
-  { id: "skills", num: "06", label: "Stack" },
-  { id: "offer", num: "07", label: "Offer Builder" },
-  { id: "contact", num: "08", label: "Contact" },
+  { id: "demo", num: "04", label: "Mobile Sandbox" },
+  { id: "work", num: "05", label: "Projects" },
+  { id: "honors", num: "06", label: "Honors" },
+  { id: "skills", num: "07", label: "Stack" },
+  { id: "offer", num: "08", label: "Offer Builder" },
+  { id: "contact", num: "09", label: "Contact" },
 ];
 
 const NAV_IDS = NAV_ITEMS.map((n) => n.id);
@@ -501,7 +502,6 @@ function App() {
   const [toastMessage, setToastMessage] = useState("");
   const [isToastOpen, setIsToastOpen] = useState(false);
   const [isScreenshotOpen, setIsScreenshotOpen] = useState(false);
-  const [isLiveDemoOpen, setIsLiveDemoOpen] = useState(false);
   const [screenshotIndex, setScreenshotIndex] = useState(0);
   const [projectCategory, setProjectCategory] = useState<string>("all");
 
@@ -730,8 +730,18 @@ function App() {
               <ArchitectureVisualizer />
             </Section>
 
-            {/* 04 // SELECTED WORK */}
-            <Section id="work" num="04" label="Selected Projects">
+            {/* 04 // LIVE MOBILE APP DEMO & SANDBOX */}
+            <Section id="demo" num="04" label="Mobile App Engine & Sandbox">
+              <div className="reveal mb-4">
+                <p className="text-[15px] leading-[1.7] text-ink-2">
+                  Interactive testbed for <strong>Sandalan</strong> (live on Google Play). Test offline-first SQLite sync reconciliation, Philippine statutory tax calculations, OCR receipt scanning, and Taglish AI assistance in real time.
+                </p>
+              </div>
+              <LiveMobileShowcase />
+            </Section>
+
+            {/* 05 // SELECTED WORK */}
+            <Section id="work" num="05" label="Selected Projects">
               {/* Category Filter Pills */}
               <div className="reveal mb-4 flex flex-wrap items-center gap-1.5">
                 <span className="mr-1 flex items-center gap-1 font-mono text-[10.5px] uppercase tracking-wider text-ink-4">
@@ -799,11 +809,11 @@ function App() {
                         {p.name === "Sandalan" && (
                           <button
                             type="button"
-                            onClick={() => setIsLiveDemoOpen(true)}
+                            onClick={() => go("demo")}
                             className="inline-flex items-center gap-1.5 rounded-md bg-brand/10 border border-brand/40 px-3 py-1.5 font-mono text-[11.5px] font-semibold text-brand transition-all hover:bg-brand hover:text-bg shadow-xs"
                           >
                             <Play className="h-3.5 w-3.5 fill-current" />
-                            <span>Run Real Android APK Demo</span>
+                            <span>Launch Live App Sandbox</span>
                           </button>
                         )}
 
@@ -848,8 +858,8 @@ function App() {
               </a>
             </Section>
 
-            {/* 05 // HONORS & HACKATHONS */}
-            <Section id="honors" num="05" label="Honors & Recognition">
+            {/* 06 // HONORS & HACKATHONS */}
+            <Section id="honors" num="06" label="Honors & Recognition">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {HONORS.map((item) => (
                   <div
@@ -887,8 +897,8 @@ function App() {
               </div>
             </Section>
 
-            {/* 06 // SKILLS & STACK */}
-            <Section id="skills" num="06" label="Technical Stack">
+            {/* 07 // SKILLS & STACK */}
+            <Section id="skills" num="07" label="Technical Stack">
               <div className="reveal grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-[130px_1fr] sm:gap-y-2.5">
                 {SKILLS.map(([label, items]) => (
                   <Fragment key={label}>
@@ -914,8 +924,8 @@ function App() {
               </article>
             </Section>
 
-            {/* 07 // INTERACTIVE OFFER & SALARY BUILDER */}
-            <Section id="offer" num="07" label="Interactive Offer & Salary Builder">
+            {/* 08 // INTERACTIVE OFFER & SALARY BUILDER */}
+            <Section id="offer" num="08" label="Interactive Offer & Salary Builder">
               <div className="reveal mb-4">
                 <p className="text-[15px] leading-[1.7] text-ink-2">
                   Planning an offer or partnership? Use this interactive simulator to configure target compensation, remote/night-shift arrangements, and perks to preview real-time terms and instant acceptance estimates.
@@ -924,8 +934,8 @@ function App() {
               <OfferCalculator />
             </Section>
 
-            {/* 08 // CONTACT */}
-            <Section id="contact" num="08" label="Contact & Collabs">
+            {/* 09 // CONTACT */}
+            <Section id="contact" num="09" label="Contact & Collabs">
               <div className="reveal">
                 <p className="text-[15px] leading-[1.7] text-ink-2">
                   Open to full-time remote roles including night shift on US hours, contract work, and
@@ -991,12 +1001,6 @@ function App() {
       </div>
 
       {/* MODALS & TOAST */}
-      <LiveMobileDemoModal
-        isOpen={isLiveDemoOpen}
-        onClose={() => setIsLiveDemoOpen(false)}
-        playStoreUrl="https://play.google.com/store/apps/details?id=com.jvcerezo.exitplan"
-      />
-
       <ScreenshotModal
         isOpen={isScreenshotOpen}
         onClose={() => setIsScreenshotOpen(false)}
