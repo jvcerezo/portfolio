@@ -260,34 +260,52 @@ const HONORS = [
 
 const SANDALAN_SCREENSHOTS: ScreenshotItem[] = [
   {
-    src: "/sandalan/feature.png",
-    title: "Sandalan Overview & Feature Graphic",
+    src: "/sandalan/01-home.jpg",
+    title: "Home Dashboard & Adulting Journey",
     description:
-      "The all-in-one Filipino adulting and financial companion with 38+ bank integrations, government guides, and AI assistant.",
+      "Adulting readiness score, upcoming government obligations calendar, daily tips, and active habit streaks.",
   },
   {
-    src: "/sandalan/screen-1.png",
-    title: "Step-by-Step Government Guides",
+    src: "/sandalan/02-tracker.jpg",
+    title: "Life Stage Journey & Checklist",
     description:
-      "Interactive, offline-accessible walkthroughs for securing TIN, SSS, PhilSys, Pag-IBIG, and PhilHealth documents.",
+      "Step-by-step adulting roadmap (Unang Hakbang, Pundasyon, Tahanan, Tugatog) with offline-synced task checklists.",
   },
   {
-    src: "/sandalan/screen-2.png",
-    title: "Expense Tracker & Financial Calculators",
+    src: "/sandalan/03-chat.jpg",
+    title: "Taglish AI Adulting Assistant",
     description:
-      "Comprehensive budget tracking with offline-first synchronization and local database encryption.",
+      "Conversational assistant answering Philippine government document requirements, taxes, and financial guidelines.",
   },
   {
-    src: "/sandalan/screen-3.png",
-    title: "1,000+ Government Office Directory",
+    src: "/sandalan/04-transactions.jpg",
+    title: "Transaction Ledger & Bank Integrations",
     description:
-      "Instant search and navigation to government agencies nationwide, fully functional without an active internet connection.",
+      "38+ bank integrations with local AES-256 encryption and Drift SQLite offline-first ledger.",
   },
   {
-    src: "/sandalan/screen-4.png",
-    title: "Taglish AI Assistant & OCR Receipt Scanner",
+    src: "/sandalan/05-budgets.jpg",
+    title: "Category Budgets & Spending Envelopes",
     description:
-      "Automated receipt parsing with OCR and conversational guidance tailored specifically to Philippine adulting requirements.",
+      "Periodic envelope budgeting system with real-time spend alerts and progress indicators.",
+  },
+  {
+    src: "/sandalan/06-achievements.jpg",
+    title: "Adulting Achievements & Milestones",
+    description:
+      "Gamified progress tracking celebrating financial independence and government compliance milestones.",
+  },
+  {
+    src: "/sandalan/07-goals.jpg",
+    title: "Savings & Financial Goals",
+    description:
+      "Target goal trackers for emergency funds, MP2 investments, housing, and life milestones.",
+  },
+  {
+    src: "/sandalan/08-reports.jpg",
+    title: "Monthly Cashflow & Analytics Reports",
+    description:
+      "Visual spending breakdowns, income vs. expense analytics, and net cashflow summaries.",
   },
 ];
 
