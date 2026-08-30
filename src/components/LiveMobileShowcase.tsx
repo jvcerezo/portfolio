@@ -455,7 +455,7 @@ export function LiveMobileShowcase() {
                 </div>
               </div>
 
-              <div className="space-y-1.5 font-mono text-[11.5px] max-h-[160px] overflow-y-auto">
+              <div className="space-y-1.5 font-mono text-[11.5px]">
                 {expenses.map((e) => (
                   <div
                     key={e.id}

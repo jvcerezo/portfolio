@@ -570,7 +570,7 @@ function App() {
           {/* ========================================================= */}
           {/* LEFT COLUMN: Sticky Side Navigator                        */}
           {/* ========================================================= */}
-          <aside className="lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-[42%] lg:flex-col lg:py-20 xl:py-24 lg:overflow-y-auto no-scrollbar">
+          <aside className="lg:sticky lg:top-0 lg:flex lg:w-[42%] lg:flex-col lg:py-20 xl:py-24">
             <div>
               {/* Profile Avatar & Top Status */}
               <div className="flex items-center gap-4">
