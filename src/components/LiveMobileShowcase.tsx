@@ -442,7 +442,7 @@ export function LiveMobileShowcase() {
                     ) : syncStatus === "offline" ? (
                       <span className="text-amber-400">Offline (Cached)</span>
                     ) : (
-                      <span className="text-emerald-500 font-semibold">✓ 100% Synced</span>
+                      <span className="text-emerald-500 font-semibold">100% Synced</span>
                     )}
                   </span>
                   <button

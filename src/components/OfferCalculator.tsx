@@ -172,7 +172,9 @@ export function OfferCalculator() {
                       : "border border-edge bg-bg text-ink-4 hover:border-edge-strong hover:text-ink-2"
                   }`}
                 >
-                  {active ? "✓ " : "+ "}
+                  <span className={active ? "text-brand mr-1 font-bold" : "text-ink-4 mr-1"}>
+                    {active ? "•" : "+"}
+                  </span>
                   {p}
                 </button>
               );

@@ -637,9 +637,10 @@ function App() {
                 </ul>
 
                 {/* SEPARATED INTERACTIVE LAB SUB-NAV (AA, BB) */}
-                <div className="mt-6 pt-4 border-t border-edge/80">
-                  <div className="flex items-center gap-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-brand mb-2">
-                    <span>⚡ // Interactive Labs</span>
+                <div className="mt-8 pt-5 border-t border-edge">
+                  <div className="flex items-center gap-1.5 font-mono text-[10.5px] font-medium uppercase tracking-[0.16em] text-ink-4 mb-2.5">
+                    <span className="text-brand">//</span>
+                    <span>Interactive Labs</span>
                   </div>
                   <ul className="space-y-2 font-mono text-[11.5px] uppercase tracking-[0.14em]">
                     {LAB_ITEMS.map((item) => {
@@ -738,7 +739,7 @@ function App() {
             <div>
               <div className="reveal">
                 <div className="flex items-center gap-2 font-mono text-[10.5px] font-medium uppercase tracking-[0.2em] text-ink-4">
-                  <span className="text-brand">⚡ //</span>
+                  <span className="text-brand">//</span>
                   <span>Key Highlights</span>
                 </div>
                 <div className="mt-1.5 h-px w-full bg-edge-strong" />
@@ -1022,11 +1023,13 @@ function App() {
             {/* ========================================================= */}
             {/* SEPARATED INTERACTIVE LABS & TOOLS (AA, BB)               */}
             {/* ========================================================= */}
-            <div className="pt-6 border-t-2 border-dashed border-edge space-y-8">
+            <div className="pt-10 border-t border-edge space-y-10 sm:space-y-12">
               <div className="reveal">
-                <div className="flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-brand">
-                  <span>⚡ LAB // Interactive Sandboxes & Tools</span>
+                <div className="flex items-center gap-2 font-mono text-[10.5px] font-medium uppercase tracking-[0.2em] text-ink-4">
+                  <span className="text-brand">//</span>
+                  <span>Interactive Labs & Tools</span>
                 </div>
+                <div className="mt-1.5 h-px w-full bg-edge-strong" />
               </div>
 
               {/* AA // SANDALAN DEMO */}
