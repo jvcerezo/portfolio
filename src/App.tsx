@@ -570,7 +570,7 @@ function App() {
           {/* ========================================================= */}
           {/* LEFT COLUMN: Sticky Side Navigator                        */}
           {/* ========================================================= */}
-          <aside className="lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-[42%] lg:flex-col lg:justify-between lg:py-20 xl:py-24">
+          <aside className="lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-[42%] lg:flex-col lg:py-20 xl:py-24 lg:overflow-y-auto no-scrollbar">
             <div>
               {/* Profile Avatar & Top Status */}
               <div className="flex items-center gap-4">
@@ -609,8 +609,8 @@ function App() {
               </p>
 
               {/* SIDE NAVIGATOR LINKS (Desktop) */}
-              <nav className="mt-8 hidden lg:block" aria-label="In-page jump links">
-                <ul className="space-y-2.5 font-mono text-[12px] uppercase tracking-[0.14em]">
+              <nav className="mt-7 hidden lg:block" aria-label="In-page jump links">
+                <ul className="space-y-2 font-mono text-[12px] uppercase tracking-[0.14em]">
                   {NAV_ITEMS.map((item) => {
                     const isActive = active === item.id;
                     return (
@@ -637,12 +637,12 @@ function App() {
                 </ul>
 
                 {/* SEPARATED INTERACTIVE LAB SUB-NAV (AA, BB) */}
-                <div className="mt-8 pt-5 border-t border-edge">
-                  <div className="flex items-center gap-1.5 font-mono text-[10.5px] font-medium uppercase tracking-[0.16em] text-ink-4 mb-2.5">
+                <div className="mt-5 pt-4 border-t border-edge">
+                  <div className="flex items-center gap-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-ink-4 mb-2">
                     <span className="text-brand">//</span>
                     <span>Interactive Labs</span>
                   </div>
-                  <ul className="space-y-2 font-mono text-[11.5px] uppercase tracking-[0.14em]">
+                  <ul className="space-y-1.5 font-mono text-[11.5px] uppercase tracking-[0.14em]">
                     {LAB_ITEMS.map((item) => {
                       const isActive = active === item.id;
                       return (
@@ -674,7 +674,7 @@ function App() {
             </div>
 
             {/* BOTTOM UTILITY: Theme, Resume, Socials */}
-            <div className="mt-10 lg:mt-0">
+            <div className="mt-6 pt-5 border-t border-edge">
               <div className="flex items-center gap-2.5">
                 <button
                   onClick={toggleTheme}
@@ -697,7 +697,7 @@ function App() {
                 </a>
               </div>
 
-              <address className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13.5px] not-italic">
+              <address className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13.5px] not-italic">
                 <div className="flex items-center gap-1">
                   <ContactLink href={PROFILE.gmailCompose} icon={Mail} external>
                     {PROFILE.email}
