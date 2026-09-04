@@ -19,6 +19,7 @@ import {
   Play,
 } from "lucide-react";
 import { TimezoneWidget } from "./components/TimezoneWidget";
+import { VisitorCounter } from "./components/VisitorCounter";
 import { ImpactStats } from "./components/ImpactStats";
 import { ArchitectureVisualizer } from "./components/ArchitectureVisualizer";
 import { LiveMobileShowcase } from "./components/LiveMobileShowcase";
@@ -820,8 +821,9 @@ function App() {
                     <div className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-ink-4">
                       Portfolio // {year}
                     </div>
-                    <div className="mt-1">
+                    <div className="mt-1 flex flex-wrap items-center gap-2">
                       <TimezoneWidget />
+                      <VisitorCounter />
                     </div>
                   </div>
                 </div>
