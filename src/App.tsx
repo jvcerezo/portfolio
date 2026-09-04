@@ -9,6 +9,7 @@ import {
   Download,
   ArrowUpRight,
   ArrowLeft,
+  ArrowUp,
   Sun,
   Moon,
   Copy,
@@ -541,10 +542,20 @@ function App() {
   const [isScreenshotOpen, setIsScreenshotOpen] = useState(false);
   const [screenshotIndex, setScreenshotIndex] = useState(0);
   const [projectCategory, setProjectCategory] = useState<string>("all");
+  const [showFloatingNav, setShowFloatingNav] = useState(false);
 
   useRevealOnScroll(currentPage);
 
   const year = new Date().getFullYear();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowFloatingNav(window.scrollY > 400);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const handleHash = () => {
@@ -785,12 +796,13 @@ function App() {
         /* ============================================================= */
         /* VIEW 2: STANDARD MAIN PORTFOLIO FLOW (01-07)                 */
         /* ============================================================= */
-        <div className="mx-auto min-h-screen max-w-[1180px] px-6 py-12 md:px-12 md:py-16 lg:px-16 lg:py-0">
-          <div className="lg:flex lg:justify-between lg:gap-14 xl:gap-20">
+        <div className="min-h-screen">
+          {/* TOP SECTION: Two-Column Hero / Intro (Natural Scroll) */}
+          <header className="mx-auto max-w-[1180px] px-6 pt-12 pb-8 md:px-12 md:pt-16 lg:px-16 lg:pt-20">
+            <div className="lg:flex lg:justify-between lg:gap-14 xl:gap-20 lg:items-start">
 
-            {/* LEFT COLUMN: Sticky Side Navigator */}
-            <aside className="lg:sticky lg:top-0 lg:flex lg:w-[42%] lg:flex-col lg:py-20 xl:py-24">
-              <div>
+              {/* LEFT COLUMN: Profile & Navigator */}
+              <div className="lg:w-[45%] xl:w-[42%] shrink-0">
                 {/* Profile Avatar & Top Status */}
                 <div className="flex items-center gap-4">
                   <picture className="animate-reveal shrink-0">
@@ -880,90 +892,99 @@ function App() {
                     </ul>
                   </div>
                 </nav>
-              </div>
 
-              {/* BOTTOM UTILITY: Theme, Resume, Socials */}
-              <div className="mt-6 pt-5 border-t border-edge">
-                <div className="flex items-center gap-2.5">
-                  <button
-                    onClick={toggleTheme}
-                    aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-                    className="flex h-8 w-8 items-center justify-center rounded-md border border-edge bg-fg/[0.02] text-ink-3 transition-colors hover:border-edge-strong hover:bg-fg/5 hover:text-ink-1"
-                  >
-                    {theme === "dark" ? (
-                      <Sun className="h-3.5 w-3.5" aria-hidden="true" />
-                    ) : (
-                      <Moon className="h-3.5 w-3.5" aria-hidden="true" />
-                    )}
-                  </button>
-                  <a
-                    href={PROFILE.resume}
-                    download
-                    className="inline-flex items-center gap-1.5 rounded-md border border-edge bg-fg/[0.02] px-3 py-1.5 font-mono text-[11.5px] text-ink-2 transition-all hover:border-edge-strong hover:bg-fg/5 hover:text-ink-1"
-                  >
-                    <Download className="h-3 w-3" aria-hidden="true" />
-                    <span>Download Résumé</span>
-                  </a>
-                </div>
-
-                <address className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13.5px] not-italic">
-                  <div className="flex items-center gap-1">
-                    <ContactLink href={PROFILE.gmailCompose} icon={Mail} external>
-                      {PROFILE.email}
-                    </ContactLink>
+                {/* BOTTOM UTILITY: Theme, Resume, Socials */}
+                <div className="mt-6 pt-5 border-t border-edge">
+                  <div className="flex items-center gap-2.5">
                     <button
-                      type="button"
-                      onClick={handleCopyEmail}
-                      aria-label="Copy email address"
-                      className="flex h-5 w-5 items-center justify-center rounded text-ink-4 transition-colors hover:bg-fg/10 hover:text-ink-1"
-                      title="Copy email to clipboard"
+                      onClick={toggleTheme}
+                      aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                      className="flex h-8 w-8 items-center justify-center rounded-md border border-edge bg-fg/[0.02] text-ink-3 transition-colors hover:border-edge-strong hover:bg-fg/5 hover:text-ink-1"
                     >
-                      {copiedEmail ? (
-                        <Check className="h-3 w-3 text-brand" />
+                      {theme === "dark" ? (
+                        <Sun className="h-3.5 w-3.5" aria-hidden="true" />
                       ) : (
-                        <Copy className="h-3 w-3" />
+                        <Moon className="h-3.5 w-3.5" aria-hidden="true" />
                       )}
                     </button>
+                    <a
+                      href={PROFILE.resume}
+                      download
+                      className="inline-flex items-center gap-1.5 rounded-md border border-edge bg-fg/[0.02] px-3 py-1.5 font-mono text-[11.5px] text-ink-2 transition-all hover:border-edge-strong hover:bg-fg/5 hover:text-ink-1"
+                    >
+                      <Download className="h-3 w-3" aria-hidden="true" />
+                      <span>Download Résumé</span>
+                    </a>
                   </div>
 
-                  <ContactLink href={PROFILE.phoneHref} icon={Phone}>
-                    {PROFILE.phone}
-                  </ContactLink>
-                  <ContactLink href={PROFILE.github} icon={Github} external>
-                    github
-                  </ContactLink>
-                  <ContactLink href={PROFILE.linkedin} icon={Linkedin} external>
-                    linkedin
-                  </ContactLink>
-                </address>
+                  <address className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13.5px] not-italic">
+                    <div className="flex items-center gap-1">
+                      <ContactLink href={PROFILE.gmailCompose} icon={Mail} external>
+                        {PROFILE.email}
+                      </ContactLink>
+                      <button
+                        type="button"
+                        onClick={handleCopyEmail}
+                        aria-label="Copy email address"
+                        className="flex h-5 w-5 items-center justify-center rounded text-ink-4 transition-colors hover:bg-fg/10 hover:text-ink-1"
+                        title="Copy email to clipboard"
+                      >
+                        {copiedEmail ? (
+                          <Check className="h-3 w-3 text-brand" />
+                        ) : (
+                          <Copy className="h-3 w-3" />
+                        )}
+                      </button>
+                    </div>
+
+                    <ContactLink href={PROFILE.phoneHref} icon={Phone}>
+                      {PROFILE.phone}
+                    </ContactLink>
+                    <ContactLink href={PROFILE.github} icon={Github} external>
+                      github
+                    </ContactLink>
+                    <ContactLink href={PROFILE.linkedin} icon={Linkedin} external>
+                      linkedin
+                    </ContactLink>
+                  </address>
+                </div>
               </div>
-            </aside>
 
-            {/* RIGHT COLUMN: Scrollable Main Content */}
-            <main id="main" className="pt-12 lg:w-[58%] lg:py-20 xl:py-24 space-y-10 sm:space-y-12">
-
-              {/* KEY HIGHLIGHTS */}
-              <div>
-                <div className="reveal">
-                  <div className="flex items-center gap-2 font-mono text-[10.5px] font-medium uppercase tracking-[0.2em] text-ink-4">
-                    <span className="text-brand">//</span>
-                    <span>Key Highlights</span>
+              {/* RIGHT COLUMN: Key Highlights & About */}
+              <div className="mt-12 lg:mt-0 lg:w-[52%] xl:w-[55%] space-y-8">
+                {/* KEY HIGHLIGHTS */}
+                <div>
+                  <div className="reveal">
+                    <div className="flex items-center gap-2 font-mono text-[10.5px] font-medium uppercase tracking-[0.2em] text-ink-4">
+                      <span className="text-brand">//</span>
+                      <span>Key Highlights</span>
+                    </div>
+                    <div className="mt-1.5 h-px w-full bg-edge-strong" />
                   </div>
-                  <div className="mt-1.5 h-px w-full bg-edge-strong" />
+                  <ImpactStats />
                 </div>
-                <ImpactStats />
-              </div>
 
-              {/* 01 // ABOUT */}
-              <Section id="about" num="01" label="About">
-                <div className="reveal space-y-3">
-                  {SUMMARY.map((p) => (
-                    <p key={p.slice(0, 24)} className="text-[15px] leading-[1.7] text-ink-2">
-                      {p}
-                    </p>
-                  ))}
-                </div>
-              </Section>
+                {/* 01 // ABOUT */}
+                <Section id="about" num="01" label="About">
+                  <div className="reveal space-y-3">
+                    {SUMMARY.map((p) => (
+                      <p key={p.slice(0, 24)} className="text-[15px] leading-[1.7] text-ink-2">
+                        {p}
+                      </p>
+                    ))}
+                  </div>
+                </Section>
+              </div>
+            </div>
+          </header>
+
+          {/* SECTION DIVIDER */}
+          <div className="mx-auto max-w-[1180px] px-6 md:px-12 lg:px-16 my-4">
+            <div className="h-px w-full bg-edge" />
+          </div>
+
+          {/* CENTERED MAIN CONTENT STREAM: 02 to 07 */}
+          <main id="main" className="mx-auto max-w-[840px] px-6 py-8 md:px-10 lg:px-0 space-y-12 sm:space-y-14">
 
               {/* 02 // EXPERIENCE */}
               <Section id="experience" num="02" label="Experience">
@@ -1240,8 +1261,100 @@ function App() {
                 </div>
               </footer>
             </main>
-          </div>
         </div>
+      )}
+
+      {/* FLOATING NAVIGATION DOCK (HUD) */}
+      {currentPage === "portfolio" && (
+        <aside
+          aria-label="Floating section navigation"
+          className={`fixed bottom-5 left-1/2 -translate-x-1/2 z-40 transition-all duration-300 ${
+            showFloatingNav
+              ? "opacity-100 translate-y-0 pointer-events-auto"
+              : "opacity-0 translate-y-4 pointer-events-none"
+          }`}
+        >
+          <nav className="flex items-center gap-1.5 rounded-full border border-edge-strong bg-bg/90 backdrop-blur-md px-3 py-1.5 shadow-lg ring-1 ring-fg/[0.04]">
+            {/* Active section indicator on mobile */}
+            <div className="flex md:hidden items-center gap-1.5 font-mono text-[11px] px-2 py-0.5 text-ink-2">
+              <span className="text-brand font-semibold">
+                {NAV_ITEMS.find((n) => n.id === active)?.num || "01"}
+              </span>
+              <span className="truncate max-w-[100px]">
+                {NAV_ITEMS.find((n) => n.id === active)?.label || "About"}
+              </span>
+            </div>
+
+            {/* Desktop section jump pills */}
+            <div className="hidden md:flex items-center gap-1 font-mono text-[11px]">
+              {NAV_ITEMS.map((item) => {
+                const isActive = active === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => go(item.id)}
+                    title={item.label}
+                    className={`rounded-full px-2.5 py-1 transition-all ${
+                      isActive
+                        ? "bg-fg text-bg font-semibold shadow-xs"
+                        : "text-ink-3 hover:text-ink-1 hover:bg-fg/5"
+                    }`}
+                  >
+                    <span>{item.num}</span>
+                    <span className="ml-1 hidden xl:inline text-[10.5px] uppercase tracking-wider">
+                      {item.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <span className="h-3 w-px bg-edge mx-1" aria-hidden="true" />
+
+            {/* Quick Labs button */}
+            <div className="flex items-center gap-1 font-mono text-[11px]">
+              {LAB_ITEMS.map((lab) => (
+                <button
+                  key={lab.id}
+                  onClick={() => navigateTo(lab.id as any)}
+                  title={lab.label}
+                  className="flex items-center gap-1 rounded-full px-2 py-1 text-ink-3 hover:text-brand hover:bg-fg/5 transition-colors"
+                >
+                  <span className="text-brand font-medium">{lab.num}</span>
+                  <span className="hidden xl:inline text-[10.5px] uppercase tracking-wider">
+                    {lab.label.split(" ")[0]}
+                  </span>
+                  <ArrowUpRight className="h-3 w-3 opacity-60" />
+                </button>
+              ))}
+            </div>
+
+            <span className="h-3 w-px bg-edge mx-1" aria-hidden="true" />
+
+            {/* Theme & Back to top */}
+            <div className="flex items-center gap-1">
+              <button
+                onClick={toggleTheme}
+                aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                className="flex h-7 w-7 items-center justify-center rounded-full text-ink-3 hover:bg-fg/5 hover:text-ink-1 transition-colors"
+              >
+                {theme === "dark" ? (
+                  <Sun className="h-3.5 w-3.5" />
+                ) : (
+                  <Moon className="h-3.5 w-3.5" />
+                )}
+              </button>
+              <button
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                aria-label="Back to top"
+                title="Back to top"
+                className="flex h-7 w-7 items-center justify-center rounded-full text-ink-3 hover:bg-fg/5 hover:text-ink-1 transition-colors"
+              >
+                <ArrowUp className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </nav>
+        </aside>
       )}
 
       {/* MODALS & TOAST */}
