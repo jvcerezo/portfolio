@@ -70,7 +70,7 @@ const EXPERIENCE = [
     meta: "Remote · Fintech",
     period: "Apr 2025 — Present",
     bullets: [
-      "Shipped 50+ merge requests and 30,000+ lines of code building automated test coverage and internal tooling for a high-scale consumer-fintech Android app.",
+      "Shipped 100+ merge requests and 30,000+ lines of code building automated test coverage and internal tooling for a high-scale consumer-fintech Android app.",
       "Engineered and maintained CI/CD pipeline integrations for the core regression and emergency-hotfix suites, validating every production release across Linux CI runners.",
       "Discovered and resolved 30+ critical, high-impact bugs using Appium and BrowserStack as the final technical gatekeeper before deployment.",
       "Integrated Claude/AI into the automation workflow to accelerate test script development and root-cause debugging.",

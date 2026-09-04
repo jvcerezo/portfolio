@@ -117,7 +117,7 @@ I build end-to-end: schema, backend, frontend, mobile, store listing, and the po
 | **Offline-first** | bidirectional Drift SQLite + Supabase sync engine |
 | **38+** | bank integrations in Sandalan |
 | **30+** | critical bugs surfaced at Billease |
-| **50+** | merge requests and 30k+ lines of automation at Billease |
+| **100+** | merge requests and 30k+ lines of automation at Billease |
 | **1st place** | Codebreak 2.0 Hackathon, built in under 24 hours |
 | **5 months** | to rewrite IRRI's SNPseek from monolith to MERN microservices |
 | **7-dev team** | led for UPLB CS Week Code Wars, zero downtime during 3 hours live |
