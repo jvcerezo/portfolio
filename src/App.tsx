@@ -60,22 +60,34 @@ const PROFILE = {
 };
 
 const SUMMARY = [
-  "Full-stack software engineer with 2+ years building and shipping production web and mobile applications across front end, back end, and QA automation. I rebuilt IRRI’s legacy Java monolith research platform into a MERN microservices architecture — seven Dockerized Node.js and Express services behind a single API gateway.",
+  "Full-stack software engineer with 2+ years building and shipping production web and mobile applications across front end, back end, and QA automation. Currently engineering cloud-first digital solutions at Converge Studios Inc., previously automating fintech releases at Billease. I rebuilt IRRI’s legacy Java monolith research platform into a MERN microservices architecture — seven Dockerized Node.js and Express services behind a single API gateway.",
   "Most of what I ship, I ship end-to-end: designing schemas, wiring REST APIs, building responsive UIs, running CI/CD pipelines, and reading production logs after deploy. I work comfortably in Agile teams and across Linux and Windows environments.",
 ];
 
 const EXPERIENCE = [
   {
+    role: "Software Engineer",
+    company: "Converge Studios Inc.",
+    meta: "Remote",
+    period: "Sep 2026 — Present",
+    bullets: [
+      "Build and deploy scalable cross-platform mobile and web applications leveraging FlutterFlow, Flutter, and cloud-first architectures.",
+      "Engineer custom application logic, REST API integrations, and backend workflows to rapidly ship enterprise-grade digital solutions.",
+      "Collaborate across cross-functional Agile teams to accelerate delivery cycles from feature scoping to production deployment.",
+    ],
+    tech: ["FlutterFlow", "Flutter", "Dart", "REST APIs", "Cloud Integrations", "Agile"],
+  },
+  {
     role: "Junior Test Automation Engineer",
     company: "Billease",
     meta: "Remote · Fintech",
-    period: "Apr 2025 — Present",
+    period: "Apr 2025 — Sep 2026",
     bullets: [
       "Shipped 100+ merge requests and 30,000+ lines of code building automated test coverage and internal tooling for a high-scale consumer-fintech Android app.",
       "Engineered and maintained CI/CD pipeline integrations for the core regression and emergency-hotfix suites, validating every production release across Linux CI runners.",
       "Discovered and resolved 30+ critical, high-impact bugs using Appium and BrowserStack as the final technical gatekeeper before deployment.",
       "Integrated Claude/AI into the automation workflow to accelerate test script development and root-cause debugging.",
-      "Work in Agile/Scrum ceremonies — sprint planning, daily standups, and retrospectives — collaborating with developers and QA across every release cycle.",
+      "Worked in Agile/Scrum ceremonies — sprint planning, daily standups, and retrospectives — collaborating with developers and QA across every release cycle.",
     ],
     tech: ["CI/CD", "Appium", "BrowserStack", "Linux", "Claude API", "Fintech"],
   },
@@ -314,12 +326,12 @@ const SANDALAN_SCREENSHOTS: ScreenshotItem[] = [
 
 const SKILLS: [string, string][] = [
   ["Languages", "JavaScript · TypeScript · Java · Python · SQL · PHP · C/C++ · Dart"],
-  ["Front End", "React · Next.js · jQuery · HTML5 · CSS3 · Tailwind CSS · Vite · Responsive UI/UX"],
+  ["Front End", "React · Next.js · FlutterFlow · jQuery · HTML5 · CSS3 · Tailwind CSS · Vite · Responsive UI/UX"],
   ["Back End", "Node.js · Express · Nest.js · REST APIs · JSON · Microservices · API Gateway · JWT / OAuth / SSO"],
   ["Databases", "PostgreSQL · MongoDB · MySQL · SQLite · Supabase · Schema Design · Query Optimization"],
   ["DevOps & CI", "Docker · Docker Compose · CI/CD · Git · GitHub · GitLab · Vercel · AWS · Linux & Windows"],
   ["Automation & QA", "Appium · BrowserStack · Unit & E2E Testing · Postman · Jira · Agile/Scrum · Code Review"],
-  ["Mobile & AI", "Flutter · Riverpod · Drift · Claude API · Gemini API · RAG Pipelines · Hugging Face · Groq"],
+  ["Mobile & AI", "Flutter · FlutterFlow · Riverpod · Drift · Claude API · Gemini API · RAG Pipelines · Hugging Face · Groq"],
 ];
 
 const EDUCATION = {

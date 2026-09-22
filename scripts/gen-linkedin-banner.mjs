@@ -66,8 +66,8 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
     <!-- Currently -->
     <g font-family="ui-monospace,'SF Mono','Menlo','Consolas','Courier New',monospace">
       <text x="40" y="260" font-size="18" fill="#ffffff" fill-opacity="0.45" letter-spacing="4">// CURRENTLY</text>
-      <text x="40" y="300" font-size="28" font-family="'Helvetica Neue',Arial,sans-serif" font-weight="700" fill="#ffffff">Jr. Test Automation Engineer</text>
-      <text x="40" y="334" font-size="20" fill="#ffffff" fill-opacity="0.6" letter-spacing="2">BILLEASE  ·  APR 2025 — PRESENT</text>
+      <text x="40" y="300" font-size="28" font-family="'Helvetica Neue',Arial,sans-serif" font-weight="700" fill="#ffffff">Software Engineer</text>
+      <text x="40" y="334" font-size="20" fill="#ffffff" fill-opacity="0.6" letter-spacing="2">CONVERGE STUDIOS  ·  SEP 2026 — PRESENT</text>
 
       <text x="40" y="400" font-size="18" fill="#ffffff" fill-opacity="0.45" letter-spacing="4">// SHIPPING</text>
       <text x="40" y="440" font-size="28" font-family="'Helvetica Neue',Arial,sans-serif" font-weight="700" fill="#ffffff">Sandalan<tspan fill="#bef264">.</tspan></text>

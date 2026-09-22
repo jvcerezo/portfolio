@@ -62,7 +62,7 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
     </g>
     <g transform="translate(618, 495)">
       <rect width="160" height="40" rx="20" fill="#ffffff" fill-opacity="0.025" stroke="#ffffff" stroke-opacity="0.2"/>
-      <text x="80" y="26" text-anchor="middle">TEST AUTOMATION</text>
+      <text x="80" y="26" text-anchor="middle">FLUTTERFLOW</text>
     </g>
   </g>
 
@@ -75,8 +75,8 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
   <!-- Right meta block -->
   <g transform="translate(1128, 210)" text-anchor="end" font-family="ui-monospace,'SF Mono','Menlo','Consolas','Courier New',monospace" fill="#ffffff">
     <text font-size="11" letter-spacing="2.5" fill-opacity="0.4">// CURRENTLY</text>
-    <text y="26" font-size="16" font-family="'Helvetica Neue','Arial',sans-serif" font-weight="600">Jr. Test Automation Engineer</text>
-    <text y="48" font-size="13" fill-opacity="0.55" letter-spacing="0.5">BILLEASE  ·  APR 2025 — PRESENT</text>
+    <text y="26" font-size="16" font-family="'Helvetica Neue','Arial',sans-serif" font-weight="600">Software Engineer</text>
+    <text y="48" font-size="13" fill-opacity="0.55" letter-spacing="0.5">CONVERGE STUDIOS  ·  SEP 2026 — PRESENT</text>
 
     <text y="100" font-size="11" letter-spacing="2.5" fill-opacity="0.4">// SHIPPING</text>
     <text y="126" font-size="16" font-family="'Helvetica Neue','Arial',sans-serif" font-weight="600">Sandalan<tspan fill="#bef264">.</tspan></text>

@@ -30,7 +30,7 @@
 
 ### About
 
-Computer Science graduate from the **University of the Philippines Los Baños** (Batch 2025). Currently a **Junior Test Automation Engineer at Billease**, and shipping **Sandalan**, a Filipino adulting and finance app live on Google Play.
+Computer Science graduate from the **University of the Philippines Los Baños** (Batch 2025). Currently a **Software Engineer at Converge Studios Inc.** (formerly Junior Test Automation Engineer at Billease), and shipping **Sandalan**, a Filipino adulting and finance app live on Google Play.
 
 I build end-to-end: schema, backend, frontend, mobile, store listing, and the post-launch crash-log triage at 2 AM. I care about products that work for the market they were built for.
 
@@ -57,6 +57,7 @@ I build end-to-end: schema, backend, frontend, mobile, store listing, and the po
 **Mobile + Frontend**
 
 ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=flutter&logoColor=white)
+![FlutterFlow](https://img.shields.io/badge/FlutterFlow-1E1E1E?style=flat-square&logoColor=white)
 ![Riverpod](https://img.shields.io/badge/Riverpod-0175C2?style=flat-square&logoColor=white)
 ![Drift SQLite](https://img.shields.io/badge/Drift_SQLite-003B57?style=flat-square&logo=sqlite&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB)
