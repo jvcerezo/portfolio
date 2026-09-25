@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Send, Copy, Check, Briefcase } from "lucide-react";
 
 const ROLES = [
+  { id: "swe", label: "Software Engineer", defaultSalary: 115000 },
   { id: "fullstack", label: "Full-Stack Engineer", defaultSalary: 110000 },
-  { id: "qa", label: "QA / Automation Engineer", defaultSalary: 95000 },
   { id: "mobile", label: "Mobile Engineer (Flutter)", defaultSalary: 120000 },
+  { id: "qa", label: "QA / Automation Engineer", defaultSalary: 95000 },
 ];
 
 const SETUPS = [

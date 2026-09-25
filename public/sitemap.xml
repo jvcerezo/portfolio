@@ -3,17 +3,18 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://jettimothycerezo.dev/</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://jettimothycerezo.dev/profile.jpg</image:loc>
       <image:title>Jet Timothy Cerezo — Software Engineer</image:title>
-      <image:caption>Jet Timothy Cerezo, Software Engineer from the Philippines</image:caption>
+      <image:caption>Jet Timothy Cerezo, Software Engineer &amp; Full-Stack Developer</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://jettimothycerezo.dev/og-image.png</image:loc>
       <image:title>Jet Timothy Cerezo Portfolio Social Preview</image:title>
+      <image:caption>Jet Timothy Cerezo — Software Engineer Portfolio (React, Node.js, Flutter, TypeScript)</image:caption>
     </image:image>
   </url>
 </urlset>

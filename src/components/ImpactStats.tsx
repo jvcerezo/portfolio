@@ -34,9 +34,9 @@ const METRICS = [
   },
   {
     icon: GitMerge,
-    value: '100+ MRs',
+    value: '150+ MRs',
     label: 'Fintech Automation',
-    detail: 'Shipped automated test suites & tooling at Billease',
+    detail: 'Shipped ~45k LOC in test suites & tooling at Billease',
   },
   {
     icon: ShieldCheck,

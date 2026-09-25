@@ -83,7 +83,7 @@ const EXPERIENCE = [
     meta: "Remote · Fintech",
     period: "Apr 2025 — Sep 2026",
     bullets: [
-      "Shipped 100+ merge requests and 30,000+ lines of code building automated test coverage and internal tooling for a high-scale consumer-fintech Android app.",
+      "Shipped ~150 merge requests and ~45,000 lines of code building automated test coverage and internal tooling for a high-scale consumer-fintech Android app.",
       "Engineered and maintained CI/CD pipeline integrations for the core regression and emergency-hotfix suites, validating every production release across Linux CI runners.",
       "Discovered and resolved 30+ critical, high-impact bugs using Appium and BrowserStack as the final technical gatekeeper before deployment.",
       "Integrated Claude/AI into the automation workflow to accelerate test script development and root-cause debugging.",
@@ -669,7 +669,9 @@ function App() {
                     <h2 className="font-display text-[15px] font-semibold text-ink-1 leading-tight">
                       {PROFILE.name}
                     </h2>
-                    <p className="text-[12px] text-ink-3">{PROFILE.title}</p>
+                    <p className="text-[12px] text-ink-3">
+                      {PROFILE.title} · Full-Stack &amp; Mobile
+                    </p>
                   </div>
                 </div>
 
@@ -844,7 +846,9 @@ function App() {
                 <h1 className="mt-6 font-display text-[32px] font-semibold leading-tight tracking-[-0.03em] text-ink-1 sm:text-[38px]">
                   {PROFILE.name}
                 </h1>
-                <p className="mt-1 text-[16px] font-medium text-ink-2">{PROFILE.title}</p>
+                <p className="mt-1 text-[16px] font-medium text-ink-2">
+                  {PROFILE.title} <span className="font-normal text-ink-4">·</span> Full-Stack &amp; Mobile Developer
+                </p>
                 <div className="mt-2.5 flex items-center gap-1.5 font-mono text-[11px] text-ink-4">
                   <MapPin className="h-3 w-3" aria-hidden="true" />
                   <span>{PROFILE.location}</span>
