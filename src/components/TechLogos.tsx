@@ -150,7 +150,7 @@ export function CompanyLogo({ company, className = "h-5 w-5" }: { company: strin
   if (norm.includes("rice") || norm.includes("irri")) {
     return (
       <img
-        src="/logos/irri.svg"
+        src="/logos/irri.png"
         alt="IRRI logo"
         className={`object-contain shrink-0 rounded-xs ${className}`}
         loading="lazy"
