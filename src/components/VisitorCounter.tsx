@@ -67,8 +67,8 @@ export function VisitorCounter() {
     if (hasError) return null;
 
     return (
-      <div className="inline-flex items-center gap-1.5 rounded-full border border-edge bg-fg/[0.03] px-2.5 py-1 font-mono text-[11px] text-ink-4 opacity-75">
-        <Eye className="h-3 w-3 text-ink-4" aria-hidden="true" />
+      <div className="inline-flex items-center gap-1.5 rounded-full border border-edge bg-fg/[0.04] px-3 py-1 font-mono text-xs text-ink-3">
+        <Eye className="h-3.5 w-3.5 text-ink-4" aria-hidden="true" />
         <span>...</span>
       </div>
     );
@@ -76,10 +76,10 @@ export function VisitorCounter() {
 
   return (
     <div
-      className="inline-flex items-center gap-1.5 rounded-full border border-edge bg-fg/[0.03] px-2.5 py-1 font-mono text-[11px] text-ink-3 transition-colors hover:border-edge-strong"
+      className="inline-flex items-center gap-1.5 rounded-full border border-edge bg-fg/[0.04] px-3 py-1 font-mono text-xs font-medium text-ink-2 transition-colors hover:border-edge-strong"
       title={`${count.toLocaleString()} total portfolio visits`}
     >
-      <Eye className="h-3 w-3 text-ink-4" aria-hidden="true" />
+      <Eye className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
       <span>{count.toLocaleString()} visits</span>
     </div>
   );

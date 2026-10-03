@@ -12,60 +12,60 @@
 
 /* Light theme (default) */
 :root {
-  --c-bg: 248 246 240;          /* warm paper */
-  --c-bg-2: 238 235 228;
-  --c-fg: 12 12 12;             /* near-black text */
-  --c-line: 12 12 12;           /* borders use fg with alpha */
-  --c-accent: 63 105 18;        /* deep olive-lime, 5.6:1 on paper */
+  --c-bg: 255 255 255;          /* pure white */
+  --c-bg-2: 244 244 245;        /* zinc-100 */
+  --c-fg: 9 9 11;               /* zinc-950 */
+  --c-line: 0 0 0;
+  --c-accent: 9 9 11;           /* crisp black accent */
 
   --bg: rgb(var(--c-bg));
   --bg-2: rgb(var(--c-bg-2));
   --fg: rgb(var(--c-fg));
 
-  --ink-1: rgb(var(--c-fg) / 1);      /* headings          ~17:1 */
-  --ink-2: rgb(var(--c-fg) / 0.82);   /* body copy          ~9.7:1 */
-  --ink-3: rgb(var(--c-fg) / 0.68);   /* secondary          ~6.3:1 */
-  --ink-4: rgb(var(--c-fg) / 0.58);   /* meta, dates, tech  ~4.5:1 */
-  --ink-5: rgb(var(--c-fg) / 0.38);   /* non-text marks only */
+  --ink-1: #09090b;             /* headings */
+  --ink-2: #27272a;             /* body copy */
+  --ink-3: #52525b;             /* secondary text */
+  --ink-4: #71717a;             /* meta, dates, tags */
+  --ink-5: #a1a1aa;
 
-  --edge: rgb(var(--c-line) / 0.16);
-  --edge-strong: rgb(var(--c-line) / 0.28);
+  --edge: rgba(0, 0, 0, 0.08);
+  --edge-strong: rgba(0, 0, 0, 0.16);
 
-  --line: rgb(var(--c-line) / 0.16);
-  --line-strong: rgb(var(--c-line) / 0.28);
+  --line: rgba(0, 0, 0, 0.08);
+  --line-strong: rgba(0, 0, 0, 0.16);
   --muted: var(--ink-4);
   --muted-2: var(--ink-3);
-  --accent: rgb(var(--c-accent));
-  --accent-dim: rgb(var(--c-accent) / 0.18);
+  --accent: #09090b;
+  --accent-dim: rgba(0, 0, 0, 0.06);
 }
 
 /* Dark theme */
 .dark {
-  --c-bg: 10 10 10;
-  --c-bg-2: 17 17 17;
-  --c-fg: 250 250 250;
+  --c-bg: 9 9 11;               /* deep obsidian zinc-950 */
+  --c-bg-2: 24 24 27;           /* zinc-900 */
+  --c-fg: 250 250 250;          /* zinc-50 */
   --c-line: 255 255 255;
-  --c-accent: 190 242 100;       /* vibrant lime on black */
+  --c-accent: 255 255 255;      /* pure white accent */
 
   --bg: rgb(var(--c-bg));
   --bg-2: rgb(var(--c-bg-2));
   --fg: rgb(var(--c-fg));
 
-  --ink-1: rgb(var(--c-fg) / 1);
-  --ink-2: rgb(var(--c-fg) / 0.74);
-  --ink-3: rgb(var(--c-fg) / 0.60);
-  --ink-4: rgb(var(--c-fg) / 0.50);
-  --ink-5: rgb(var(--c-fg) / 0.32);
+  --ink-1: #fafafa;             /* pure white headings */
+  --ink-2: #e4e4e7;             /* crisp body text (zinc-200) */
+  --ink-3: #a1a1aa;             /* secondary text (zinc-400) */
+  --ink-4: #71717a;             /* meta, dates, tags (zinc-500) */
+  --ink-5: #52525b;
 
-  --edge: rgb(var(--c-line) / 0.10);
-  --edge-strong: rgb(var(--c-line) / 0.22);
+  --edge: rgba(255, 255, 255, 0.08);
+  --edge-strong: rgba(255, 255, 255, 0.16);
 
-  --line: rgb(var(--c-line) / 0.10);
-  --line-strong: rgb(var(--c-line) / 0.22);
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
   --muted: var(--ink-4);
   --muted-2: var(--ink-3);
-  --accent: rgb(var(--c-accent));
-  --accent-dim: rgb(var(--c-accent) / 0.15);
+  --accent: #ffffff;
+  --accent-dim: rgba(255, 255, 255, 0.08);
 }
 
 * {
@@ -134,6 +134,23 @@ body {
 .animate-dot {
   animation: dot-pulse 1.8s ease-in-out infinite;
 }
+
+@keyframes eq-1 {
+  0%, 100% { height: 4px; }
+  50% { height: 13px; }
+}
+@keyframes eq-2 {
+  0%, 100% { height: 12px; }
+  50% { height: 5px; }
+}
+@keyframes eq-3 {
+  0%, 100% { height: 7px; }
+  50% { height: 14px; }
+}
+
+.animate-eq-1 { animation: eq-1 0.85s ease-in-out infinite; }
+.animate-eq-2 { animation: eq-2 0.6s ease-in-out infinite 0.15s; }
+.animate-eq-3 { animation: eq-3 0.95s ease-in-out infinite 0.3s; }
 
 /* Reveal on scroll */
 .reveal {
