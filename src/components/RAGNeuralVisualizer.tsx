@@ -33,9 +33,9 @@ const PRESET_QUERIES = [
   { label: "Trivia Guardrail (Off-Topic)", query: "What is the capital of Australia?" },
 ];
 
-const SVG_WIDTH = 760;
-const SVG_HEIGHT = 460;
-const LAYER_X_POSITIONS = [70, 220, 390, 550, 680];
+const SVG_WIDTH = 1000;
+const SVG_HEIGHT = 540;
+const LAYER_X_POSITIONS = [95, 280, 510, 740, 915];
 
 export function RAGNeuralVisualizer({
   initialTrace,
@@ -126,8 +126,8 @@ export function RAGNeuralVisualizer({
   // Node position calculations for SVG Canvas
   const nodePositions = useMemo(() => {
     const positions: Record<string, { x: number; y: number; layer: number }> = {};
-    const topMargin = 55;
-    const usableHeight = 360;
+    const topMargin = 60;
+    const usableHeight = 440;
 
     trace.layers.forEach((layer) => {
       const x = LAYER_X_POSITIONS[layer.index];
@@ -300,7 +300,7 @@ export function RAGNeuralVisualizer({
 
         <svg
           viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}
-          className="w-full max-w-[840px] h-full drop-shadow-sm select-none"
+          className="w-full max-w-[1100px] h-full drop-shadow-sm select-none"
           preserveAspectRatio="xMidYMid meet"
           style={{ overflow: "visible" }}
         >
@@ -326,9 +326,9 @@ export function RAGNeuralVisualizer({
               <g key={layer.code} className="transition-all" pointerEvents="none">
                 <text
                   x={x}
-                  y={22}
+                  y={24}
                   textAnchor="middle"
-                  className={`font-mono text-[10px] font-semibold uppercase tracking-wider transition-colors ${
+                  className={`font-mono text-[11px] font-semibold uppercase tracking-wider transition-colors ${
                     isLayerPulsing ? "fill-emerald-500 font-bold" : "fill-ink-3"
                   }`}
                 >
@@ -336,9 +336,9 @@ export function RAGNeuralVisualizer({
                 </text>
                 <text
                   x={x}
-                  y={34}
+                  y={38}
                   textAnchor="middle"
-                  className="font-sans text-[8.5px] fill-ink-5"
+                  className="font-sans text-[9px] fill-ink-5"
                 >
                   {layer.index === 0
                     ? "Tokens"
@@ -353,9 +353,9 @@ export function RAGNeuralVisualizer({
                 {/* Vertical column subtle guideline */}
                 <line
                   x1={x}
-                  y1={42}
+                  y1={46}
                   x2={x}
-                  y2={SVG_HEIGHT - 15}
+                  y2={SVG_HEIGHT - 18}
                   stroke="currentColor"
                   strokeOpacity="0.04"
                   strokeDasharray="2 4"
@@ -429,7 +429,7 @@ export function RAGNeuralVisualizer({
                 const isLayerPulsing = animationStep === node.layer;
                 const isGuard = node.id.includes("guardrail");
 
-                const nodeRadius = node.layer === 4 ? 14 : node.layer === 0 ? 9 : 8;
+                const nodeRadius = node.layer === 4 ? 16 : node.layer === 0 ? 11 : 9.5;
 
                 // Color configuration
                 let fillColor = "var(--color-bg, #0d0f12)";
@@ -455,7 +455,7 @@ export function RAGNeuralVisualizer({
                     <circle
                       cx={pos.x}
                       cy={pos.y}
-                      r={nodeRadius + 10}
+                      r={nodeRadius + 12}
                       fill="transparent"
                       stroke="transparent"
                     />
@@ -466,7 +466,7 @@ export function RAGNeuralVisualizer({
                         pointerEvents="none"
                         cx={pos.x}
                         cy={pos.y}
-                        r={nodeRadius + 5}
+                        r={nodeRadius + 6}
                         fill={isGuard ? "#f59e0b" : "#10b981"}
                         opacity={isFocal ? 0.35 : isLayerPulsing ? 0.3 : 0.15}
                         className={isLayerPulsing ? "animate-pulse" : ""}
@@ -502,10 +502,10 @@ export function RAGNeuralVisualizer({
                       // Left-aligned label for Layer 0
                       <text
                         pointerEvents="none"
-                        x={pos.x - nodeRadius - 6}
-                        y={pos.y + 3}
+                        x={pos.x - nodeRadius - 8}
+                        y={pos.y + 3.5}
                         textAnchor="end"
-                        className={`font-mono text-[9px] font-medium transition-colors ${
+                        className={`font-mono text-[9.5px] font-medium transition-colors ${
                           node.active ? "fill-ink-1 font-semibold" : "fill-ink-5"
                         }`}
                       >
@@ -516,17 +516,17 @@ export function RAGNeuralVisualizer({
                       <g pointerEvents="none">
                         <text
                           x={pos.x}
-                          y={pos.y - nodeRadius - 8}
+                          y={pos.y - nodeRadius - 10}
                           textAnchor="middle"
-                          className="font-mono text-[9.5px] font-bold fill-ink-1 uppercase tracking-wider"
+                          className="font-mono text-[10px] font-bold fill-ink-1 uppercase tracking-wider"
                         >
                           {node.label}
                         </text>
                         <text
                           x={pos.x}
-                          y={pos.y + nodeRadius + 14}
+                          y={pos.y + nodeRadius + 16}
                           textAnchor="middle"
-                          className="font-mono text-[8px] fill-emerald-500 font-medium"
+                          className="font-mono text-[8.5px] fill-emerald-500 font-medium"
                         >
                           {trace.stats.confidence}% conf
                         </text>
@@ -535,14 +535,14 @@ export function RAGNeuralVisualizer({
                       // Right-side label for Hidden Layers 1, 2, 3
                       <g pointerEvents="none">
                         <text
-                          x={pos.x + nodeRadius + 6}
-                          y={pos.y + 3}
+                          x={pos.x + nodeRadius + 8}
+                          y={pos.y + 3.5}
                           textAnchor="start"
-                          className={`font-sans text-[8.5px] transition-colors truncate ${
+                          className={`font-sans text-[9px] transition-colors truncate ${
                             node.active ? "fill-ink-1 font-medium" : "fill-ink-5"
                           }`}
                         >
-                          {node.label.length > 20 ? node.label.slice(0, 18) + "…" : node.label}
+                          {node.label.length > 28 ? node.label.slice(0, 26) + "…" : node.label}
                         </text>
                       </g>
                     )}
@@ -555,7 +555,7 @@ export function RAGNeuralVisualizer({
       </div>
 
       {/* Bottom Inspector & Synthesis Drawer - Fixed height prevents layout shifts on hover */}
-      <div className="border-t border-edge bg-fg/[0.015] p-3 h-[132px] shrink-0 overflow-hidden flex flex-col justify-between">
+      <div className="border-t border-edge bg-fg/[0.015] p-3 h-[142px] shrink-0 overflow-hidden flex flex-col justify-between">
         {activeInspectNode ? (
           /* Deep-Dive Inspection Panel for Clicked / Hovered Neuron */
           <div className="h-full flex flex-col justify-between">
