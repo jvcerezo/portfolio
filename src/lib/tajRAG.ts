@@ -300,7 +300,26 @@ export const KNOWLEDGE_CORPUS: KnowledgeChunk[] = [
     ],
     sourceLabel: "Contact & Availability",
     content:
-      "Jet is based in Los Baños, Laguna, Philippines (UTC+8). He is actively open and available for full-time Software Engineering roles (remote worldwide). He is fully flexible and available to align with US working hours (PST, EST, etc.). Contact: Email: jetjetcerezo@gmail.com, Phone: +63 998 914 8907, LinkedIn: linkedin.com/in/jet-timothy-cerezo-126903254, GitHub: github.com/jvcerezo.",
+      "Jet is based in Los Baños, Laguna, Philippines (UTC+8). He is actively open and available for full-time Software Engineering roles (remote worldwide). He is fully flexible and available to align with US working hours (PST, EST, etc.). Contact: Email: jetjetcerezo@gmail.com, Phone: +63 998 914 8907, LinkedIn: linkedin.com/in/jet-timothy-cerezo-126903254, GitHub: github.com/jvcerezo. You can view his interactive résumé at /resume.",
+  },
+  {
+    id: "resume_cv",
+    title: "Official Résumé & Curriculum Vitae (PDF)",
+    category: "bio",
+    keywords: [
+      "resume",
+      "cv",
+      "curriculum vitae",
+      "pdf",
+      "download resume",
+      "view resume",
+      "credentials",
+      "experience pdf",
+      "qualifications",
+    ],
+    sourceLabel: "Official Résumé",
+    content:
+      "Jet's official software engineering résumé is viewable directly in the dedicated interactive PDF viewer at /resume, where you can inspect it or download the PDF file directly. It details his full-stack engineering achievements, microservices architecture, test automation metrics (~150 MRs, ~45k LOC at Billease), and production Flutter apps on Google Play.",
   },
   {
     id: "philosophy_architecture",

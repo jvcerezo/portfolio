@@ -3,7 +3,6 @@ import {
   Mail,
   Github,
   Linkedin,
-  Download,
   ArrowUpRight,
   Sun,
   Moon,
@@ -16,6 +15,7 @@ import {
   Layers,
   Terminal,
   Bot,
+  FileText,
 } from "lucide-react";
 import { TimezoneWidget } from "./components/TimezoneWidget";
 import { VisitorCounter } from "./components/VisitorCounter";
@@ -27,6 +27,7 @@ import { ImpactBento } from "./components/ImpactBento";
 import { ArchitectureDiagram } from "./components/ArchitectureDiagram";
 import { TajAIModal, TajAILauncher } from "./components/TajAIModal";
 import { TechLogo, CompanyLogo, CompanyBrandStrip } from "./components/TechLogos";
+import { ResumePage } from "./components/ResumePage";
 import { fireConfetti } from "./lib/confetti";
 
 const PROFILE = {
@@ -351,8 +352,41 @@ function useScrollSpy(ids: string[]) {
   return active;
 }
 
+const isResumeRoute = () => {
+  if (typeof window === "undefined") return false;
+  const path = window.location.pathname.toLowerCase().replace(/\/$/, "");
+  const hash = window.location.hash.toLowerCase();
+  return path === "/resume" || hash === "#resume" || hash === "#/resume";
+};
+
 function App() {
   const [theme, toggleTheme] = useTheme();
+  const [isResumeView, setIsResumeView] = useState<boolean>(isResumeRoute);
+
+  useEffect(() => {
+    const syncRoute = () => {
+      setIsResumeView(isResumeRoute());
+    };
+    window.addEventListener("popstate", syncRoute);
+    window.addEventListener("hashchange", syncRoute);
+    return () => {
+      window.removeEventListener("popstate", syncRoute);
+      window.removeEventListener("hashchange", syncRoute);
+    };
+  }, []);
+
+  const navigateToResume = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    window.history.pushState(null, "", "/resume");
+    setIsResumeView(true);
+    window.scrollTo({ top: 0, behavior: "instant" });
+  };
+
+  const navigateToPortfolio = () => {
+    window.history.pushState(null, "", "/");
+    setIsResumeView(false);
+  };
+
   const activeNav = useScrollSpy(NAV_ITEMS.map((n) => n.id));
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -467,6 +501,8 @@ function App() {
         handleCopyEmail();
       } else if (e.key.toLowerCase() === "j") {
         setIsTajAIOpen((prev) => !prev);
+      } else if (e.key.toLowerCase() === "r") {
+        navigateToResume();
       } else if (e.key.toLowerCase() === "m") {
         fireConfetti();
         setToastMessage("🎉 Confetti celebration!");
@@ -476,7 +512,7 @@ function App() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [toggleTheme, konamiIdx, KONAMI]);
+  }, [toggleTheme, konamiIdx, KONAMI, isResumeView]);
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
@@ -484,6 +520,17 @@ function App() {
       el.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  if (isResumeView) {
+    return (
+      <ResumePage
+        onBack={navigateToPortfolio}
+        theme={theme}
+        toggleTheme={toggleTheme}
+        pdfUrl={PROFILE.resume}
+      />
+    );
+  }
 
   return (
     <div className="relative min-h-screen bg-bg text-ink-1 font-sans selection:bg-ink-1 selection:text-bg antialiased">
@@ -720,18 +767,19 @@ function App() {
                 </a>
 
                 <a
-                  href={PROFILE.resume}
-                  download
-                  className="hover:text-ink-1 transition-colors flex items-center gap-1 font-mono text-xs uppercase tracking-wider"
+                  href="/resume"
+                  onClick={navigateToResume}
+                  className="hover:text-ink-1 transition-colors flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider"
+                  title="View Résumé (PDF Viewer)"
                 >
-                  <Download className="h-4 w-4" />
+                  <FileText className="h-4 w-4" />
                   <span>Résumé</span>
                 </a>
               </div>
 
               {/* Minimal Keyboard Shortcuts Hint */}
               <div className="font-mono text-[11px] text-ink-5 hidden lg:block">
-                Hotkeys: <kbd className="font-semibold text-ink-4">[J]</kbd> Taj AI · <kbd className="font-semibold text-ink-4">[T]</kbd> Theme · <kbd className="font-semibold text-ink-4">[C]</kbd> Copy Email · <kbd className="font-semibold text-ink-4">[M]</kbd> Confetti
+                Hotkeys: <kbd className="font-semibold text-ink-4">[J]</kbd> Taj AI · <kbd className="font-semibold text-ink-4">[R]</kbd> Résumé · <kbd className="font-semibold text-ink-4">[T]</kbd> Theme · <kbd className="font-semibold text-ink-4">[C]</kbd> Copy Email · <kbd className="font-semibold text-ink-4">[M]</kbd> Confetti
               </div>
             </div>
           </header>
@@ -893,9 +941,10 @@ function App() {
 
               <div className="mt-12">
                 <a
-                  href={PROFILE.resume}
-                  download
+                  href="/resume"
+                  onClick={navigateToResume}
                   className="inline-flex items-center font-semibold leading-tight text-ink-1 hover:underline text-sm group"
+                  title="View Résumé (PDF Viewer)"
                 >
                   <span>View Full Résumé (PDF)</span>
                   <ArrowUpRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
