@@ -152,28 +152,44 @@ export function RAGNeuralVisualizer({
     return map;
   }, [trace]);
 
+  // Focal node ID when hovered or pinned
+  const focalNodeId = hoveredNodeId || selectedNodeId;
+
   // Currently focused node (selected or hovered)
   const activeInspectNode = useMemo(() => {
-    const targetId = selectedNodeId || hoveredNodeId;
-    if (targetId && nodesMap.has(targetId)) {
-      return nodesMap.get(targetId)!;
+    if (focalNodeId && nodesMap.has(focalNodeId)) {
+      return nodesMap.get(focalNodeId)!;
     }
     return null;
-  }, [selectedNodeId, hoveredNodeId, nodesMap]);
+  }, [focalNodeId, nodesMap]);
 
   // Connected synapse IDs for currently highlighted node
   const highlightedSynapseIds = useMemo(() => {
-    const targetId = hoveredNodeId || selectedNodeId;
-    if (!targetId) return null;
+    if (!focalNodeId) return null;
 
     const set = new Set<string>();
     trace.synapses.forEach((syn) => {
-      if (syn.sourceId === targetId || syn.targetId === targetId) {
+      if (syn.sourceId === focalNodeId || syn.targetId === focalNodeId) {
         set.add(syn.id);
       }
     });
     return set;
-  }, [hoveredNodeId, selectedNodeId, trace.synapses]);
+  }, [focalNodeId, trace.synapses]);
+
+  // Connected neighbor node IDs for currently highlighted node
+  const connectedNeighborNodeIds = useMemo(() => {
+    if (!focalNodeId) return null;
+
+    const set = new Set<string>();
+    trace.synapses.forEach((syn) => {
+      if (syn.sourceId === focalNodeId) {
+        set.add(syn.targetId);
+      } else if (syn.targetId === focalNodeId) {
+        set.add(syn.sourceId);
+      }
+    });
+    return set;
+  }, [focalNodeId, trace.synapses]);
 
   return (
     <div className="flex flex-col h-full bg-bg text-ink-1 overflow-hidden select-none">
@@ -182,7 +198,7 @@ export function RAGNeuralVisualizer({
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-edge bg-fg/[0.04]">
-              <Activity className="h-4 w-4 text-emerald-500 animate-pulse" />
+              <Activity className="h-4 w-4 text-emerald-500" />
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -210,8 +226,8 @@ export function RAGNeuralVisualizer({
               className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-mono rounded-lg border border-edge bg-fg/[0.03] hover:bg-fg/[0.08] hover:border-ink-1/30 transition-all text-ink-2 disabled:opacity-50 cursor-pointer"
               title="Replay layer activation flow"
             >
-              <Play className={`h-3 w-3 ${isAnimating ? "animate-spin text-emerald-500" : ""}`} />
-              <span>{isAnimating ? "Signal Flowing..." : "Replay Pulse"}</span>
+              <Play className={`h-3 w-3 ${isAnimating ? "text-emerald-500" : ""}`} />
+              <span>{isAnimating ? "Signal Flowing..." : "Replay Flow"}</span>
             </button>
 
             {onBackToChat && (
@@ -321,15 +337,22 @@ export function RAGNeuralVisualizer({
           {/* Layer Headers */}
           {trace.layers.map((layer) => {
             const x = LAYER_X_POSITIONS[layer.index];
-            const isLayerPulsing = animationStep === layer.index;
+            const isWaveFront = animationStep === layer.index;
+            const isLayerActiveInFlow =
+              animationStep === null || animationStep >= layer.index;
+
             return (
               <g key={layer.code} className="transition-all" pointerEvents="none">
                 <text
                   x={x}
                   y={24}
                   textAnchor="middle"
-                  className={`font-mono text-[11px] font-semibold uppercase tracking-wider transition-colors ${
-                    isLayerPulsing ? "fill-emerald-500 font-bold" : "fill-ink-3"
+                  className={`font-mono text-[11px] font-semibold uppercase tracking-wider transition-colors duration-300 ${
+                    isWaveFront
+                      ? "fill-emerald-400 font-bold"
+                      : isLayerActiveInFlow
+                      ? "fill-ink-2"
+                      : "fill-ink-4"
                   }`}
                 >
                   {layer.code}
@@ -338,7 +361,9 @@ export function RAGNeuralVisualizer({
                   x={x}
                   y={38}
                   textAnchor="middle"
-                  className="font-sans text-[9px] fill-ink-5"
+                  className={`font-sans text-[9px] transition-colors duration-300 ${
+                    isLayerActiveInFlow ? "fill-ink-4" : "fill-ink-5"
+                  }`}
                 >
                   {layer.index === 0
                     ? "Tokens"
@@ -357,8 +382,9 @@ export function RAGNeuralVisualizer({
                   x2={x}
                   y2={SVG_HEIGHT - 18}
                   stroke="currentColor"
-                  strokeOpacity="0.04"
+                  strokeOpacity={isLayerActiveInFlow ? "0.06" : "0.03"}
                   strokeDasharray="2 4"
+                  className="transition-opacity duration-300"
                 />
               </g>
             );
@@ -371,12 +397,7 @@ export function RAGNeuralVisualizer({
               const tgtPos = nodePositions[syn.targetId];
               if (!srcPos || !tgtPos) return null;
 
-              const isHighlighted = highlightedSynapseIds?.has(syn.id);
-              const isLayerActive =
-                animationStep === null ||
-                (animationStep >= srcPos.layer && animationStep <= tgtPos.layer);
-
-              const isActive = syn.active && isLayerActive;
+              const isConnectedToFocal = highlightedSynapseIds?.has(syn.id) ?? false;
               const isGuardrail =
                 syn.sourceId.includes("guardrail") || syn.targetId.includes("guardrail");
 
@@ -385,20 +406,40 @@ export function RAGNeuralVisualizer({
               const pathData = `M ${srcPos.x} ${srcPos.y} C ${midX} ${srcPos.y}, ${midX} ${tgtPos.y}, ${tgtPos.x} ${tgtPos.y}`;
 
               let stroke = "currentColor";
-              let strokeOpacity = 0.05;
+              let strokeOpacity = 0.04;
               let strokeWidth = 0.75;
               let strokeDasharray: string | undefined = undefined;
 
-              if (isHighlighted) {
-                stroke = isGuardrail ? "url(#guardrailSynapseGrad)" : "url(#activeSynapseGrad)";
-                strokeOpacity = 1;
-                strokeWidth = 2.5;
-                strokeDasharray = "4 3";
-              } else if (isActive) {
-                stroke = isGuardrail ? "url(#guardrailSynapseGrad)" : "url(#activeSynapseGrad)";
-                strokeOpacity = 0.85;
-                strokeWidth = 1.75;
-                strokeDasharray = "5 3";
+              if (focalNodeId) {
+                // WHEN A NEURON IS HOVERED OR PINNED:
+                // Deactivate the default chosen neural path to eliminate conflicting lines.
+                if (isConnectedToFocal) {
+                  if (syn.active) {
+                    stroke = isGuardrail ? "url(#guardrailSynapseGrad)" : "url(#activeSynapseGrad)";
+                    strokeOpacity = 1;
+                    strokeWidth = 2.5;
+                  } else {
+                    stroke = "#06b6d4";
+                    strokeOpacity = 0.55;
+                    strokeWidth = 1.75;
+                    strokeDasharray = "4 3";
+                  }
+                } else {
+                  strokeOpacity = 0.025;
+                  strokeWidth = 0.5;
+                }
+              } else {
+                // DEFAULT FLOW STATE:
+                // Signal connects forward smoothly as each layer activates without blinking
+                const isSynapseActiveInFlow =
+                  animationStep === null || animationStep >= tgtPos.layer;
+                const isActive = syn.active && isSynapseActiveInFlow;
+
+                if (isActive) {
+                  stroke = isGuardrail ? "url(#guardrailSynapseGrad)" : "url(#activeSynapseGrad)";
+                  strokeOpacity = 0.85;
+                  strokeWidth = 2;
+                }
               }
 
               return (
@@ -410,7 +451,7 @@ export function RAGNeuralVisualizer({
                   strokeWidth={strokeWidth}
                   strokeOpacity={strokeOpacity}
                   strokeDasharray={strokeDasharray}
-                  className={isActive ? "animate-pulse transition-all duration-300" : "transition-all"}
+                  className="transition-all duration-300 ease-out"
                 />
               );
             })}
@@ -423,24 +464,77 @@ export function RAGNeuralVisualizer({
                 const pos = nodePositions[node.id];
                 if (!pos) return null;
 
-                const isSelected = selectedNodeId === node.id;
-                const isHovered = hoveredNodeId === node.id;
-                const isFocal = isSelected || isHovered;
-                const isLayerPulsing = animationStep === node.layer;
+                const isTarget = focalNodeId === node.id;
+                const isNeighbor = connectedNeighborNodeIds?.has(node.id) ?? false;
                 const isGuard = node.id.includes("guardrail");
 
                 const nodeRadius = node.layer === 4 ? 16 : node.layer === 0 ? 11 : 9.5;
 
-                // Color configuration
+                // Color and highlight configuration
                 let fillColor = "var(--color-bg, #0d0f12)";
                 let strokeColor = "currentColor";
                 let strokeOpacity = 0.2;
                 let strokeWidth = 1.5;
+                let showHalo = false;
+                let haloColor = isGuard ? "#f59e0b" : "#10b981";
+                let haloOpacity = 0;
+                let showInnerDot = false;
+                let innerDotColor = haloColor;
+                let labelClass = "fill-ink-5";
 
-                if (node.active) {
-                  strokeColor = isGuard ? "#f59e0b" : "#10b981";
-                  strokeOpacity = 1;
-                  strokeWidth = isFocal ? 2.5 : 2;
+                if (focalNodeId) {
+                  // HOVERED / PINNED INSPECTION STATE:
+                  // The default chosen path is deactivated so there is no visual conflict.
+                  if (isTarget) {
+                    const focalColor = isGuard ? "#f59e0b" : node.active ? "#10b981" : "#06b6d4";
+                    strokeColor = focalColor;
+                    strokeOpacity = 1;
+                    strokeWidth = 2.5;
+                    showHalo = true;
+                    haloColor = focalColor;
+                    haloOpacity = 0.35;
+                    showInnerDot = true;
+                    innerDotColor = focalColor;
+                    labelClass = "fill-ink-1 font-bold";
+                  } else if (isNeighbor) {
+                    const neighborColor = isGuard ? "#f59e0b" : node.active ? "#10b981" : "currentColor";
+                    strokeColor = neighborColor;
+                    strokeOpacity = node.active ? 0.9 : 0.45;
+                    strokeWidth = 1.75;
+                    showHalo = node.active;
+                    haloColor = neighborColor;
+                    haloOpacity = 0.15;
+                    showInnerDot = node.active;
+                    innerDotColor = neighborColor;
+                    labelClass = node.active ? "fill-ink-1 font-semibold" : "fill-ink-3";
+                  } else {
+                    // Conflicting node from chosen path or background: fully dimmed
+                    strokeOpacity = 0.1;
+                    strokeWidth = 1;
+                    labelClass = "fill-ink-5/30";
+                  }
+                } else {
+                  // DEFAULT FLOW STATE (NO HOVER):
+                  // Active neurons in the chosen path light up steadily as the signal reaches their layer
+                  const isNodeActiveInFlow =
+                    animationStep === null || animationStep >= node.layer;
+                  const isActive = node.active && isNodeActiveInFlow;
+
+                  if (isActive) {
+                    strokeColor = isGuard ? "#f59e0b" : "#10b981";
+                    strokeOpacity = 1;
+                    strokeWidth = 2;
+                    showHalo = true;
+                    haloColor = strokeColor;
+                    haloOpacity = 0.2;
+                    showInnerDot = true;
+                    innerDotColor = strokeColor;
+                    labelClass = "fill-ink-1 font-semibold";
+                  } else {
+                    strokeOpacity = 0.2;
+                    strokeWidth = 1.25;
+                    labelClass = "fill-ink-5";
+                  }
                 }
 
                 return (
@@ -460,16 +554,16 @@ export function RAGNeuralVisualizer({
                       stroke="transparent"
                     />
 
-                    {/* Outer Glow Halo for Active Nodes */}
-                    {node.active && (
+                    {/* Outer Glow Halo for Active / Focused Nodes */}
+                    {showHalo && (
                       <circle
                         pointerEvents="none"
                         cx={pos.x}
                         cy={pos.y}
                         r={nodeRadius + 6}
-                        fill={isGuard ? "#f59e0b" : "#10b981"}
-                        opacity={isFocal ? 0.35 : isLayerPulsing ? 0.3 : 0.15}
-                        className={isLayerPulsing ? "animate-pulse" : ""}
+                        fill={haloColor}
+                        opacity={haloOpacity}
+                        className="transition-opacity duration-300"
                       />
                     )}
 
@@ -483,17 +577,18 @@ export function RAGNeuralVisualizer({
                       stroke={strokeColor}
                       strokeWidth={strokeWidth}
                       strokeOpacity={strokeOpacity}
-                      className="transition-all duration-200"
+                      className="transition-all duration-300"
                     />
 
-                    {/* Small inner dot if fired */}
-                    {node.active && (
+                    {/* Small inner dot if active / focused */}
+                    {showInnerDot && (
                       <circle
                         pointerEvents="none"
                         cx={pos.x}
                         cy={pos.y}
                         r={nodeRadius * 0.4}
-                        fill={isGuard ? "#f59e0b" : "#10b981"}
+                        fill={innerDotColor}
+                        className="transition-all duration-300"
                       />
                     )}
 
@@ -505,9 +600,7 @@ export function RAGNeuralVisualizer({
                         x={pos.x - nodeRadius - 8}
                         y={pos.y + 3.5}
                         textAnchor="end"
-                        className={`font-mono text-[9.5px] font-medium transition-colors ${
-                          node.active ? "fill-ink-1 font-semibold" : "fill-ink-5"
-                        }`}
+                        className={`font-mono text-[9.5px] transition-colors duration-200 ${labelClass}`}
                       >
                         {node.label}
                       </text>
@@ -526,7 +619,11 @@ export function RAGNeuralVisualizer({
                           x={pos.x}
                           y={pos.y + nodeRadius + 16}
                           textAnchor="middle"
-                          className="font-mono text-[8.5px] fill-emerald-500 font-medium"
+                          className={`font-mono text-[8.5px] font-medium transition-colors ${
+                            focalNodeId && !isTarget && !isNeighbor
+                              ? "fill-ink-5/40"
+                              : "fill-emerald-500"
+                          }`}
                         >
                           {trace.stats.confidence}% conf
                         </text>
@@ -538,9 +635,7 @@ export function RAGNeuralVisualizer({
                           x={pos.x + nodeRadius + 8}
                           y={pos.y + 3.5}
                           textAnchor="start"
-                          className={`font-sans text-[9px] transition-colors truncate ${
-                            node.active ? "fill-ink-1 font-medium" : "fill-ink-5"
-                          }`}
+                          className={`font-sans text-[9px] transition-colors duration-200 truncate ${labelClass}`}
                         >
                           {node.label.length > 28 ? node.label.slice(0, 26) + "…" : node.label}
                         </text>

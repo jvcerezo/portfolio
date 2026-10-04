@@ -305,10 +305,7 @@ export function TajAIModal({ isOpen, onClose }: TajAIModalProps) {
               <Activity className="h-3 w-3 text-emerald-500" />
               <span className="flex items-center gap-1">
                 <span>Neural Graph</span>
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
-                </span>
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
               </span>
             </button>
           </div>
@@ -558,7 +555,7 @@ export function TajAILauncher({ onClick }: { onClick: () => void }) {
     >
       <div className="relative flex h-5 w-5 items-center justify-center rounded-full bg-fg text-bg">
         <Sparkles className="h-3 w-3" />
-        <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-bg animate-pulse" />
+        <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-bg" />
       </div>
       <div className="font-mono text-xs flex items-center gap-1.5">
         <span className="font-semibold text-ink-1">Taj AI</span>
