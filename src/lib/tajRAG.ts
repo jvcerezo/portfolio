@@ -16,11 +16,62 @@ export interface RetrievalResult {
   score: number;
 }
 
+export interface NeuralNode {
+  id: string;
+  layer: number;
+  label: string;
+  sublabel: string;
+  activation: number;
+  active: boolean;
+  type: "token" | "intent" | "corpus" | "pooling" | "output";
+  metadata?: {
+    score?: number;
+    matchedKeywords?: string[];
+    description?: string;
+    details?: string;
+    sourceLabel?: string;
+    formula?: string;
+  };
+}
+
+export interface NeuralSynapse {
+  id: string;
+  sourceId: string;
+  targetId: string;
+  weight: number;
+  active: boolean;
+}
+
+export interface NeuralLayer {
+  index: number;
+  name: string;
+  code: string;
+  description: string;
+  nodes: NeuralNode[];
+}
+
+export interface RAGNeuralTrace {
+  query: string;
+  timestamp: number;
+  layers: NeuralLayer[];
+  synapses: NeuralSynapse[];
+  stats: {
+    totalTokens: number;
+    stopWordsCount: number;
+    topScore: number;
+    retrievedCount: number;
+    confidence: number;
+    intent: string;
+    status: "matched" | "unrelated" | "greeting";
+  };
+}
+
 export interface TajResponse {
   answer: string;
   retrievedSources: KnowledgeChunk[];
   confidence: number;
   intent: string;
+  neuralTrace?: RAGNeuralTrace;
 }
 
 export const KNOWLEDGE_CORPUS: KnowledgeChunk[] = [
@@ -346,6 +397,566 @@ export function retrieveContext(query: string, topK = 3): RetrievalResult[] {
     .slice(0, topK);
 }
 
+// Generate Step-by-Step Neural Network RAG Trace
+export function generateNeuralTrace(
+  query: string,
+  responseContext?: {
+    answer: string;
+    retrievedSources: KnowledgeChunk[];
+    confidence: number;
+    intent: string;
+  }
+): RAGNeuralTrace {
+  const qLower = query.toLowerCase().trim();
+  const rawTokens = tokenize(query, false);
+  const filteredTokens = tokenize(query, true);
+  const stopWords = rawTokens.filter((t) => !filteredTokens.includes(t));
+
+  const isGreeting = /^(hi|hello|hey|kamusta|good\s+(morning|afternoon|evening)|who\s+are\s+you|what\s+is\s+taj\s*ai|help)\b/i.test(qLower);
+  const isBilleaseLoan = /\b(loan|loans|borrow|credit\s+limit|interest\s+rate|repay|repayment|cash\s+advance|customer\s+service|pay\s+bill|billing|apply\s+for\s+loan|borrow\s+money)\b/i.test(qLower);
+  const isAgriculture = /\b(cook\s+rice|growing\s+rice|rice\s+variety|buy\s+rice|harvest|crop|agriculture|farming|seeds)\b/i.test(qLower);
+  const isOffTopic =
+    /\b(\d+\s*[\+\-\*\/]\s*\d+|square\s+root|calculate|solve\s+for)\b/i.test(qLower) ||
+    /\b(weather|temperature|forecast|rain\s+today|climate)\b/i.test(qLower) ||
+    /\b(capital\s+of|who\s+is\s+the\s+president|prime\s+minister|who\s+won\s+the\s+(world\s+cup|super\s+bowl|nba|championship)|how\s+old\s+is|tallest\s+building|speed\s+of\s+light)\b/i.test(qLower) ||
+    /\b(write\s+a\s+(poem|song|story|essay)|tell\s+me\s+a\s+(joke|riddle|story)|sing\s+a\s+song)\b/i.test(qLower) ||
+    /\b(recipe|how\s+to\s+cook|bake|ingredients\s+for)\b/i.test(qLower) ||
+    /\b(write\s+(python|c\+\+|java|javascript|sql|html)\s+code\s+(for|to)|solve\s+my\s+homework|debug\s+my\s+code|invert\s+a\s+binary\s+tree)\b/i.test(qLower) ||
+    /\b(do\s+you\s+(love|feel|eat|sleep)|are\s+you\s+(human|alive|sentient)|meaning\s+of\s+life|marry\s+me)\b/i.test(qLower) ||
+    /\b(lend\s+me|borrow\s+money|give\s+me\s+money|send\s+me\s+crypto|buy\s+me)\b/i.test(qLower);
+
+  const isGuardrailTriggered = isBilleaseLoan || isAgriculture || isOffTopic;
+
+  // Compute retrieval scores for all chunks
+  const allChunkScores = KNOWLEDGE_CORPUS.map((chunk) => {
+    let score = 0;
+    const chunkTokens = tokenize(`${chunk.title} ${chunk.content} ${chunk.keywords.join(" ")}`, false);
+    const chunkSet = new Set(chunkTokens);
+    const matchedTokens: string[] = [];
+
+    for (const q of filteredTokens) {
+      let matched = false;
+      if (chunk.keywords.some((k) => k.toLowerCase() === q || k.toLowerCase().includes(q))) {
+        score += 3.5;
+        matched = true;
+      }
+      if (chunk.title.toLowerCase().includes(q)) {
+        score += 2.5;
+        matched = true;
+      }
+      if (chunkSet.has(q)) {
+        score += 1.2;
+        matched = true;
+      }
+      if (matched && !matchedTokens.includes(q)) {
+        matchedTokens.push(q);
+      }
+    }
+
+    // Entity boosts
+    let entityBoost = 0;
+    if (qLower.includes("billease") && chunk.id === "exp_billease") { score += 5; entityBoost += 5; }
+    if (qLower.includes("sandalan") && chunk.id === "proj_sandalan") { score += 5; entityBoost += 5; }
+    if (qLower.includes("irri") && chunk.id === "exp_irri") { score += 5; entityBoost += 5; }
+    if (qLower.includes("snpseek") && chunk.id === "exp_irri") { score += 5; entityBoost += 5; }
+    if (qLower.includes("microservice") && chunk.id === "exp_irri") { score += 4; entityBoost += 4; }
+    if ((qLower.includes("hackathon") || qLower.includes("codebreak")) && chunk.id === "proj_codebreak") { score += 5; entityBoost += 5; }
+    if (qLower.includes("converge") && chunk.id === "exp_converge") { score += 5; entityBoost += 5; }
+    if ((qLower.includes("contact") || qLower.includes("email") || qLower.includes("hire") || qLower.includes("us hour")) && chunk.id === "contact_availability") { score += 5; entityBoost += 5; }
+    if ((qLower.includes("stack") || qLower.includes("skills") || qLower.includes("languages")) && chunk.id === "skills_matrix") { score += 4; entityBoost += 4; }
+    if ((qLower.includes("who is jet") || qLower.includes("about jet") || qLower.includes("bio") || qLower.includes("summary")) && chunk.id === "bio_overview") { score += 6; entityBoost += 6; }
+
+    return { chunk, score, entityBoost, matchedTokens };
+  });
+
+  const sortedResults = [...allChunkScores].sort((a, b) => b.score - a.score);
+  const topRetrieval = sortedResults.filter((r) => r.score > 1.5).slice(0, 3);
+  const topScore = sortedResults.length > 0 ? sortedResults[0].score : 0;
+  const isNoMatch = topScore < 1.8 && !isGreeting && !isGuardrailTriggered;
+
+  const status: "matched" | "unrelated" | "greeting" = isGreeting
+    ? "greeting"
+    : isGuardrailTriggered || isNoMatch
+    ? "unrelated"
+    : "matched";
+
+  const intent =
+    responseContext?.intent ||
+    (isGreeting
+      ? "greeting"
+      : isGuardrailTriggered
+      ? "guardrail_rejected"
+      : isNoMatch
+      ? "unrelated_no_match"
+      : topRetrieval[0]?.chunk.category || "general");
+
+  const confidence =
+    responseContext?.confidence ??
+    (status === "matched"
+      ? Math.min(Math.round((topScore / 8) * 100), 99)
+      : status === "greeting"
+      ? 99
+      : 0);
+
+  // --- LAYER 0: Query Tokenizer & Input Embeddings ---
+  const layer0Nodes: NeuralNode[] = [];
+  if (filteredTokens.length === 0) {
+    layer0Nodes.push({
+      id: "node_tok_empty",
+      layer: 0,
+      label: rawTokens.length > 0 ? `[${rawTokens.slice(0, 3).join(", ")}]` : "[empty query]",
+      sublabel: rawTokens.length > 0 ? "Stop-words only" : "Zero length",
+      activation: 0.15,
+      active: false,
+      type: "token",
+      metadata: {
+        formula: "TF = 0.0 • No content keywords retained after English stop-word filtering",
+        details: "Filtered tokens empty",
+      },
+    });
+  } else {
+    filteredTokens.slice(0, 5).forEach((token, idx) => {
+      layer0Nodes.push({
+        id: `node_tok_${idx}_${token}`,
+        layer: 0,
+        label: token,
+        sublabel: "TF: 1.0 (Content)",
+        activation: 1.0,
+        active: true,
+        type: "token",
+        metadata: {
+          formula: `Normalized keyword '${token}', frequency = 1.0`,
+          details: "Direct token match for semantic routing",
+        },
+      });
+    });
+  }
+  if (stopWords.length > 0) {
+    layer0Nodes.push({
+      id: "node_tok_stopwords",
+      layer: 0,
+      label: `Stop-Words (${stopWords.length})`,
+      sublabel: `Suppressed (${stopWords.slice(0, 2).join(", ")}...)`,
+      activation: 0.05,
+      active: false,
+      type: "token",
+      metadata: {
+        formula: "Eliminated by STOP_WORDS filter (noise reduction)",
+        details: `Filtered: ${stopWords.join(", ")}`,
+      },
+    });
+  }
+
+  // --- LAYER 1: Semantic Intent & Feature Attention ---
+  const intentDefinitions = [
+    {
+      id: "head_qa",
+      label: "Fintech & QA Testing",
+      sublabel: "Billease • Appium • CI/CD",
+      keywords: ["billease", "qa", "test", "automation", "appium", "browserstack", "ci/cd", "mr", "bugs", "linux", "45k"],
+    },
+    {
+      id: "head_mobile",
+      label: "Mobile & Offline Sync",
+      sublabel: "Sandalan • Drift SQLite • Supabase",
+      keywords: ["sandalan", "google play", "flutter", "drift", "sqlite", "supabase", "offline", "sync", "tax", "ocr", "taglish"],
+    },
+    {
+      id: "head_microservices",
+      label: "Genomics Microservices",
+      sublabel: "IRRI • Docker • MERN Rewrite",
+      keywords: ["irri", "snpseek", "microservices", "docker", "monolith", "mongodb", "oauth", "sso", "mern", "rice research"],
+    },
+    {
+      id: "head_ai",
+      label: "Sub-Second Agentic RAG",
+      sublabel: "Codebreak 2.0 • Tenext Champion",
+      keywords: ["codebreak", "hackathon", "tenext", "groq", "whisper", "claude", "champion", "winner", "vector", "rag"],
+    },
+    {
+      id: "head_stack",
+      label: "Technical Stack Matrix",
+      sublabel: "TypeScript • Node • React • Mobile",
+      keywords: ["skills", "stack", "tech", "languages", "typescript", "javascript", "dart", "react", "node", "express", "postgresql", "docker"],
+    },
+    {
+      id: "head_career",
+      label: "Availability & Career",
+      sublabel: "Full-Time Remote • US Hours • UPLB",
+      keywords: ["hire", "contact", "email", "phone", "remote", "us hours", "availability", "job", "uplb", "degree", "bio", "converge"],
+    },
+    {
+      id: "head_guardrail",
+      label: "Guardrails & Out-of-Scope",
+      sublabel: "Safety Filter & Non-Jet Topics",
+      keywords: ["loan", "cook", "rice", "weather", "recipe", "math", "joke", "binary tree", "capital", "homework"],
+    },
+  ];
+
+  const layer1Nodes: NeuralNode[] = intentDefinitions.map((def) => {
+    let matchCount = 0;
+    const matchedTokens: string[] = [];
+
+    for (const q of filteredTokens) {
+      if (def.keywords.some((k) => k.toLowerCase() === q || k.toLowerCase().includes(q))) {
+        matchCount++;
+        matchedTokens.push(q);
+      }
+    }
+
+    let isTriggered = false;
+    let activation = 0.05;
+
+    if (def.id === "head_guardrail") {
+      if (isGuardrailTriggered) {
+        isTriggered = true;
+        activation = 0.98;
+      }
+    } else {
+      if (matchCount > 0) {
+        isTriggered = true;
+        activation = Math.min(1.0, 0.35 + matchCount * 0.3);
+      }
+    }
+
+    return {
+      id: `node_${def.id}`,
+      layer: 1,
+      label: def.label,
+      sublabel: def.sublabel,
+      activation,
+      active: isTriggered,
+      type: "intent",
+      metadata: {
+        matchedKeywords: matchedTokens,
+        formula: isTriggered
+          ? `Attention weight = ${(activation * 100).toFixed(0)}% based on domain relevance`
+          : "Base attention = 5% (Inhibited)",
+        details: def.keywords.slice(0, 6).join(", ") + "...",
+      },
+    };
+  });
+
+  // --- LAYER 2: Knowledge Corpus Chunks ---
+  const layer2Nodes: NeuralNode[] = allChunkScores.map(({ chunk, score, entityBoost, matchedTokens }) => {
+    const isCorpusSuppressed = isGuardrailTriggered || isGreeting;
+    const effectiveScore = isCorpusSuppressed ? 0 : score;
+    const activation = isCorpusSuppressed ? 0.03 : Math.min(1.0, Math.max(0.04, effectiveScore / 9.0));
+    const active = effectiveScore >= 1.8;
+
+    return {
+      id: `node_chunk_${chunk.id}`,
+      layer: 2,
+      label: chunk.sourceLabel,
+      sublabel: `Score: ${effectiveScore.toFixed(1)} ${active ? "✓ Pass" : "✕ Low"}`,
+      activation,
+      active,
+      type: "corpus",
+      metadata: {
+        score: effectiveScore,
+        sourceLabel: chunk.sourceLabel,
+        matchedKeywords: matchedTokens,
+        formula: `BM25 Term Match + Entity Boost (+${entityBoost}) = ${effectiveScore.toFixed(1)} pts`,
+        details: chunk.content.slice(0, 140) + "...",
+      },
+    };
+  });
+
+  // --- LAYER 3: Context Pooling & Relevance Gate ---
+  const layer3Nodes: NeuralNode[] = [];
+  if (isGuardrailTriggered) {
+    layer3Nodes.push({
+      id: "node_pool_guardrail",
+      layer: 3,
+      label: "Guardrail Gate",
+      sublabel: isBilleaseLoan
+        ? "Billease Loan Service Redirect"
+        : isAgriculture
+        ? "Rice Crop Science Redirect"
+        : "Off-Topic Redirect",
+      activation: 0.98,
+      active: true,
+      type: "pooling",
+      metadata: {
+        formula: "Guardrail matched regex -> Bypass corpus -> Divert to scope clarification handler",
+        details: "Suppressed knowledge retrieval to maintain portfolio fidelity.",
+      },
+    });
+    layer3Nodes.push({
+      id: "node_pool_suppressed",
+      layer: 3,
+      label: "Corpus Ingestion",
+      sublabel: "Inhibited (Score 0.0)",
+      activation: 0.05,
+      active: false,
+      type: "pooling",
+      metadata: {
+        formula: "Gated by Guardrail Attention Head",
+      },
+    });
+  } else if (isGreeting) {
+    layer3Nodes.push({
+      id: "node_pool_greeting",
+      layer: 3,
+      label: "Greeting Handler",
+      sublabel: "Taj AI Assistant Identity",
+      activation: 0.99,
+      active: true,
+      type: "pooling",
+      metadata: {
+        formula: "Direct intent dispatch to greeting synthesizer (99% confidence)",
+      },
+    });
+  } else if (topRetrieval.length > 0 && topRetrieval[0].score >= 1.8) {
+    layer3Nodes.push({
+      id: "node_pool_rank1",
+      layer: 3,
+      label: "Primary Context (Rank 1)",
+      sublabel: `${topRetrieval[0].chunk.title.slice(0, 24)}... (${topRetrieval[0].score.toFixed(1)} pts)`,
+      activation: 0.96,
+      active: true,
+      type: "pooling",
+      metadata: {
+        score: topRetrieval[0].score,
+        sourceLabel: topRetrieval[0].chunk.sourceLabel,
+        formula: `Rank 1 chunk with ${topRetrieval[0].score.toFixed(1)} points fed to prompt context window`,
+      },
+    });
+    if (topRetrieval.length > 1 && topRetrieval[1].score >= 1.8) {
+      layer3Nodes.push({
+        id: "node_pool_rank2",
+        layer: 3,
+        label: "Secondary Context (Rank 2)",
+        sublabel: `${topRetrieval[1].chunk.title.slice(0, 24)}... (${topRetrieval[1].score.toFixed(1)} pts)`,
+        activation: 0.74,
+        active: true,
+        type: "pooling",
+        metadata: {
+          score: topRetrieval[1].score,
+          sourceLabel: topRetrieval[1].chunk.sourceLabel,
+          formula: `Rank 2 secondary chunk augmenting synthesis`,
+        },
+      });
+    }
+    layer3Nodes.push({
+      id: "node_pool_threshold",
+      layer: 3,
+      label: "Relevance Gate (>1.8)",
+      sublabel: `Passed (${topRetrieval[0].score.toFixed(1)} >= 1.8)`,
+      activation: 0.92,
+      active: true,
+      type: "pooling",
+      metadata: {
+        formula: `Cutoff threshold 1.8: ${topRetrieval[0].score.toFixed(1)} points exceeds threshold -> Accepted`,
+      },
+    });
+  } else {
+    layer3Nodes.push({
+      id: "node_pool_unrelated",
+      layer: 3,
+      label: "Out-of-Scope Fallback",
+      sublabel: `Top score ${topScore.toFixed(1)} < 1.8 cutoff`,
+      activation: 0.88,
+      active: true,
+      type: "pooling",
+      metadata: {
+        formula: "All corpus chunk scores below 1.8 threshold -> Dispatched to polite refusal gate",
+      },
+    });
+    layer3Nodes.push({
+      id: "node_pool_threshold",
+      layer: 3,
+      label: "Relevance Gate (>1.8)",
+      sublabel: `Failed (${topScore.toFixed(1)} < 1.8)`,
+      activation: 0.1,
+      active: false,
+      type: "pooling",
+    });
+  }
+
+  // --- LAYER 4: Output Synthesis Layer ---
+  const answerPreview = responseContext?.answer
+    ? responseContext.answer.split("\n")[0].replace(/[#*`]/g, "").slice(0, 90) + "..."
+    : "Response generated.";
+
+  const layer4Nodes: NeuralNode[] = [
+    {
+      id: "node_out_synthesis",
+      layer: 4,
+      label:
+        status === "matched"
+          ? "Grounded Response"
+          : status === "greeting"
+          ? "Greeting & Scope"
+          : "Scope Clarification",
+      sublabel: `${confidence}% confidence • Intent: ${intent}`,
+      activation: confidence > 0 ? Math.max(0.7, confidence / 100) : 0.85,
+      active: true,
+      type: "output",
+      metadata: {
+        score: confidence,
+        formula: `Synthesized answer grounded in ${topRetrieval.length} retrieved verified sources`,
+        details: answerPreview,
+      },
+    },
+  ];
+
+  // --- SYNAPSES (EDGES) BETWEEN ADJACENT LAYERS ---
+  const synapses: NeuralSynapse[] = [];
+
+  // L0 -> L1
+  layer0Nodes.forEach((tokNode) => {
+    layer1Nodes.forEach((intentNode) => {
+      const isTokMatching = intentNode.metadata?.matchedKeywords?.includes(tokNode.label);
+      const isGuard = intentNode.id === "node_head_guardrail" && isGuardrailTriggered;
+      const active = Boolean(tokNode.active && (isTokMatching || isGuard));
+      synapses.push({
+        id: `syn_${tokNode.id}_${intentNode.id}`,
+        sourceId: tokNode.id,
+        targetId: intentNode.id,
+        weight: active ? (isGuard ? 0.98 : 0.85) : 0.04,
+        active,
+      });
+    });
+  });
+
+  // L1 -> L2
+  const intentToChunkMap: Record<string, string[]> = {
+    node_head_qa: ["node_chunk_exp_billease"],
+    node_head_mobile: ["node_chunk_proj_sandalan"],
+    node_head_microservices: ["node_chunk_exp_irri"],
+    node_head_ai: ["node_chunk_proj_codebreak"],
+    node_head_stack: ["node_chunk_skills_matrix"],
+    node_head_career: ["node_chunk_contact_availability", "node_chunk_edu_uplb", "node_chunk_exp_converge", "node_chunk_bio_overview"],
+    node_head_guardrail: [],
+  };
+
+  layer1Nodes.forEach((intentNode) => {
+    const targetChunkIds = intentToChunkMap[intentNode.id] || [];
+    layer2Nodes.forEach((chunkNode) => {
+      const isMapped = targetChunkIds.includes(chunkNode.id);
+      const active = Boolean(intentNode.active && isMapped && chunkNode.active);
+      synapses.push({
+        id: `syn_${intentNode.id}_${chunkNode.id}`,
+        sourceId: intentNode.id,
+        targetId: chunkNode.id,
+        weight: active ? 0.92 : 0.03,
+        active,
+      });
+    });
+  });
+
+  // L2 -> L3
+  layer2Nodes.forEach((chunkNode) => {
+    layer3Nodes.forEach((poolNode) => {
+      let active = false;
+      if (poolNode.id === "node_pool_rank1" && chunkNode.metadata?.score === topRetrieval[0]?.score && chunkNode.active) {
+        active = true;
+      } else if (poolNode.id === "node_pool_rank2" && topRetrieval[1] && chunkNode.metadata?.score === topRetrieval[1]?.score && chunkNode.active) {
+        active = true;
+      } else if (poolNode.id === "node_pool_threshold" && chunkNode.active) {
+        active = true;
+      }
+      synapses.push({
+        id: `syn_${chunkNode.id}_${poolNode.id}`,
+        sourceId: chunkNode.id,
+        targetId: poolNode.id,
+        weight: active ? 0.95 : 0.02,
+        active,
+      });
+    });
+  });
+
+  // Connect Guardrail directly L1 -> L3 if triggered
+  if (isGuardrailTriggered) {
+    const guardNode = layer1Nodes.find((n) => n.id === "node_head_guardrail");
+    const poolGuardNode = layer3Nodes.find((n) => n.id === "node_pool_guardrail");
+    if (guardNode && poolGuardNode) {
+      synapses.push({
+        id: `syn_${guardNode.id}_${poolGuardNode.id}`,
+        sourceId: guardNode.id,
+        targetId: poolGuardNode.id,
+        weight: 0.98,
+        active: true,
+      });
+    }
+  }
+
+  // L3 -> L4
+  layer3Nodes.forEach((poolNode) => {
+    layer4Nodes.forEach((outNode) => {
+      const active = poolNode.active;
+      synapses.push({
+        id: `syn_${poolNode.id}_${outNode.id}`,
+        sourceId: poolNode.id,
+        targetId: outNode.id,
+        weight: active ? 0.95 : 0.03,
+        active,
+      });
+    });
+  });
+
+  return {
+    query,
+    timestamp: Date.now(),
+    layers: [
+      {
+        index: 0,
+        name: "Layer 0: Input Embeddings",
+        code: "L0:INPUT",
+        description: "Tokenization, stop-word elimination, and sparse term vector construction.",
+        nodes: layer0Nodes,
+      },
+      {
+        index: 1,
+        name: "Layer 1: Semantic Intent & Attention",
+        code: "L1:ATTN",
+        description: "Domain attention heads classify technical domain and guardrail boundaries.",
+        nodes: layer1Nodes,
+      },
+      {
+        index: 2,
+        name: "Layer 2: Knowledge Base Corpus",
+        code: "L2:CORPUS",
+        description: "Dense evaluation across all résumé & engineering chunks with BM25 & entity boosts.",
+        nodes: layer2Nodes,
+      },
+      {
+        index: 3,
+        name: "Layer 3: Context Pooling & Relevance Gate",
+        code: "L3:POOL",
+        description: "Top-K retrieval ranking and score threshold gate (>1.8) filtering.",
+        nodes: layer3Nodes,
+      },
+      {
+        index: 4,
+        name: "Layer 4: Output Synthesis Layer",
+        code: "L4:SYNTHESIS",
+        description: "Final answer generation grounded strictly in retrieved context chunks.",
+        nodes: layer4Nodes,
+      },
+    ],
+    synapses,
+    stats: {
+      totalTokens: rawTokens.length,
+      stopWordsCount: stopWords.length,
+      topScore,
+      retrievedCount: topRetrieval.length,
+      confidence,
+      intent,
+      status,
+    },
+  };
+}
+
+function finishResponse(query: string, res: Omit<TajResponse, "neuralTrace">): TajResponse {
+  const fullResponse: TajResponse = {
+    ...res,
+  };
+  fullResponse.neuralTrace = generateNeuralTrace(query, fullResponse);
+  return fullResponse;
+}
+
 // Synthesize answer based on retrieved context and query intent
 export function askTajAI(query: string): TajResponse {
   const qLower = query.toLowerCase().trim();
@@ -356,14 +967,14 @@ export function askTajAI(query: string): TajResponse {
       qLower
     )
   ) {
-    return {
+    return finishResponse(query, {
       answer:
         "Hello! I am **Taj AI**, Jet Timothy Cerezo's retrieval-augmented assistant. I have direct context over his software engineering experience, production metrics, microservices architecture, and shipped apps.\n\n" +
         "Ask me anything about his work, or select a question below to get started!",
       retrievedSources: [KNOWLEDGE_CORPUS[0]],
       confidence: 99,
       intent: "greeting",
-    };
+    });
   }
 
   // 2. Detect Billease customer service / loan inquiries (doesn't apply to Jet)
@@ -372,26 +983,26 @@ export function askTajAI(query: string): TajResponse {
       qLower
     )
   ) {
-    return {
+    return finishResponse(query, {
       answer:
         "That doesn't apply to Jet. Billease is a Philippine consumer fintech app where Jet previously worked as a **Junior Test Automation Engineer** (Apr 2025 — Sep 2026), building automated QA test pipelines and Linux CI/CD runners for their Android app.\n\n" +
         "I don't have access to customer accounts, credit lines, or loan services for Billease. If you'd like to know about Jet's engineering contributions at Billease (such as his ~150 merge requests, Appium automation, or CI/CD release gatekeeping), feel free to ask!",
       retrievedSources: [],
       confidence: 0,
       intent: "unrelated_billease_service",
-    };
+    });
   }
 
   // 3. Detect Rice Agriculture / Crop Science questions (doesn't apply to Jet)
   if (/\b(cook\s+rice|growing\s+rice|rice\s+variety|buy\s+rice|harvest|crop|agriculture|farming|seeds)\b/i.test(qLower)) {
-    return {
+    return finishResponse(query, {
       answer:
         "That doesn't apply to Jet. While Jet was a Software Developer & Thesis Affiliate at the **International Rice Research Institute (IRRI)** (Jul 2024 — May 2025), his work was strictly software engineering: re-architecting their SNPseek genomics platform from an enterprise Java monolith into 7 Dockerized MERN microservices.\n\n" +
         "I can answer questions regarding his microservices architecture, Docker Compose orchestration, and MongoDB schema design at IRRI, but I don't cover crop science or agriculture.",
       retrievedSources: [],
       confidence: 0,
       intent: "unrelated_agriculture",
-    };
+    });
   }
 
   // 4. Detect General Trivia, Math, Science, Recipes, Off-topic requests (doesn't apply to Jet)
@@ -414,7 +1025,7 @@ export function askTajAI(query: string): TajResponse {
     /\b(lend\s+me|borrow\s+money|give\s+me\s+money|send\s+me\s+crypto|buy\s+me)\b/i.test(qLower);
 
   if (isOffTopic) {
-    return {
+    return finishResponse(query, {
       answer:
         "That question doesn't apply to Jet or falls outside the scope of this portfolio.\n\n" +
         "I am **Taj AI**, Jet Timothy Cerezo's retrieval-augmented assistant. My context is specialized in answering questions about Jet's engineering career, production projects, technical capabilities, and job opportunities.\n\n" +
@@ -427,7 +1038,7 @@ export function askTajAI(query: string): TajResponse {
       retrievedSources: [],
       confidence: 0,
       intent: "unrelated_off_topic",
-    };
+    });
   }
 
   // 5. Query context retrieval
@@ -435,7 +1046,7 @@ export function askTajAI(query: string): TajResponse {
 
   // If no relevance or low score found, reject politely as unrelated
   if (retrieved.length === 0 || retrieved[0].score < 1.8) {
-    return {
+    return finishResponse(query, {
       answer:
         "That question doesn't apply to Jet or isn't covered in his portfolio context.\n\n" +
         "I am **Taj AI**, specialized in answering questions about Jet Timothy Cerezo's software engineering background, shipped applications, technical capabilities, and availability for software roles.\n\n" +
@@ -443,7 +1054,7 @@ export function askTajAI(query: string): TajResponse {
       retrievedSources: [],
       confidence: 0,
       intent: "unrelated_no_match",
-    };
+    });
   }
 
   const primaryChunk = retrieved[0].chunk;
@@ -543,10 +1154,10 @@ export function askTajAI(query: string): TajResponse {
       (retrieved[1] ? `**Additional Context:** ${retrieved[1].chunk.content.slice(0, 160)}...` : "");
   }
 
-  return {
+  return finishResponse(query, {
     answer: synthesizedAnswer,
     retrievedSources: retrieved.map((r) => r.chunk),
     confidence,
     intent: primaryChunk.category,
-  };
+  });
 }
