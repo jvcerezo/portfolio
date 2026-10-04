@@ -105,8 +105,8 @@ I build end-to-end: schema, backend, frontend, mobile, store listing, and the po
 
 ### Recognition
 
-- **Codebreak 2.0 Champion** — Tenext.ai Hackathon, 2025
-- **Bioinformatics SWE Intern** — International Rice Research Institute (IRRI), 2024 to 2025
+- **Codebreak 2.0 Champion** — Tenext.ai Hackathon, May 2025
+- **Bioinformatics SWE Intern** — International Rice Research Institute (IRRI), Jul 2024 to May 2025
 - **Iskolar ng Laguna** and **UP SLAS Scholar** — UPLB Computer Science, Batch 2025
 - **Honor Roll** — UPLB Computer Science
 

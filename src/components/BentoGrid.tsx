@@ -153,7 +153,7 @@ export function BentoGrid({
             <span className="rounded-full border border-edge-strong px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-ink-4">
               Fintech · Billease
             </span>
-            <span className="font-mono text-[11px] text-ink-4">2025 — 2026</span>
+            <span className="font-mono text-[11px] text-ink-4">Apr 2025 — Sep 2026</span>
           </div>
 
           <h3 className="mt-4 font-display text-[20px] sm:text-[22px] font-semibold tracking-tight text-ink-1">
@@ -276,7 +276,7 @@ export function BentoGrid({
               <Trophy className="h-3 w-3" />
               <span>1st Place Winner</span>
             </span>
-            <span className="font-mono text-[11px] text-ink-4">Tenext.ai 2025</span>
+            <span className="font-mono text-[11px] text-ink-4">Tenext.ai · May 2025</span>
           </div>
 
           <h3 className="mt-3 font-display text-[19px] sm:text-[21px] font-semibold tracking-tight text-ink-1">

@@ -169,7 +169,7 @@ export function ArchitectureVisualizer() {
                 Codebreak 2.0 AI Support Platform (Hackathon 1st Place)
               </h4>
               <span className="font-mono text-[11px] text-ink-4">
-                Tenext.ai 2025 · Built in &lt;24 hours
+                Tenext.ai · May 2025 · Built in &lt;24 hours
               </span>
             </div>
             <p className="text-[13.5px] leading-relaxed text-ink-2">

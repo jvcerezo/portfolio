@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { soundFx } from "../lib/sound";
 import { GitPullRequest, Trophy, Layers, Smartphone, ShieldCheck, Terminal } from "lucide-react";
 
 interface MetricItem {
@@ -70,12 +69,10 @@ export function ImpactBento() {
             <div
               key={metric.label}
               onMouseEnter={() => {
-                soundFx.playPop();
                 setActiveIdx(idx);
               }}
               onMouseLeave={() => setActiveIdx(null)}
               onClick={() => {
-                soundFx.playNote(idx);
                 setActiveIdx(isSelected ? null : idx);
               }}
               className={`group relative overflow-hidden rounded-xl border p-3.5 transition-all duration-300 cursor-pointer ${

@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect, type ReactNode } from "react";
-import { soundFx } from "../lib/sound";
 import { askTajAI, type KnowledgeChunk } from "../lib/tajRAG";
 import {
   Sparkles,
@@ -143,7 +142,6 @@ export function TajAIModal({ isOpen, onClose }: TajAIModalProps) {
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 100);
-      soundFx.playChime();
     }
   }, [isOpen]);
 
@@ -155,7 +153,6 @@ export function TajAIModal({ isOpen, onClose }: TajAIModalProps) {
     const query = (textToSend || input).trim();
     if (!query || isThinking) return;
 
-    soundFx.playClick();
     const userMsgId = Date.now().toString();
     const userMessage: Message = {
       id: userMsgId,
@@ -170,7 +167,6 @@ export function TajAIModal({ isOpen, onClose }: TajAIModalProps) {
     // Run RAG retrieval & synthesis
     setTimeout(() => {
       const response = askTajAI(query);
-      soundFx.playPop();
 
       const botMsgId = (Date.now() + 1).toString();
       const botMessage: Message = {
@@ -187,7 +183,6 @@ export function TajAIModal({ isOpen, onClose }: TajAIModalProps) {
   };
 
   const handleClearChat = () => {
-    soundFx.playPop();
     setMessages([
       {
         id: "welcome",
@@ -198,7 +193,6 @@ export function TajAIModal({ isOpen, onClose }: TajAIModalProps) {
   };
 
   const toggleSource = (msgId: string) => {
-    soundFx.playClick();
     setExpandedSources((prev) => ({ ...prev, [msgId]: !prev[msgId] }));
   };
 
@@ -406,7 +400,6 @@ export function TajAILauncher({ onClick }: { onClick: () => void }) {
     <button
       type="button"
       onClick={() => {
-        soundFx.playPop();
         onClick();
       }}
       aria-label="Ask Taj AI about Jet's background"

@@ -11,8 +11,6 @@ import {
   Check,
   Smartphone,
   Phone,
-  Volume2,
-  VolumeX,
   X,
   Sparkles,
   Layers,
@@ -25,12 +23,10 @@ import { ScreenshotModal, type ScreenshotItem } from "./components/ScreenshotMod
 import { Toast } from "./components/Toast";
 import { ParticleCanvas } from "./components/ParticleCanvas";
 import { TiltCard } from "./components/TiltCard";
-import { CommandPalette } from "./components/CommandPalette";
 import { ImpactBento } from "./components/ImpactBento";
 import { ArchitectureDiagram } from "./components/ArchitectureDiagram";
 import { TajAIModal, TajAILauncher } from "./components/TajAIModal";
 import { TechLogo, CompanyLogo, CompanyBrandStrip } from "./components/TechLogos";
-import { soundFx } from "./lib/sound";
 import { fireConfetti } from "./lib/confetti";
 
 const PROFILE = {
@@ -62,7 +58,7 @@ const EXPERIENCE = [
     role: "Software Engineer",
     company: "Converge Studios Inc.",
     meta: "Remote",
-    period: "2026 — Present",
+    period: "Sep 2026 — Present",
     bullets: [
       "Build and deploy scalable cross-platform mobile and web applications leveraging FlutterFlow, Flutter, and cloud-first architectures.",
       "Engineer custom application logic, REST API integrations, and backend workflows to rapidly ship enterprise-grade digital solutions.",
@@ -75,7 +71,7 @@ const EXPERIENCE = [
     role: "Junior Test Automation Engineer",
     company: "Billease",
     meta: "Remote · Fintech",
-    period: "2025 — 2026",
+    period: "Apr 2025 — Sep 2026",
     bullets: [
       "Shipped ~150 merge requests and ~45,000 lines of code building automated test coverage and internal tooling for a high-scale consumer fintech Android app.",
       "Engineered and maintained CI/CD pipeline integrations for core regression and emergency-hotfix suites, validating every production release across Linux CI runners.",
@@ -89,7 +85,7 @@ const EXPERIENCE = [
     role: "Software Developer · Thesis Affiliate",
     company: "International Rice Research Institute (IRRI)",
     meta: "Los Baños, Laguna",
-    period: "2024 — 2025",
+    period: "Jul 2024 — May 2025",
     bullets: [
       "Re-architected IRRI’s legacy Java monolith SNPseek genomics platform into a MERN microservices system: seven independent Node.js/Express services behind an API gateway, orchestrated with Docker Compose.",
       "Re-engineered authentication and data access layers, building a custom SSO/OAuth layer bridging legacy enterprise systems with new Node services.",
@@ -102,7 +98,7 @@ const EXPERIENCE = [
     role: "Full-Stack Developer",
     company: "Freelance / Project-Based",
     meta: "Remote",
-    period: "2024",
+    period: "Aug 2024 — Oct 2024",
     bullets: [
       "Built a story-based interactive web game on the MERN stack with a 3-person team; owned front end, back end, and UI/UX through to client delivery.",
     ],
@@ -113,7 +109,7 @@ const EXPERIENCE = [
     role: "Code Wars Co-Head · Project Manager",
     company: "UPLB Computer Science Society",
     meta: "Los Baños, Laguna",
-    period: "2023 — 2025",
+    period: "Oct 2023 — Jul 2025",
     bullets: [
       "Led a 7-member development team on the competitive-programming event platform, overseeing feature development, bug tracking, testing, and deployment.",
       "Ran the live platform for 20 teams, 3 judges, and 3 continuous hours of zero-downtime service.",
@@ -149,7 +145,7 @@ const PROJECTS: Project[] = [
   {
     name: "SNPseek MERN",
     tagline: "Genomics microservices research platform",
-    year: "2024 — 2025",
+    year: "Jul 2024 — May 2025",
     description:
       "Complete rewrite of IRRI’s legacy Java monolith genomics database into seven independent Node.js/Express services behind an API gateway, orchestrated with Docker Compose. Built advanced multi-criteria filtering, MongoDB query optimization, and interactive charts over large genomic datasets.",
     tech: ["React", "Node.js", "Express", "MongoDB", "Docker", "API Gateway", "OAuth SSO"],
@@ -159,7 +155,7 @@ const PROJECTS: Project[] = [
   {
     name: "Codebreak 2.0",
     tagline: "RAG-based AI customer support platform",
-    year: "2025",
+    year: "May 2025",
     description:
       "Full-stack customer support intelligence platform engineered in under 24 hours at the Tenext.ai hackathon (1st Place Champion). Built vector similarity retrieval pipelines, live transcription call scripts, and automated post-call compliance QA using Claude API and Groq.",
     tech: ["Node.js", "RAG", "Vector Search", "Claude API", "Groq", "Microservices"],
@@ -179,7 +175,7 @@ const PROJECTS: Project[] = [
   {
     name: "PICSEL",
     tagline: "Reservation management system",
-    year: "2024",
+    year: "Feb 2024 — Jun 2024",
     description:
       "Built backend components over 5 months in a 20-developer student organization team; integrated Google OAuth authentication and shipped across 7 major features under peer code review.",
     tech: ["Node.js", "PostgreSQL", "OAuth", "Team Collaboration"],
@@ -222,7 +218,7 @@ const HONORS = [
   {
     title: "Codebreak 2.0 Hackathon Champion",
     award: "1st Place Winner · Tenext.ai Hackathon",
-    period: "2025",
+    period: "May 2025",
     detail: "Engineered a full-stack RAG customer support intelligence platform in under 24 hours with live call scripts and post-call QA analytics.",
     link: "https://www.facebook.com/photo/?fbid=706685865053901&set=a.263981095991049",
   },
@@ -236,14 +232,14 @@ const HONORS = [
   {
     title: "Code Wars Co-Head · Zero Downtime",
     award: "Platform Engineering Leadership",
-    period: "2023 — 2025",
+    period: "Oct 2023 — Jul 2025",
     detail: "Led a 7-member engineering team delivering 3 hours of continuous live competition for 20 teams and 3 judges with zero downtime.",
     link: null,
   },
   {
     title: "Bioinformatics Thesis Affiliate · IRRI",
     award: "Genomics Research Affiliate",
-    period: "2024 — 2025",
+    period: "Jul 2024 — May 2025",
     detail: "Affiliate at the International Rice Research Institute (IRRI), migrating legacy Java genomic platforms into Dockerized MERN microservices.",
     link: null,
   },
@@ -321,7 +317,6 @@ function useTheme(): [Theme, () => void] {
   }, [theme]);
 
   const toggle = () => {
-    soundFx.playPop();
     setTheme((t) => (t === "dark" ? "light" : "dark"));
   };
 
@@ -365,28 +360,16 @@ function App() {
   const [isScreenshotOpen, setIsScreenshotOpen] = useState(false);
   const [screenshotIndex, setScreenshotIndex] = useState(0);
 
-  // Creative Aspect 1: Sound toggle state
-  const [soundEnabled, setSoundEnabled] = useState(() => soundFx.enabled);
-  const toggleSound = () => {
-    const next = soundFx.toggle();
-    setSoundEnabled(next);
-    setToastMessage(next ? "Audio feedback enabled (synthesized)" : "Audio feedback muted");
-    setIsToastOpen(true);
-  };
-
-  // Creative Aspect 2: Perspective Lens / Summary Mode (added 'code' tab)
+  // Creative Aspect: Perspective Lens / Summary Mode (added 'code' tab)
   const [summaryMode, setSummaryMode] = useState<"bio" | "tldr" | "philosophy" | "code">("bio");
 
-  // Creative Aspect 3: Interactive Tech Cross-Highlighting
+  // Creative Aspect: Interactive Tech Cross-Highlighting
   const [activeTechFilter, setActiveTechFilter] = useState<string | null>(null);
 
-  // Creative Aspect 4: Command Palette modal (Cmd+K)
-  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
-
-  // Creative Aspect 5: Taj AI RAG Assistant Modal (Press J)
+  // Creative Aspect: Taj AI RAG Assistant Modal (Press J)
   const [isTajAIOpen, setIsTajAIOpen] = useState(false);
 
-  // Creative Aspect 5: Interactive System Architecture Diagram toggles
+  // Creative Aspect: Interactive System Architecture Diagram toggles
   const [expandedArch, setExpandedArch] = useState<{ [key: string]: boolean }>({
     Sandalan: false,
     "SNPseek MERN": false,
@@ -394,12 +377,10 @@ function App() {
   });
 
   const toggleArch = (name: string) => {
-    soundFx.playPop();
     setExpandedArch((prev) => ({ ...prev, [name]: !prev[name] }));
   };
 
   const handleTechClick = (tech: string) => {
-    soundFx.playClick();
     if (activeTechFilter?.toLowerCase() === tech.toLowerCase()) {
       setActiveTechFilter(null);
     } else {
@@ -423,7 +404,7 @@ function App() {
     return { exp, proj };
   }, [activeTechFilter]);
 
-  // Creative Aspect 6: Brittany Chiang cursor spotlight
+  // Creative Aspect: Brittany Chiang cursor spotlight
   const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -433,7 +414,7 @@ function App() {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // Creative Aspect 7: Konami Code Easter Egg
+  // Creative Aspect: Konami Code Easter Egg
   const [konamiIdx, setKonamiIdx] = useState(0);
   const KONAMI = useMemo(
     () => ["arrowup", "arrowup", "arrowdown", "arrowdown", "arrowleft", "arrowright", "arrowleft", "arrowright", "b", "a"],
@@ -442,7 +423,6 @@ function App() {
 
   const handleCopyEmail = (e?: React.MouseEvent) => {
     if (e) e.preventDefault();
-    soundFx.playPop();
     fireConfetti();
     try {
       navigator.clipboard.writeText(PROFILE.email);
@@ -458,14 +438,6 @@ function App() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Command palette global shortcut (Cmd+K or Ctrl+K)
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        soundFx.playPop();
-        setIsCommandPaletteOpen((prev) => !prev);
-        return;
-      }
-
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
         return;
       }
@@ -474,7 +446,6 @@ function App() {
       if (e.key.toLowerCase() === KONAMI[konamiIdx]) {
         const next = konamiIdx + 1;
         if (next === KONAMI.length) {
-          soundFx.playChime();
           fireConfetti();
           setToastMessage("👾 Konami Code Unlocked! Full-stack engineer level max.");
           setIsToastOpen(true);
@@ -489,24 +460,17 @@ function App() {
       // Hotkeys
       if (e.key === "Escape") {
         setActiveTechFilter(null);
-        setIsCommandPaletteOpen(false);
         setIsTajAIOpen(false);
       } else if (e.key.toLowerCase() === "t") {
         toggleTheme();
       } else if (e.key.toLowerCase() === "c") {
         handleCopyEmail();
-      } else if (e.key.toLowerCase() === "s") {
-        toggleSound();
       } else if (e.key.toLowerCase() === "j") {
-        soundFx.playPop();
         setIsTajAIOpen((prev) => !prev);
       } else if (e.key.toLowerCase() === "m") {
         fireConfetti();
-        soundFx.playPop();
         setToastMessage("🎉 Confetti celebration!");
         setIsToastOpen(true);
-      } else if (e.key === "?") {
-        setIsCommandPaletteOpen(true);
       }
     };
 
@@ -514,12 +478,7 @@ function App() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [toggleTheme, konamiIdx, KONAMI]);
 
-  const scrollTo = (id: string, index?: number) => {
-    if (typeof index === "number") {
-      soundFx.playNote(index);
-    } else {
-      soundFx.playClick();
-    }
+  const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: "smooth" });
@@ -567,7 +526,6 @@ function App() {
                   <button
                     type="button"
                     onClick={() => {
-                      soundFx.playPop();
                       setIsTajAIOpen(true);
                     }}
                     aria-label="Ask Taj AI RAG assistant"
@@ -576,43 +534,6 @@ function App() {
                   >
                     <Bot className="h-3.5 w-3.5" />
                     <span className="hidden sm:inline">Taj AI</span>
-                  </button>
-
-                  {/* Command Palette Trigger Button */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      soundFx.playPop();
-                      setIsCommandPaletteOpen(true);
-                    }}
-                    aria-label="Open Command Palette (Cmd+K)"
-                    title="Open Command Palette (Cmd+K or ?)"
-                    className="flex h-8 items-center gap-1.5 px-2.5 rounded-lg border border-edge text-ink-3 hover:text-ink-1 hover:border-edge-strong transition-colors text-xs font-mono"
-                  >
-                    <Terminal className="h-3.5 w-3.5" />
-                    <span className="hidden sm:inline">⌘K</span>
-                  </button>
-
-                  {/* Sound FX Toggle Button with Animated Equalizer */}
-                  <button
-                    type="button"
-                    onClick={toggleSound}
-                    aria-label={soundEnabled ? "Mute audio feedback" : "Enable tactile audio feedback"}
-                    title={soundEnabled ? "Tactile Audio: ON (Press S)" : "Tactile Audio: OFF (Press S)"}
-                    className="flex h-8 items-center gap-1.5 px-2 rounded-lg border border-edge text-ink-3 hover:text-ink-1 hover:border-edge-strong transition-colors"
-                  >
-                    {soundEnabled ? (
-                      <>
-                        <Volume2 className="h-3.5 w-3.5 text-ink-1" />
-                        <span className="flex items-end gap-0.5 h-3 w-2.5">
-                          <span className="w-0.5 bg-ink-1 rounded-full animate-eq-1" />
-                          <span className="w-0.5 bg-ink-1 rounded-full animate-eq-2" />
-                          <span className="w-0.5 bg-ink-1 rounded-full animate-eq-3" />
-                        </span>
-                      </>
-                    ) : (
-                      <VolumeX className="h-4 w-4" />
-                    )}
                   </button>
 
                   {/* Theme Switcher Button */}
@@ -655,7 +576,6 @@ function App() {
                       key={mode}
                       type="button"
                       onClick={() => {
-                        soundFx.playPop();
                         setSummaryMode(mode);
                       }}
                       className={`flex-1 py-1 px-1.5 rounded-md transition-all text-center ${
@@ -698,7 +618,6 @@ function App() {
                         <button
                           type="button"
                           onClick={() => {
-                            soundFx.playChime();
                             fireConfetti();
                             console.log(
                               "%c🚀 Jet Timothy Cerezo — Software Engineer\nReady to build scalable web, mobile & microservices systems.\nEmail: jetjetcerezo@gmail.com",
@@ -725,17 +644,16 @@ function App() {
                 </div>
               </div>
 
-              {/* Brittany Chiang Expanding Horizontal Line Navigation with Melodic Chimes */}
+              {/* Brittany Chiang Expanding Horizontal Line Navigation */}
               <nav className="nav hidden lg:block mt-8" aria-label="In-page jump links">
                 <ul className="w-max space-y-3 font-mono text-xs uppercase tracking-widest">
-                  {NAV_ITEMS.map((item, index) => {
+                  {NAV_ITEMS.map((item) => {
                     const isActive = activeNav === item.id;
                     return (
                       <li key={item.id}>
                         <button
                           type="button"
-                          onClick={() => scrollTo(item.id, index)}
-                          onMouseEnter={() => soundFx.playNote(index)}
+                          onClick={() => scrollTo(item.id)}
                           className={`group flex items-center py-1 transition-all ${
                             isActive ? "text-ink-1 font-semibold" : "text-ink-4 hover:text-ink-2"
                           }`}
@@ -813,7 +731,7 @@ function App() {
 
               {/* Minimal Keyboard Shortcuts Hint */}
               <div className="font-mono text-[11px] text-ink-5 hidden lg:block">
-                Hotkeys: <kbd className="font-semibold text-ink-4">[J]</kbd> Taj AI · <kbd className="font-semibold text-ink-4">[⌘K]</kbd> Palette · <kbd className="font-semibold text-ink-4">[T]</kbd> Theme · <kbd className="font-semibold text-ink-4">[C]</kbd> Copy Email · <kbd className="font-semibold text-ink-4">[S]</kbd> Audio · <kbd className="font-semibold text-ink-4">[M]</kbd> Confetti
+                Hotkeys: <kbd className="font-semibold text-ink-4">[J]</kbd> Taj AI · <kbd className="font-semibold text-ink-4">[T]</kbd> Theme · <kbd className="font-semibold text-ink-4">[C]</kbd> Copy Email · <kbd className="font-semibold text-ink-4">[M]</kbd> Confetti
               </div>
             </div>
           </header>
@@ -1049,7 +967,6 @@ function App() {
                                       key={shot.title}
                                       type="button"
                                       onClick={() => {
-                                        soundFx.playPop();
                                         setIsScreenshotOpen(true);
                                         setScreenshotIndex(idx);
                                       }}
@@ -1068,7 +985,6 @@ function App() {
                                 <button
                                   type="button"
                                   onClick={() => {
-                                    soundFx.playPop();
                                     setIsScreenshotOpen(true);
                                     setScreenshotIndex(0);
                                   }}
@@ -1346,7 +1262,6 @@ function App() {
             <button
               type="button"
               onClick={() => {
-                soundFx.playClick();
                 setActiveTechFilter(null);
               }}
               className="ml-1 p-0.5 rounded-full text-ink-4 hover:bg-fg/10 hover:text-ink-1 transition-colors"
@@ -1377,20 +1292,6 @@ function App() {
       <TajAIModal
         isOpen={isTajAIOpen}
         onClose={() => setIsTajAIOpen(false)}
-      />
-
-      {/* Raycast / Linear style Command Palette (Cmd+K) */}
-      <CommandPalette
-        isOpen={isCommandPaletteOpen}
-        onClose={() => setIsCommandPaletteOpen(false)}
-        onNavigate={scrollTo}
-        onToggleTheme={toggleTheme}
-        onToggleSound={toggleSound}
-        onFilterTech={handleTechClick}
-        onCopyEmail={handleCopyEmail}
-        onOpenTajAI={() => setIsTajAIOpen(true)}
-        theme={theme}
-        soundEnabled={soundEnabled}
       />
 
       {/* Copy Email Toast */}

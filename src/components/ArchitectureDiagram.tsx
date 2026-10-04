@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { soundFx } from "../lib/sound";
 import { ArrowRight, Server, Smartphone, Cpu, Network, Zap } from "lucide-react";
 
 interface NodeInfo {
@@ -64,7 +63,6 @@ export function ArchitectureDiagram({ projectKey }: DiagramProps) {
               <div
                 key={node.id}
                 onClick={() => {
-                  soundFx.playNote(i);
                   setActiveNode(isSelected ? null : node.id);
                 }}
                 className={`flex flex-col justify-between rounded-lg border p-2.5 cursor-pointer transition-all duration-200 ${
@@ -148,7 +146,6 @@ export function ArchitectureDiagram({ projectKey }: DiagramProps) {
               <div
                 key={svc.id}
                 onClick={() => {
-                  soundFx.playNote(i + 1);
                   setActiveNode(isSelected ? null : svc.id);
                 }}
                 className={`flex flex-col justify-between rounded-lg border p-2.5 cursor-pointer transition-all duration-200 ${
@@ -231,7 +228,6 @@ export function ArchitectureDiagram({ projectKey }: DiagramProps) {
             <div
               key={step.id}
               onClick={() => {
-                soundFx.playNote(i + 2);
                 setActiveNode(isSelected ? null : step.id);
               }}
               className={`flex flex-col justify-between rounded-lg border p-2.5 cursor-pointer transition-all duration-200 ${
