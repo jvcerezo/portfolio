@@ -288,7 +288,7 @@ export function RAGNeuralVisualizer({
       </div>
 
       {/* Main Neural Canvas (SVG) */}
-      <div className="flex-1 relative overflow-auto bg-bg/50 flex items-center justify-center p-2 min-h-[300px]">
+      <div className="flex-1 relative overflow-hidden bg-bg/50 flex items-center justify-center p-2 min-h-[260px]">
         {/* Subtle grid pattern background */}
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"
@@ -300,7 +300,8 @@ export function RAGNeuralVisualizer({
 
         <svg
           viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}
-          className="w-full max-w-[840px] h-auto max-h-full drop-shadow-sm select-none"
+          className="w-full max-w-[840px] h-full drop-shadow-sm select-none"
+          preserveAspectRatio="xMidYMid meet"
           style={{ overflow: "visible" }}
         >
           <defs>
@@ -315,15 +316,6 @@ export function RAGNeuralVisualizer({
               <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.9" />
               <stop offset="100%" stopColor="#ef4444" stopOpacity="0.9" />
             </linearGradient>
-
-            {/* Node pulse glow filter */}
-            <filter id="nodeGlow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
           </defs>
 
           {/* Layer Headers */}
@@ -331,7 +323,7 @@ export function RAGNeuralVisualizer({
             const x = LAYER_X_POSITIONS[layer.index];
             const isLayerPulsing = animationStep === layer.index;
             return (
-              <g key={layer.code} className="transition-all">
+              <g key={layer.code} className="transition-all" pointerEvents="none">
                 <text
                   x={x}
                   y={22}
@@ -372,8 +364,8 @@ export function RAGNeuralVisualizer({
             );
           })}
 
-          {/* Synapses (Connecting Lines) */}
-          <g className="synapses-layer">
+          {/* Synapses (Connecting Lines) - pointer-events none to prevent hover stealing */}
+          <g className="synapses-layer" pointerEvents="none">
             {trace.synapses.map((syn) => {
               const srcPos = nodePositions[syn.sourceId];
               const tgtPos = nodePositions[syn.targetId];
@@ -459,21 +451,31 @@ export function RAGNeuralVisualizer({
                     onMouseEnter={() => setHoveredNodeId(node.id)}
                     onMouseLeave={() => setHoveredNodeId(null)}
                   >
+                    {/* Generous stable hitbox to prevent hover jitter */}
+                    <circle
+                      cx={pos.x}
+                      cy={pos.y}
+                      r={nodeRadius + 10}
+                      fill="transparent"
+                      stroke="transparent"
+                    />
+
                     {/* Outer Glow Halo for Active Nodes */}
                     {node.active && (
                       <circle
+                        pointerEvents="none"
                         cx={pos.x}
                         cy={pos.y}
-                        r={nodeRadius + (isLayerPulsing || isFocal ? 7 : 4)}
+                        r={nodeRadius + 5}
                         fill={isGuard ? "#f59e0b" : "#10b981"}
-                        opacity={isFocal ? 0.4 : isLayerPulsing ? 0.35 : 0.15}
-                        filter="url(#nodeGlow)"
+                        opacity={isFocal ? 0.35 : isLayerPulsing ? 0.3 : 0.15}
                         className={isLayerPulsing ? "animate-pulse" : ""}
                       />
                     )}
 
                     {/* Node Core Circle */}
                     <circle
+                      pointerEvents="none"
                       cx={pos.x}
                       cy={pos.y}
                       r={nodeRadius}
@@ -487,6 +489,7 @@ export function RAGNeuralVisualizer({
                     {/* Small inner dot if fired */}
                     {node.active && (
                       <circle
+                        pointerEvents="none"
                         cx={pos.x}
                         cy={pos.y}
                         r={nodeRadius * 0.4}
@@ -498,6 +501,7 @@ export function RAGNeuralVisualizer({
                     {node.layer === 0 ? (
                       // Left-aligned label for Layer 0
                       <text
+                        pointerEvents="none"
                         x={pos.x - nodeRadius - 6}
                         y={pos.y + 3}
                         textAnchor="end"
@@ -509,7 +513,7 @@ export function RAGNeuralVisualizer({
                       </text>
                     ) : node.layer === 4 ? (
                       // Centered label for Layer 4 Output
-                      <g>
+                      <g pointerEvents="none">
                         <text
                           x={pos.x}
                           y={pos.y - nodeRadius - 8}
@@ -529,7 +533,7 @@ export function RAGNeuralVisualizer({
                       </g>
                     ) : (
                       // Right-side label for Hidden Layers 1, 2, 3
-                      <g>
+                      <g pointerEvents="none">
                         <text
                           x={pos.x + nodeRadius + 6}
                           y={pos.y + 3}
@@ -550,22 +554,22 @@ export function RAGNeuralVisualizer({
         </svg>
       </div>
 
-      {/* Bottom Inspector & Synthesis Drawer */}
-      <div className="border-t border-edge bg-fg/[0.015] p-3 space-y-2">
+      {/* Bottom Inspector & Synthesis Drawer - Fixed height prevents layout shifts on hover */}
+      <div className="border-t border-edge bg-fg/[0.015] p-3 h-[132px] shrink-0 overflow-hidden flex flex-col justify-between">
         {activeInspectNode ? (
           /* Deep-Dive Inspection Panel for Clicked / Hovered Neuron */
-          <div className="rounded-xl border border-edge bg-bg p-3 shadow-md space-y-2 animate-reveal">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-[9px] uppercase px-1.5 py-0.5 rounded border border-edge bg-fg/[0.04] text-ink-3">
+          <div className="h-full flex flex-col justify-between">
+            <div className="flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-2 truncate">
+                <span className="font-mono text-[9px] uppercase px-1.5 py-0.5 rounded border border-edge bg-fg/[0.04] text-ink-3 shrink-0">
                   Layer {activeInspectNode.layer} · {trace.layers[activeInspectNode.layer]?.name}
                 </span>
-                <span className="font-semibold text-xs text-ink-1">
+                <span className="font-semibold text-xs text-ink-1 truncate">
                   {activeInspectNode.label}
                 </span>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 shrink-0">
                 <span
                   className={`font-mono text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1 font-medium ${
                     activeInspectNode.active
@@ -589,17 +593,17 @@ export function RAGNeuralVisualizer({
                   <button
                     type="button"
                     onClick={() => setSelectedNodeId(null)}
-                    className="text-[10px] font-mono text-ink-4 hover:text-ink-1 underline"
+                    className="text-[10px] font-mono text-ink-4 hover:text-ink-1 underline cursor-pointer"
                   >
-                    Deselect
+                    Unpin
                   </button>
                 )}
               </div>
             </div>
 
             {/* Metrics Breakdown */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-              <div className="p-2 rounded-lg border border-edge bg-fg/[0.02] space-y-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs flex-1 my-1">
+              <div className="p-2 rounded-lg border border-edge bg-bg flex flex-col justify-between">
                 <div className="font-mono text-[10px] text-ink-5 flex items-center justify-between">
                   <span>Mathematical Activation:</span>
                   <span className="text-ink-1 font-bold">
@@ -607,64 +611,111 @@ export function RAGNeuralVisualizer({
                   </span>
                 </div>
                 {/* Progress bar */}
-                <div className="h-1.5 w-full rounded-full bg-fg/[0.06] overflow-hidden">
+                <div className="h-1.5 w-full rounded-full bg-fg/[0.06] overflow-hidden my-1">
                   <div
-                    className={`h-full rounded-full transition-all duration-500 ${
+                    className={`h-full rounded-full transition-all duration-300 ${
                       activeInspectNode.active ? "bg-emerald-500" : "bg-ink-5"
                     }`}
                     style={{ width: `${Math.max(5, activeInspectNode.activation * 100)}%` }}
                   />
                 </div>
-                <div className="font-mono text-[9px] text-ink-4">
+                <div className="font-mono text-[9px] text-ink-4 truncate">
                   {activeInspectNode.metadata?.formula || "Standard activation threshold function"}
                 </div>
               </div>
 
-              <div className="p-2 rounded-lg border border-edge bg-fg/[0.02] space-y-1">
-                <div className="font-mono text-[10px] text-ink-5">Criteria & Details:</div>
-                <div className="text-[11px] text-ink-2 leading-snug line-clamp-2">
+              <div className="p-2 rounded-lg border border-edge bg-bg flex flex-col justify-between">
+                <div className="font-mono text-[10px] text-ink-5 flex items-center justify-between">
+                  <span>Criteria & Details:</span>
+                  {activeInspectNode.metadata?.score !== undefined && (
+                    <span className="text-ink-1 font-semibold text-[10px]">
+                      Score: {activeInspectNode.metadata.score.toFixed(1)} pts
+                    </span>
+                  )}
+                </div>
+                <div className="text-[11px] text-ink-2 leading-tight line-clamp-2">
                   {activeInspectNode.metadata?.details ||
                     activeInspectNode.sublabel ||
                     "Evaluated against token frequencies and corpus embeddings."}
                 </div>
                 {activeInspectNode.metadata?.matchedKeywords &&
-                  activeInspectNode.metadata.matchedKeywords.length > 0 && (
-                    <div className="font-mono text-[9px] text-emerald-500 flex items-center gap-1">
-                      <span>Matched tokens:</span>
-                      <span>{activeInspectNode.metadata.matchedKeywords.join(", ")}</span>
-                    </div>
-                  )}
+                activeInspectNode.metadata.matchedKeywords.length > 0 ? (
+                  <div className="font-mono text-[9px] text-emerald-500 truncate flex items-center gap-1">
+                    <span>Tokens:</span>
+                    <span>{activeInspectNode.metadata.matchedKeywords.join(", ")}</span>
+                  </div>
+                ) : (
+                  <div className="font-mono text-[9px] text-ink-5">Click to pin details</div>
+                )}
               </div>
             </div>
           </div>
         ) : (
           /* General Pipeline Summary State */
-          <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-4 text-ink-3 font-mono text-[10px]">
-              <div className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                <span>Active Synapse / Fired Neuron</span>
+          <div className="h-full flex flex-col justify-between">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-[9px] uppercase px-1.5 py-0.5 rounded border border-edge bg-fg/[0.04] text-ink-3">
+                  RAG Architecture
+                </span>
+                <span className="font-semibold text-xs text-ink-1">
+                  5-Layer Feedforward Retrieval Pipeline
+                </span>
               </div>
-              <div className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-fg/20" />
-                <span>Inhibited Pathway</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <HelpCircle className="h-3 w-3 text-ink-4" />
-                <span>Hover or click any neuron to inspect weights</span>
+              <div className="flex items-center gap-1.5 font-mono text-[10px] text-ink-4">
+                <span>Top Score: {trace.stats.topScore.toFixed(1)} pts</span>
+                <span>•</span>
+                <span>Confidence: {trace.stats.confidence}%</span>
               </div>
             </div>
 
-            {onSendToChat && (
-              <button
-                type="button"
-                onClick={() => onSendToChat(activeQuery)}
-                className="text-xs font-mono text-ink-3 hover:text-ink-1 flex items-center gap-1 cursor-pointer"
-              >
-                <span>Ask in Chat</span>
-                <ExternalLink className="h-3 w-3" />
-              </button>
-            )}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs flex-1 my-1">
+              <div className="p-2 rounded-lg border border-edge bg-bg flex flex-col justify-center gap-1">
+                <div className="font-mono text-[10px] text-ink-5">Layer Progression:</div>
+                <div className="flex items-center gap-1 font-mono text-[9px] text-ink-3">
+                  <span className="px-1.5 py-0.5 rounded bg-fg/[0.04]">L0 Tokens</span>
+                  <span>→</span>
+                  <span className="px-1.5 py-0.5 rounded bg-fg/[0.04]">L1 Attention</span>
+                  <span>→</span>
+                  <span className="px-1.5 py-0.5 rounded bg-fg/[0.04]">L2 Corpus</span>
+                  <span>→</span>
+                  <span className="px-1.5 py-0.5 rounded bg-fg/[0.04]">L3 Pooling</span>
+                  <span>→</span>
+                  <span className="px-1.5 py-0.5 rounded bg-fg/[0.04]">L4 Output</span>
+                </div>
+              </div>
+
+              <div className="p-2 rounded-lg border border-edge bg-bg flex flex-col justify-center gap-1">
+                <div className="font-mono text-[10px] text-ink-5">Interactive Topology:</div>
+                <div className="flex items-center gap-3 font-mono text-[9px] text-ink-3">
+                  <div className="flex items-center gap-1">
+                    <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                    <span>Active Pathway</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="h-2 w-2 rounded-full bg-fg/20" />
+                    <span>Inhibited Synapse</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between text-[10px] font-mono text-ink-4">
+              <div className="flex items-center gap-1">
+                <HelpCircle className="h-3 w-3 text-ink-4" />
+                <span>Hover or click any neuron to inspect weights &amp; citations</span>
+              </div>
+              {onSendToChat && (
+                <button
+                  type="button"
+                  onClick={() => onSendToChat(activeQuery)}
+                  className="hover:text-ink-1 flex items-center gap-1 cursor-pointer"
+                >
+                  <span>Ask in Chat</span>
+                  <ExternalLink className="h-2.5 w-2.5" />
+                </button>
+              )}
+            </div>
           </div>
         )}
       </div>
