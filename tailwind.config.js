@@ -7,6 +7,12 @@ export default {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+  			// Inter and Space Grotesk are loaded in index.html; without this
+  			// `font-sans` fell back to the system font.
+  			sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+  			mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace']
+  		},
   		colors: {
   			bg: 'rgb(var(--c-bg) / <alpha-value>)',
   			fg: 'rgb(var(--c-fg) / <alpha-value>)',
