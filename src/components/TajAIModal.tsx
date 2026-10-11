@@ -143,6 +143,15 @@ export function TajAIModal({ isOpen, onClose }: TajAIModalProps) {
     return generateNeuralTrace("What did Jet ship at Billease?");
   });
   const [activeTraceQuery, setActiveTraceQuery] = useState("What did Jet ship at Billease?");
+  // Corpus node to pin when the graph opens from a source chip.
+  const [pinnedSourceNodeId, setPinnedSourceNodeId] = useState<string | null>(null);
+
+  const openTrace = (trace: RAGNeuralTrace, query: string, sourceChunkId?: string) => {
+    setActiveTrace(trace);
+    setActiveTraceQuery(query);
+    setPinnedSourceNodeId(sourceChunkId ? `node_chunk_${sourceChunkId}` : null);
+    setViewMode("neural");
+  };
 
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -236,7 +245,7 @@ export function TajAIModal({ isOpen, onClose }: TajAIModalProps) {
       onClick={onClose}
     >
       <div
-        className={`flex flex-col w-full rounded-t-2xl sm:rounded-2xl border border-edge bg-bg shadow-2xl ring-1 ring-fg/10 overflow-hidden transition-all duration-300 ${
+        className={`flex flex-col w-full min-w-0 max-w-full rounded-t-2xl sm:rounded-2xl border border-edge bg-bg shadow-2xl ring-1 ring-fg/10 overflow-hidden transition-all duration-300 ${
           isMaximized
             ? "h-full sm:h-[95vh] sm:max-w-[96vw]"
             : viewMode === "neural"
@@ -255,7 +264,7 @@ export function TajAIModal({ isOpen, onClose }: TajAIModalProps) {
             <div>
               <div className="flex items-center gap-1.5 font-semibold text-xs text-ink-1">
                 <span>Taj AI</span>
-                <span className="font-mono text-[9px] uppercase px-1.5 py-0.2 rounded border border-edge bg-fg/[0.04] text-ink-4">
+                <span className="hidden sm:inline font-mono text-[9px] uppercase px-1.5 py-0.2 rounded border border-edge bg-fg/[0.04] text-ink-4">
                   RAG Engine
                 </span>
               </div>
@@ -349,6 +358,7 @@ export function TajAIModal({ isOpen, onClose }: TajAIModalProps) {
           <div className="flex-1 overflow-hidden flex flex-col">
             <RAGNeuralVisualizer
               initialTrace={activeTrace || undefined}
+              initialPinnedNodeId={pinnedSourceNodeId}
               currentQuery={activeTraceQuery}
               onBackToChat={() => setViewMode("chat")}
               onSendToChat={(query) => {
@@ -390,6 +400,24 @@ export function TajAIModal({ isOpen, onClose }: TajAIModalProps) {
                       {/* Rich Formatted Markdown Message */}
                       <FormattedMessage text={msg.text} isTaj={isTaj} />
 
+                      {/* Source chips: open the graph with that chunk's evidence pinned */}
+                      {isTaj && msg.id !== "welcome" && msg.neuralTrace && msg.sources && msg.sources.length > 0 && (
+                        <div className="flex flex-wrap items-center gap-1.5 pt-1 text-[10px] font-mono">
+                          <span className="text-ink-5">Sources:</span>
+                          {msg.sources.map((src) => (
+                            <button
+                              key={src.id}
+                              type="button"
+                              onClick={() => openTrace(msg.neuralTrace!, msg.relatedUserQuery || msg.neuralTrace!.query, src.id)}
+                              className="rounded-md border border-emerald-500/30 bg-emerald-500/5 px-2 py-0.5 text-emerald-500 transition-colors hover:border-emerald-500/60 hover:bg-emerald-500/10 cursor-pointer"
+                              title={`See why "${src.sourceLabel}" was retrieved`}
+                            >
+                              {src.sourceLabel}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
                       {/* RAG Context Retrieval & Neural Trace Controls */}
                       {isTaj && msg.id !== "welcome" && (
                         <div className="pt-2.5 border-t border-edge flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono">
@@ -418,11 +446,7 @@ export function TajAIModal({ isOpen, onClose }: TajAIModalProps) {
                           {msg.neuralTrace && (
                             <button
                               type="button"
-                              onClick={() => {
-                                setActiveTrace(msg.neuralTrace!);
-                                setActiveTraceQuery(msg.relatedUserQuery || msg.neuralTrace!.query);
-                                setViewMode("neural");
-                              }}
+                              onClick={() => openTrace(msg.neuralTrace!, msg.relatedUserQuery || msg.neuralTrace!.query)}
                               className="flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-edge bg-fg/[0.03] hover:bg-fg/[0.08] hover:border-fg/30 text-ink-3 hover:text-ink-1 transition-all cursor-pointer font-medium"
                               title="Inspect live neural network internals for this query"
                             >
@@ -463,6 +487,24 @@ export function TajAIModal({ isOpen, onClose }: TajAIModalProps) {
                 );
               })}
 
+              {messages.length === 1 && !isThinking && (
+                <div className="pl-11 sm:pl-12">
+                  <div className="text-[10px] sm:text-[11px] font-mono text-ink-5 mb-2">Try asking:</div>
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                    {SUGGESTIONS.map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => handleSend(s)}
+                        className="rounded-full border border-edge px-3 py-1.5 text-[11px] font-mono text-ink-3 hover:text-ink-1 hover:border-fg hover:bg-fg/[0.04] transition-all text-left cursor-pointer"
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {isThinking && (
                 <div className="flex items-center gap-2 text-ink-4 font-mono text-xs sm:text-[13px] pl-2">
                   <Bot className="h-4 w-4 animate-spin" />
@@ -474,16 +516,16 @@ export function TajAIModal({ isOpen, onClose }: TajAIModalProps) {
             </div>
 
             {/* Suggestion Chips */}
-            {messages.length <= 3 && (
+            {messages.length > 1 && messages.length <= 3 && (
               <div className="px-4 sm:px-6 py-2.5 border-t border-edge/60 bg-fg/[0.01]">
                 <div className="text-[10px] sm:text-[11px] font-mono text-ink-5 mb-1.5">Suggested Questions:</div>
-                <div className="flex flex-wrap gap-1.5 sm:gap-2 max-h-24 overflow-y-auto">
+                <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-1 no-scrollbar">
                   {SUGGESTIONS.map((s) => (
                     <button
                       key={s}
                       type="button"
                       onClick={() => handleSend(s)}
-                      className="rounded-full border border-edge px-3 py-1.5 text-[11px] font-mono text-ink-3 hover:text-ink-1 hover:border-ink-1 hover:bg-fg/[0.04] transition-all text-left cursor-pointer"
+                      className="shrink-0 rounded-full border border-edge px-3 py-1.5 text-[11px] font-mono text-ink-3 hover:text-ink-1 hover:border-ink-1 hover:bg-fg/[0.04] transition-all text-left cursor-pointer"
                     >
                       {s}
                     </button>
@@ -532,7 +574,7 @@ export function TajAIModal({ isOpen, onClose }: TajAIModalProps) {
                     View Neural Network Graph
                   </button>
                 </span>
-                <span>Press Enter ↵</span>
+                <span className="hidden sm:inline">Press Enter ↵</span>
               </div>
             </div>
           </>
