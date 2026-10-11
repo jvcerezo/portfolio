@@ -236,7 +236,7 @@ export function TajAIModal({ isOpen, onClose }: TajAIModalProps) {
       onClick={onClose}
     >
       <div
-        className={`flex flex-col w-full rounded-t-2xl sm:rounded-2xl border border-edge bg-bg shadow-2xl ring-1 ring-ink-1/10 overflow-hidden transition-all duration-300 ${
+        className={`flex flex-col w-full rounded-t-2xl sm:rounded-2xl border border-edge bg-bg shadow-2xl ring-1 ring-fg/10 overflow-hidden transition-all duration-300 ${
           isMaximized
             ? "h-full sm:h-[95vh] sm:max-w-[96vw]"
             : viewMode === "neural"
@@ -423,7 +423,7 @@ export function TajAIModal({ isOpen, onClose }: TajAIModalProps) {
                                 setActiveTraceQuery(msg.relatedUserQuery || msg.neuralTrace!.query);
                                 setViewMode("neural");
                               }}
-                              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-edge bg-fg/[0.03] hover:bg-fg/[0.08] hover:border-ink-1/30 text-ink-3 hover:text-ink-1 transition-all cursor-pointer font-medium"
+                              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-edge bg-fg/[0.03] hover:bg-fg/[0.08] hover:border-fg/30 text-ink-3 hover:text-ink-1 transition-all cursor-pointer font-medium"
                               title="Inspect live neural network internals for this query"
                             >
                               <Activity className="h-3.5 w-3.5 text-emerald-500" />
@@ -552,7 +552,7 @@ export function TajAILauncher({ onClick }: { onClick: () => void }) {
       }}
       aria-label="Ask Taj AI about Jet's background"
       // Compact so it sits in the page margin; the label slides out on hover/focus.
-      className="fixed bottom-5 right-5 z-40 group flex items-center rounded-full border border-edge bg-bg/95 p-2.5 shadow-2xl backdrop-blur-md ring-1 ring-ink-1/10 hover:border-ink-1 focus-visible:border-ink-1 focus-visible:outline-none transition-all cursor-pointer [margin-bottom:env(safe-area-inset-bottom)]"
+      className="fixed bottom-5 right-5 z-40 group flex items-center rounded-full border border-edge bg-bg/95 p-2.5 shadow-2xl backdrop-blur-md ring-1 ring-fg/10 hover:border-ink-1 focus-visible:border-ink-1 focus-visible:outline-none transition-all cursor-pointer [margin-bottom:env(safe-area-inset-bottom)]"
     >
       <div className="relative flex h-5 w-5 items-center justify-center rounded-full bg-fg text-bg">
         <Sparkles className="h-3 w-3" />

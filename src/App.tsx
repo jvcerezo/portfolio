@@ -556,7 +556,7 @@ function App() {
           {/* ========================================================= */}
           {/* LEFT SIDEBAR (STICKY ON DESKTOP)                          */}
           {/* ========================================================= */}
-          <header className="group/side relative lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-1/2 lg:flex-col lg:justify-between lg:py-24 rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 lg:-mx-4 lg:p-6 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-ink-1/10">
+          <header className="group/side relative lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-1/2 lg:flex-col lg:justify-between lg:py-24 rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 lg:-mx-4 lg:p-6 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-fg/10">
             <div>
               {/* Profile Avatar & Interactive Toggles */}
               <div className="flex items-center justify-between">
@@ -793,7 +793,7 @@ function App() {
             {/* 1. ABOUT SECTION */}
             <section
               id="about"
-              className="group/sec relative scroll-mt-16 md:scroll-mt-24 rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-ink-1/10"
+              className="group/sec relative scroll-mt-16 md:scroll-mt-24 rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-fg/10"
               aria-label="About me"
             >
               <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-bg/85 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:static lg:mx-0 lg:mb-6 lg:w-auto lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
@@ -844,7 +844,7 @@ function App() {
             {/* 2. EXPERIENCE SECTION */}
             <section
               id="experience"
-              className="group/sec relative scroll-mt-16 md:scroll-mt-24 rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-ink-1/10"
+              className="group/sec relative scroll-mt-16 md:scroll-mt-24 rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-fg/10"
               aria-label="Work experience"
             >
               <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-bg/85 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:static lg:mx-0 lg:mb-6 lg:w-auto lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
@@ -920,7 +920,7 @@ function App() {
                                     className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[11px] font-normal transition-all ${
                                       isSelected
                                         ? "border-signal/60 bg-signal/10 text-signal"
-                                        : "border-edge bg-fg/[0.03] text-ink-3 hover:border-ink-1/40 hover:text-ink-1"
+                                        : "border-edge bg-fg/[0.03] text-ink-3 hover:border-fg/40 hover:text-ink-1"
                                     }`}
                                     title={`Filter projects & experience by ${t}`}
                                   >
@@ -954,7 +954,7 @@ function App() {
             {/* 3. PROJECTS SECTION */}
             <section
               id="projects"
-              className="group/sec relative scroll-mt-16 md:scroll-mt-24 rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-ink-1/10"
+              className="group/sec relative scroll-mt-16 md:scroll-mt-24 rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-fg/10"
               aria-label="Selected projects"
             >
               <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-bg/85 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:static lg:mx-0 lg:mb-6 lg:w-auto lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
@@ -1022,7 +1022,7 @@ function App() {
                                         setIsScreenshotOpen(true);
                                         setScreenshotIndex(idx);
                                       }}
-                                      className="group/thumb relative aspect-[9/19.5] w-[84px] shrink-0 snap-start overflow-hidden rounded-[14px] border-2 border-edge-strong bg-black shadow-lg transition-all hover:-translate-y-1 hover:border-ink-1/60 focus-visible:-translate-y-1 focus-visible:border-signal focus-visible:outline-none motion-reduce:transition-none"
+                                      className="group/thumb relative aspect-[9/19.5] w-[84px] shrink-0 snap-start overflow-hidden rounded-[14px] border-2 border-edge-strong bg-black shadow-lg transition-all hover:-translate-y-1 hover:border-fg/60 focus-visible:-translate-y-1 focus-visible:border-signal focus-visible:outline-none motion-reduce:transition-none"
                                       title={`View screenshot: ${shot.title}`}
                                     >
                                       <img
@@ -1134,7 +1134,7 @@ function App() {
                                     className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[11px] font-normal transition-all ${
                                       isSelected
                                         ? "border-signal/60 bg-signal/10 text-signal"
-                                        : "border-edge bg-fg/[0.03] text-ink-3 hover:border-ink-1/40 hover:text-ink-1"
+                                        : "border-edge bg-fg/[0.03] text-ink-3 hover:border-fg/40 hover:text-ink-1"
                                     }`}
                                     title={`Filter projects & experience by ${t}`}
                                   >
@@ -1168,7 +1168,7 @@ function App() {
             {/* 4. TECHNICAL SKILLS SECTION */}
             <section
               id="skills"
-              className="group/sec relative scroll-mt-16 md:scroll-mt-24 rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-ink-1/10"
+              className="group/sec relative scroll-mt-16 md:scroll-mt-24 rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-fg/10"
               aria-label="Technical skills"
             >
               <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-bg/85 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:static lg:mx-0 lg:mb-6 lg:w-auto lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
@@ -1195,7 +1195,7 @@ function App() {
                             className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 font-mono text-xs transition-all ${
                               isSelected
                                 ? "border border-signal/60 bg-signal/10 text-signal"
-                                : "bg-fg/[0.04] border border-edge text-ink-2 hover:border-ink-1/40 hover:text-ink-1"
+                                : "bg-fg/[0.04] border border-edge text-ink-2 hover:border-fg/40 hover:text-ink-1"
                             }`}
                           >
                             <TechLogo name={skill} className="h-3.5 w-3.5 shrink-0" />
@@ -1212,7 +1212,7 @@ function App() {
             {/* 5. HONORS & EDUCATION SECTION */}
             <section
               id="honors"
-              className="group/sec relative scroll-mt-16 md:scroll-mt-24 rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-ink-1/10"
+              className="group/sec relative scroll-mt-16 md:scroll-mt-24 rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-fg/10"
               aria-label="Honors and education"
             >
               <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-bg/85 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:static lg:mx-0 lg:mb-6 lg:w-auto lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
@@ -1274,7 +1274,7 @@ function App() {
 
             {/* 6. CONTACT / FOOTER */}
             <footer
-              className="group/sec relative rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-ink-1/10 pt-10 space-y-6 text-sm text-ink-4"
+              className="group/sec relative rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-fg/10 pt-10 space-y-6 text-sm text-ink-4"
             >
               {/* Contact panel: same card language as the impact matrix */}
               <div
@@ -1350,7 +1350,7 @@ function App() {
           aria-label="Active technology filter"
           className="fixed bottom-5 left-1/2 z-40 -translate-x-1/2 animate-reveal max-w-[calc(100vw-6rem)]"
         >
-          <div className="flex items-center gap-2.5 rounded-full border border-edge bg-bg/95 px-4 py-2 shadow-2xl backdrop-blur-md ring-1 ring-ink-1/10 font-mono text-xs">
+          <div className="flex items-center gap-2.5 rounded-full border border-edge bg-bg/95 px-4 py-2 shadow-2xl backdrop-blur-md ring-1 ring-fg/10 font-mono text-xs">
             <Sparkles className="h-3.5 w-3.5 text-ink-1" />
             <span className="text-ink-3">Filtering by:</span>
             <span className="font-semibold text-ink-1">{activeTechFilter}</span>

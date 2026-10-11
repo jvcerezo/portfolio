@@ -77,7 +77,7 @@ export function ImpactBento() {
               }}
               className={`group relative overflow-hidden rounded-xl border p-3.5 transition-all duration-300 cursor-pointer ${
                 isSelected
-                  ? "border-ink-1/40 bg-bg shadow-xl scale-[1.01]"
+                  ? "border-fg/40 bg-bg shadow-xl scale-[1.01]"
                   : "border-edge bg-bg/80 hover:bg-bg hover:border-edge-strong hover:shadow-lg"
               }`}
             >

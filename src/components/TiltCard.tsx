@@ -44,8 +44,8 @@ export function TiltCard({
         isDimmed ? "opacity-25 blur-[0.4px]" : "opacity-100"
       } ${
         isHighlighted
-          ? "ring-1 ring-ink-1/30 bg-bg shadow-lg border-edge-strong"
-          : "hover:bg-bg hover:shadow-xl hover:border-edge-strong hover:ring-1 hover:ring-ink-1/10"
+          ? "ring-1 ring-fg/30 bg-bg shadow-lg border-edge-strong"
+          : "hover:bg-bg hover:shadow-xl hover:border-edge-strong hover:ring-1 hover:ring-fg/10"
       } ${className}`}
     >
       {/* Clean Specular Border Spotlight - card stays rock-solid flat with zero drag or tilt */}

@@ -223,7 +223,7 @@ export function RAGNeuralVisualizer({
               type="button"
               onClick={triggerFlowAnimation}
               disabled={isAnimating}
-              className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-mono rounded-lg border border-edge bg-fg/[0.03] hover:bg-fg/[0.08] hover:border-ink-1/30 transition-all text-ink-2 disabled:opacity-50 cursor-pointer"
+              className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-mono rounded-lg border border-edge bg-fg/[0.03] hover:bg-fg/[0.08] hover:border-fg/30 transition-all text-ink-2 disabled:opacity-50 cursor-pointer"
               title="Replay layer activation flow"
             >
               <Play className={`h-3 w-3 ${isAnimating ? "text-emerald-500" : ""}`} />
@@ -293,7 +293,7 @@ export function RAGNeuralVisualizer({
                 className={`shrink-0 px-2 py-0.5 rounded-md border transition-all ${
                   isCurrent
                     ? "border-emerald-500 bg-emerald-500/10 text-emerald-500 font-semibold"
-                    : "border-edge bg-fg/[0.02] text-ink-3 hover:text-ink-1 hover:border-ink-1/30"
+                    : "border-edge bg-fg/[0.02] text-ink-3 hover:text-ink-1 hover:border-fg/30"
                 }`}
               >
                 {p.label}
