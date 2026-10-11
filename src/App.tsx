@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import {
+  ChevronDown,
   Mail,
   Github,
   Linkedin,
@@ -708,7 +709,7 @@ function App() {
                           <span
                             className={`mr-4 h-px transition-all duration-300 ${
                               isActive
-                                ? "w-16 bg-ink-1"
+                                ? "w-16 bg-signal"
                                 : "w-8 bg-ink-4 group-hover:w-16 group-hover:bg-ink-2"
                             }`}
                           />
@@ -787,7 +788,7 @@ function App() {
           {/* ========================================================= */}
           {/* RIGHT CONTENT STREAM (SEAMLESS SCROLL)                    */}
           {/* ========================================================= */}
-          <main className="pt-20 pb-16 lg:w-1/2 lg:py-24 space-y-24">
+          <main className="pt-20 pb-16 lg:w-1/2 lg:py-24 space-y-16 md:space-y-20">
             
             {/* 1. ABOUT SECTION */}
             <section
@@ -795,8 +796,9 @@ function App() {
               className="group/sec relative scroll-mt-16 md:scroll-mt-24 rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-ink-1/10"
               aria-label="About me"
             >
-              <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-bg/85 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only">
-                <h2 className="text-sm font-bold uppercase tracking-widest text-ink-1">
+              <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-bg/85 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:static lg:mx-0 lg:mb-6 lg:w-auto lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
+                <h2 className="text-sm font-bold uppercase tracking-widest text-ink-1 lg:font-mono lg:text-xs lg:font-semibold lg:tracking-[0.2em] lg:text-ink-4">
+                  <span aria-hidden="true" className="mr-2 hidden text-signal lg:inline">&gt;_</span>
                   About
                 </h2>
               </div>
@@ -845,8 +847,9 @@ function App() {
               className="group/sec relative scroll-mt-16 md:scroll-mt-24 rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-ink-1/10"
               aria-label="Work experience"
             >
-              <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-bg/85 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only">
-                <h2 className="text-sm font-bold uppercase tracking-widest text-ink-1">
+              <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-bg/85 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:static lg:mx-0 lg:mb-6 lg:w-auto lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
+                <h2 className="text-sm font-bold uppercase tracking-widest text-ink-1 lg:font-mono lg:text-xs lg:font-semibold lg:tracking-[0.2em] lg:text-ink-4">
+                  <span aria-hidden="true" className="mr-2 hidden text-signal lg:inline">&gt;_</span>
                   Experience
                 </h2>
               </div>
@@ -914,14 +917,14 @@ function App() {
                                   <button
                                     type="button"
                                     onClick={() => handleTechClick(t)}
-                                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-xs font-medium transition-all ${
+                                    className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[11px] font-normal transition-all ${
                                       isSelected
-                                        ? "bg-ink-1 text-bg shadow-xs font-semibold scale-105"
-                                        : "bg-fg/[0.05] border border-edge text-ink-2 hover:border-ink-1/40 hover:text-ink-1"
+                                        ? "border-signal/60 bg-signal/10 text-signal"
+                                        : "border-edge bg-fg/[0.03] text-ink-3 hover:border-ink-1/40 hover:text-ink-1"
                                     }`}
                                     title={`Filter projects & experience by ${t}`}
                                   >
-                                    <TechLogo name={t} className="h-3.5 w-3.5 shrink-0" />
+                                    <TechLogo name={t} className="h-3 w-3 shrink-0" />
                                     <span>{t}</span>
                                   </button>
                                 </li>
@@ -954,8 +957,9 @@ function App() {
               className="group/sec relative scroll-mt-16 md:scroll-mt-24 rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-ink-1/10"
               aria-label="Selected projects"
             >
-              <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-bg/85 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only">
-                <h2 className="text-sm font-bold uppercase tracking-widest text-ink-1">
+              <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-bg/85 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:static lg:mx-0 lg:mb-6 lg:w-auto lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
+                <h2 className="text-sm font-bold uppercase tracking-widest text-ink-1 lg:font-mono lg:text-xs lg:font-semibold lg:tracking-[0.2em] lg:text-ink-4">
+                  <span aria-hidden="true" className="mr-2 hidden text-signal lg:inline">&gt;_</span>
                   Projects
                 </h2>
               </div>
@@ -1005,9 +1009,12 @@ function App() {
                           {/* Creative Aspect: Interactive Screenshot Thumbnails & Architecture for Sandalan */}
                           {project.name === "Sandalan" && (
                             <div className="space-y-2 py-1">
-                              <div className="flex flex-wrap items-center gap-2">
-                                <div className="flex gap-1.5">
-                                  {SANDALAN_SCREENSHOTS.slice(0, 4).map((shot, idx) => (
+                              {/* Phone-frame strip: all screenshots, scrolls sideways */}
+                              <div
+                                className="-mx-1 flex snap-x gap-2.5 overflow-x-auto px-1 pb-2 pt-1 [scrollbar-width:thin]"
+                                data-particle-avoid
+                              >
+                                {SANDALAN_SCREENSHOTS.map((shot, idx) => (
                                     <button
                                       key={shot.title}
                                       type="button"
@@ -1015,18 +1022,19 @@ function App() {
                                         setIsScreenshotOpen(true);
                                         setScreenshotIndex(idx);
                                       }}
-                                      className="group/thumb relative h-12 w-9 overflow-hidden rounded-md border border-edge bg-black transition-transform hover:scale-110 hover:border-ink-1"
+                                      className="group/thumb relative aspect-[9/19.5] w-[84px] shrink-0 snap-start overflow-hidden rounded-[14px] border-2 border-edge-strong bg-black shadow-lg transition-all hover:-translate-y-1 hover:border-ink-1/60 focus-visible:-translate-y-1 focus-visible:border-signal focus-visible:outline-none motion-reduce:transition-none"
                                       title={`View screenshot: ${shot.title}`}
                                     >
                                       <img
                                         src={shot.src}
                                         alt={shot.title}
-                                        className="h-full w-full object-cover opacity-80 group-hover/thumb:opacity-100"
+                                        className="h-full w-full object-cover object-top opacity-90 transition-opacity group-hover/thumb:opacity-100"
                                         loading="lazy"
                                       />
                                     </button>
-                                  ))}
-                                </div>
+                                ))}
+                              </div>
+                              <div className="flex flex-wrap items-center gap-2">
                                 <button
                                   type="button"
                                   onClick={() => {
@@ -1041,14 +1049,19 @@ function App() {
                                 <button
                                   type="button"
                                   onClick={() => toggleArch("Sandalan")}
+                                aria-expanded={!!expandedArch["Sandalan"]}
                                   className={`font-mono text-xs px-2.5 py-1 rounded-md border transition-colors flex items-center gap-1.5 ${
                                     expandedArch["Sandalan"]
-                                      ? "border-ink-1 bg-ink-1 text-bg font-semibold"
+                                      ? "border-signal/60 bg-signal/10 text-signal"
                                       : "border-edge text-ink-3 hover:text-ink-1 hover:border-edge-strong bg-fg/[0.02]"
                                   }`}
                                 >
                                   <Layers className="h-3.5 w-3.5" />
                                   <span>{expandedArch["Sandalan"] ? "Hide Architecture" : "Offline Sync Architecture"}</span>
+                                  <ChevronDown
+                                    aria-hidden="true"
+                                    className={`h-3.5 w-3.5 transition-transform duration-200 ${expandedArch["Sandalan"] ? "rotate-180" : ""}`}
+                                  />
                                 </button>
                               </div>
                               {expandedArch["Sandalan"] && (
@@ -1063,14 +1076,19 @@ function App() {
                               <button
                                 type="button"
                                 onClick={() => toggleArch("SNPseek MERN")}
+                                aria-expanded={!!expandedArch["SNPseek MERN"]}
                                 className={`font-mono text-xs px-2.5 py-1 rounded-md border transition-colors inline-flex items-center gap-1.5 ${
                                   expandedArch["SNPseek MERN"]
-                                    ? "border-ink-1 bg-ink-1 text-bg font-semibold"
+                                    ? "border-signal/60 bg-signal/10 text-signal"
                                     : "border-edge text-ink-3 hover:text-ink-1 hover:border-edge-strong bg-fg/[0.02]"
                                 }`}
                               >
                                 <Layers className="h-3.5 w-3.5" />
                                 <span>{expandedArch["SNPseek MERN"] ? "Hide Microservices" : "System Architecture: 7 Microservices"}</span>
+                                  <ChevronDown
+                                    aria-hidden="true"
+                                    className={`h-3.5 w-3.5 transition-transform duration-200 ${expandedArch["SNPseek MERN"] ? "rotate-180" : ""}`}
+                                  />
                               </button>
                               {expandedArch["SNPseek MERN"] && (
                                 <ArchitectureDiagram projectKey="snpseek" />
@@ -1084,14 +1102,19 @@ function App() {
                               <button
                                 type="button"
                                 onClick={() => toggleArch("Codebreak 2.0")}
+                                aria-expanded={!!expandedArch["Codebreak 2.0"]}
                                 className={`font-mono text-xs px-2.5 py-1 rounded-md border transition-colors inline-flex items-center gap-1.5 ${
                                   expandedArch["Codebreak 2.0"]
-                                    ? "border-ink-1 bg-ink-1 text-bg font-semibold"
+                                    ? "border-signal/60 bg-signal/10 text-signal"
                                     : "border-edge text-ink-3 hover:text-ink-1 hover:border-edge-strong bg-fg/[0.02]"
                                 }`}
                               >
                                 <Layers className="h-3.5 w-3.5" />
                                 <span>{expandedArch["Codebreak 2.0"] ? "Hide RAG Pipeline" : "Interactive Architecture: AI Vector RAG"}</span>
+                                  <ChevronDown
+                                    aria-hidden="true"
+                                    className={`h-3.5 w-3.5 transition-transform duration-200 ${expandedArch["Codebreak 2.0"] ? "rotate-180" : ""}`}
+                                  />
                               </button>
                               {expandedArch["Codebreak 2.0"] && (
                                 <ArchitectureDiagram projectKey="codebreak" />
@@ -1108,14 +1131,14 @@ function App() {
                                   <button
                                     type="button"
                                     onClick={() => handleTechClick(t)}
-                                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-xs font-medium transition-all ${
+                                    className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[11px] font-normal transition-all ${
                                       isSelected
-                                        ? "bg-ink-1 text-bg shadow-xs font-semibold scale-105"
-                                        : "bg-fg/[0.05] border border-edge text-ink-2 hover:border-ink-1/40 hover:text-ink-1"
+                                        ? "border-signal/60 bg-signal/10 text-signal"
+                                        : "border-edge bg-fg/[0.03] text-ink-3 hover:border-ink-1/40 hover:text-ink-1"
                                     }`}
                                     title={`Filter projects & experience by ${t}`}
                                   >
-                                    <TechLogo name={t} className="h-3.5 w-3.5 shrink-0" />
+                                    <TechLogo name={t} className="h-3 w-3 shrink-0" />
                                     <span>{t}</span>
                                   </button>
                                 </li>
@@ -1148,8 +1171,9 @@ function App() {
               className="group/sec relative scroll-mt-16 md:scroll-mt-24 rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-ink-1/10"
               aria-label="Technical skills"
             >
-              <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-bg/85 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only">
-                <h2 className="text-sm font-bold uppercase tracking-widest text-ink-1">
+              <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-bg/85 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:static lg:mx-0 lg:mb-6 lg:w-auto lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
+                <h2 className="text-sm font-bold uppercase tracking-widest text-ink-1 lg:font-mono lg:text-xs lg:font-semibold lg:tracking-[0.2em] lg:text-ink-4">
+                  <span aria-hidden="true" className="mr-2 hidden text-signal lg:inline">&gt;_</span>
                   Skills
                 </h2>
               </div>
@@ -1170,7 +1194,7 @@ function App() {
                             onClick={() => handleTechClick(skill)}
                             className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 font-mono text-xs transition-all ${
                               isSelected
-                                ? "bg-ink-1 text-bg font-semibold shadow-xs scale-105"
+                                ? "border border-signal/60 bg-signal/10 text-signal"
                                 : "bg-fg/[0.04] border border-edge text-ink-2 hover:border-ink-1/40 hover:text-ink-1"
                             }`}
                           >
@@ -1191,8 +1215,9 @@ function App() {
               className="group/sec relative scroll-mt-16 md:scroll-mt-24 rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-ink-1/10"
               aria-label="Honors and education"
             >
-              <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-bg/85 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only">
-                <h2 className="text-sm font-bold uppercase tracking-widest text-ink-1">
+              <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-bg/85 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:static lg:mx-0 lg:mb-6 lg:w-auto lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
+                <h2 className="text-sm font-bold uppercase tracking-widest text-ink-1 lg:font-mono lg:text-xs lg:font-semibold lg:tracking-[0.2em] lg:text-ink-4">
+                  <span aria-hidden="true" className="mr-2 hidden text-signal lg:inline">&gt;_</span>
                   Honors &amp; Education
                 </h2>
               </div>
@@ -1251,14 +1276,42 @@ function App() {
             <footer
               className="group/sec relative rounded-3xl p-5 sm:p-7 -mx-5 sm:-mx-7 border border-transparent transition-all duration-300 hover:bg-bg hover:border-edge-strong hover:shadow-2xl hover:ring-1 hover:ring-ink-1/10 pt-10 space-y-6 text-sm text-ink-4"
             >
-              <div className="space-y-2">
-                <h3 className="text-base font-semibold text-ink-1">
+              {/* Contact panel: same card language as the impact matrix */}
+              <div
+                className="relative overflow-hidden rounded-2xl border border-edge bg-bg/80 p-6 shadow-lg sm:p-8"
+                data-particle-avoid
+              >
+                <div className="absolute inset-x-0 top-0 h-[2px] bg-signal/70" aria-hidden="true" />
+                <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs">
+                  <span className="uppercase tracking-[0.2em] text-ink-4">
+                    <span className="mr-2 text-signal" aria-hidden="true">&gt;_</span>
+                    Contact
+                  </span>
+                  <span className="inline-flex items-center gap-2 rounded-full border border-edge px-3 py-1 text-ink-3">
+                    <span className="relative flex h-2 w-2">
+                      <span className="absolute inline-flex h-full w-full rounded-full bg-signal opacity-60 motion-safe:animate-ping" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-signal" />
+                    </span>
+                    Open to roles
+                  </span>
+                </div>
+
+                <h3 className="font-display mt-5 text-2xl font-bold tracking-tight text-ink-1 sm:text-3xl">
                   Get in Touch
                 </h3>
-                <p className="leading-relaxed text-ink-3">
+                <p className="mt-3 max-w-prose leading-relaxed text-ink-3">
                   I'm currently open to full-time software engineering roles (remote worldwide, open to US hours). Whether you have a project in mind or want to speak with me, my inbox is always open.
                 </p>
-                <div className="flex flex-wrap items-center gap-3 pt-2">
+
+                <a
+                  href={`mailto:${PROFILE.email}`}
+                  className="group/mail mt-5 inline-flex items-center gap-2 break-all font-mono text-base text-ink-1 underline decoration-edge-strong underline-offset-4 transition-colors hover:decoration-signal sm:text-lg"
+                >
+                  {PROFILE.email}
+                  <ArrowUpRight className="h-4 w-4 shrink-0 transition-transform group-hover/mail:-translate-y-0.5 group-hover/mail:translate-x-0.5 motion-reduce:transition-none" />
+                </a>
+
+                <div className="mt-6 flex flex-wrap items-center gap-3">
                   <a
                     href={PROFILE.gmailCompose}
                     target="_blank"
@@ -1275,7 +1328,7 @@ function App() {
                     onClick={handleCopyEmail}
                     className="inline-flex items-center gap-2 rounded-lg border border-edge px-3.5 py-2 font-medium text-ink-2 hover:border-edge-strong transition-colors text-sm"
                   >
-                    {copiedEmail ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                    {copiedEmail ? <Check className="h-4 w-4 text-signal" /> : <Copy className="h-4 w-4" />}
                     <span>{copiedEmail ? "Copied" : "Copy Email"}</span>
                   </button>
                 </div>
