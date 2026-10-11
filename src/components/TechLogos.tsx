@@ -1,4 +1,28 @@
 import { useState } from "react";
+import type { LucideIcon } from "lucide-react";
+import {
+  Boxes,
+  BrainCircuit,
+  CalendarDays,
+  Cloud,
+  Cpu,
+  Database,
+  FlaskConical,
+  GitPullRequest,
+  KeyRound,
+  Landmark,
+  Layers,
+  MonitorSmartphone,
+  Network,
+  Repeat,
+  Rocket,
+  ScanText,
+  Search,
+  Server,
+  Users,
+  Webhook,
+  Workflow,
+} from "lucide-react";
 
 // Official Simple Icons slugs mapping for frameworks, languages, databases, DevOps & testing tools
 interface TechMeta {
@@ -24,8 +48,8 @@ const TECH_SLUGS: Record<string, TechMeta> = {
   "tailwind css": { slug: "tailwindcss" },
   html: { slug: "html5" },
   html5: { slug: "html5" },
-  css: { slug: "css3" },
-  css3: { slug: "css3" },
+  css: { slug: "css" },
+  css3: { slug: "css" },
   vite: { slug: "vite" },
   vercel: { slug: "vercel", invertDark: true },
 
@@ -54,7 +78,6 @@ const TECH_SLUGS: Record<string, TechMeta> = {
   // DevOps & Cloud
   docker: { slug: "docker" },
   "docker compose": { slug: "docker" },
-  aws: { slug: "amazonwebservices" },
   git: { slug: "git" },
   "github actions": { slug: "githubactions" },
   gitlab: { slug: "gitlab" },
@@ -63,16 +86,61 @@ const TECH_SLUGS: Record<string, TechMeta> = {
 
   // Automation & QA
   appium: { slug: "appium" },
-  browserstack: { slug: "browserstack" },
   postman: { slug: "postman" },
   jira: { slug: "jira" },
 
   // AI & APIs
-  claude: { slug: "anthropic" },
-  "claude api": { slug: "anthropic" },
+  claude: { slug: "anthropic", invertDark: true },
+  "claude api": { slug: "anthropic", invertDark: true },
+  "google calendar api": { slug: "googlecalendar" },
   gemini: { slug: "googlegemini" },
   "gemini api": { slug: "googlegemini" },
 };
+
+// Concepts and tools without a Simple Icons logo (AWS and BrowserStack were
+// removed from the set) get a fitting Lucide icon instead of a generic one.
+const CONCEPT_ICONS: Record<string, LucideIcon> = {
+  aws: Cloud,
+  "cloud integrations": Cloud,
+  browserstack: MonitorSmartphone,
+  "responsive design": MonitorSmartphone,
+  "rest apis": Webhook,
+  "api gateway": Network,
+  microservices: Boxes,
+  mern: Layers,
+  "ci/cd": Workflow,
+  "github flow": GitPullRequest,
+  oauth: KeyRound,
+  sso: KeyRound,
+  jwt: KeyRound,
+  agile: Repeat,
+  testing: FlaskConical,
+  "unit & e2e testing": FlaskConical,
+  deployment: Rocket,
+  "platform ops": Server,
+  leadership: Users,
+  "team collaboration": Users,
+  fintech: Landmark,
+  rag: BrainCircuit,
+  "rag pipelines": BrainCircuit,
+  ai: BrainCircuit,
+  "vector search": Search,
+  ocr: ScanText,
+  groq: Cpu,
+  "schema design": Database,
+  calendar: CalendarDays,
+};
+
+function getConceptIcon(name: string): LucideIcon | null {
+  const norm = name.toLowerCase().trim();
+  if (CONCEPT_ICONS[norm]) return CONCEPT_ICONS[norm];
+  for (const [key, icon] of Object.entries(CONCEPT_ICONS)) {
+    // Word-ish match so "ai" doesn't hit "tailwind" or "email".
+    const escaped = key.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&");
+    if (new RegExp(`(^|[^a-z])${escaped}([^a-z]|$)`).test(norm)) return icon;
+  }
+  return null;
+}
 
 function getTechMeta(name: string): TechMeta | null {
   const norm = name.toLowerCase().trim();
@@ -90,7 +158,11 @@ export function TechLogo({ name, className = "h-3 w-3" }: { name: string; classN
   const meta = getTechMeta(name);
 
   if (!meta || hasError) {
-    // Subtle vector code bracket fallback
+    const Concept = getConceptIcon(name);
+    if (Concept) {
+      return <Concept className={`${className} shrink-0 opacity-80`} aria-hidden="true" strokeWidth={2.25} />;
+    }
+    // Neutral fallback for anything else
     return (
       <svg
         className={`${className} shrink-0 opacity-70`}
