@@ -551,15 +551,16 @@ export function TajAILauncher({ onClick }: { onClick: () => void }) {
         onClick();
       }}
       aria-label="Ask Taj AI about Jet's background"
-      className="fixed bottom-6 right-6 z-40 group flex items-center gap-2.5 rounded-full border border-edge bg-bg/95 px-4 py-2.5 shadow-2xl backdrop-blur-md ring-1 ring-ink-1/10 hover:border-ink-1 hover:scale-105 transition-all cursor-pointer"
+      // Compact so it sits in the page margin; the label slides out on hover/focus.
+      className="fixed bottom-5 right-5 z-40 group flex items-center rounded-full border border-edge bg-bg/95 p-2.5 shadow-2xl backdrop-blur-md ring-1 ring-ink-1/10 hover:border-ink-1 focus-visible:border-ink-1 focus-visible:outline-none transition-all cursor-pointer [margin-bottom:env(safe-area-inset-bottom)]"
     >
       <div className="relative flex h-5 w-5 items-center justify-center rounded-full bg-fg text-bg">
         <Sparkles className="h-3 w-3" />
         <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-bg" />
       </div>
-      <div className="font-mono text-xs flex items-center gap-1.5">
+      <div className="font-mono text-xs flex items-center gap-1.5 overflow-hidden whitespace-nowrap max-w-0 opacity-0 transition-all duration-300 group-hover:ml-2.5 group-hover:max-w-[12rem] group-hover:opacity-100 group-focus-visible:ml-2.5 group-focus-visible:max-w-[12rem] group-focus-visible:opacity-100 motion-reduce:transition-none">
         <span className="font-semibold text-ink-1">Taj AI</span>
-        <span className="text-ink-4 hidden sm:inline">· Ask me anything</span>
+        <span className="text-ink-4">· Ask me anything</span>
       </div>
     </button>
   );
