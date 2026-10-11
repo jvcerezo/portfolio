@@ -597,7 +597,7 @@ function App() {
               </div>
 
               {/* Clean Static Name (No Glitch) */}
-              <h1 className="text-4xl font-bold tracking-tight text-ink-1 sm:text-5xl mt-6">
+              <h1 className="font-display text-4xl font-bold tracking-tight text-ink-1 sm:text-5xl mt-6">
                 {PROFILE.name}
               </h1>
               <h2 className="mt-3 text-lg font-medium tracking-tight text-ink-2 sm:text-xl flex items-center gap-2">
@@ -787,7 +787,7 @@ function App() {
           {/* ========================================================= */}
           {/* RIGHT CONTENT STREAM (SEAMLESS SCROLL)                    */}
           {/* ========================================================= */}
-          <main className="pt-20 lg:w-1/2 lg:py-24 space-y-24">
+          <main className="pt-20 pb-16 lg:w-1/2 lg:py-24 space-y-24">
             
             {/* 1. ABOUT SECTION */}
             <section
@@ -878,26 +878,22 @@ function App() {
                             <CompanyLogo company={job.company} className="h-7 w-7 mt-0.5 shrink-0 rounded-md" />
                             <div className="min-w-0 flex-1">
                               <h3 className="font-medium leading-snug text-ink-1">
-                                <div>
-                                  {job.link ? (
-                                    <a
-                                      href={job.link}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="inline-flex items-baseline font-semibold leading-tight text-ink-1 hover:text-ink-1 focus-visible:text-ink-1 group/link text-base sm:text-lg"
-                                    >
-                                      <span>{job.role} · </span>
-                                      <span className="inline-block ml-1">
-                                        {job.company}
-                                        <ArrowUpRight className="inline-block h-4 w-4 shrink-0 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5 motion-reduce:transition-none ml-1" />
-                                      </span>
-                                    </a>
-                                  ) : (
-                                    <span className="font-semibold text-base sm:text-lg text-ink-1">
-                                      {job.role} · {job.company}
-                                    </span>
-                                  )}
-                                </div>
+                                <span className="font-display block text-base font-semibold leading-tight text-ink-1 sm:text-lg">
+                                  {job.role}
+                                </span>
+                                {job.link ? (
+                                  <a
+                                    href={job.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group/link mt-1 inline-flex items-center gap-1 text-sm font-medium text-ink-2 transition-colors hover:text-ink-1 focus-visible:text-ink-1"
+                                  >
+                                    {job.company}
+                                    <ArrowUpRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5 motion-reduce:transition-none" />
+                                  </a>
+                                ) : (
+                                  <span className="mt-1 block text-sm font-medium text-ink-2">{job.company}</span>
+                                )}
                                 <div className="text-xs font-mono text-ink-4 mt-0.5">{job.meta}</div>
                               </h3>
                             </div>
@@ -980,7 +976,7 @@ function App() {
                         </div>
 
                         <div className="z-10 sm:col-span-6 space-y-2">
-                          <h3 className="font-semibold text-base sm:text-lg leading-snug text-ink-1">
+                          <h3 className="font-display font-semibold text-base sm:text-lg leading-snug text-ink-1">
                             {project.link ? (
                               <a
                                 href={project.link}
@@ -1299,7 +1295,7 @@ function App() {
       {activeTechFilter && (
         <aside
           aria-label="Active technology filter"
-          className="fixed bottom-6 right-6 z-40 animate-reveal"
+          className="fixed bottom-5 left-1/2 z-40 -translate-x-1/2 animate-reveal max-w-[calc(100vw-6rem)]"
         >
           <div className="flex items-center gap-2.5 rounded-full border border-edge bg-bg/95 px-4 py-2 shadow-2xl backdrop-blur-md ring-1 ring-ink-1/10 font-mono text-xs">
             <Sparkles className="h-3.5 w-3.5 text-ink-1" />
