@@ -84,7 +84,7 @@ export function ImpactBento() {
               {/* Subtle top accent shimmer */}
               <div
                 className={`absolute top-0 left-0 right-0 h-[2px] transition-opacity duration-300 ${
-                  isSelected ? "bg-ink-1 opacity-100" : "bg-ink-1/20 opacity-0 group-hover:opacity-100"
+                  isSelected ? "bg-signal opacity-100" : "bg-signal/60 opacity-0 group-hover:opacity-100"
                 }`}
               />
 
@@ -98,7 +98,11 @@ export function ImpactBento() {
               </div>
 
               <div className="mt-3">
-                <div className="font-mono text-lg font-bold tracking-tight text-ink-1 sm:text-xl">
+                <div
+                  className={`font-mono text-lg font-bold tracking-tight transition-colors duration-300 sm:text-xl ${
+                    isSelected ? "text-signal" : "text-ink-1 group-hover:text-signal"
+                  }`}
+                >
                   {metric.value}
                 </div>
                 <div className="font-semibold text-xs text-ink-2 mt-0.5">

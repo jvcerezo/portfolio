@@ -23,7 +23,7 @@ const MOUSE_PUSH = 0.6;
 // Text-aware dimming: the network fades behind copy so it frames the text
 // instead of running through it. Coarse grid of cells covered by text.
 const CELL = 16;
-const TEXT_SELECTOR = "h1, h2, h3, p, li, dd, dt, blockquote, [data-particle-avoid]";
+const TEXT_SELECTOR = "h1, h2, h3, p, li, dd, dt, blockquote, button, a, [data-particle-avoid]";
 const TEXT_PAD = 6;
 const TEXT_DIM = 0.15;
 

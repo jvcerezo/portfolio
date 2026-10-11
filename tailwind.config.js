@@ -19,6 +19,8 @@ export default {
   			line: 'rgb(var(--c-line) / <alpha-value>)',
   			mute: 'rgb(var(--c-fg) / <alpha-value>)',
   			brand: 'rgb(var(--c-accent) / <alpha-value>)',
+  			// Single colour accent (emerald, from the avatar's online dot).
+  			signal: 'rgb(var(--c-signal) / <alpha-value>)',
   			// Theme-aware text ramp — see the comment in index.css for why these
   			// are tokens rather than fg/<alpha> utilities.
   			ink: {

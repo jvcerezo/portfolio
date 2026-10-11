@@ -76,10 +76,11 @@ export function VisitorCounter() {
 
   return (
     <div
-      className="inline-flex items-center gap-1.5 rounded-full border border-edge bg-fg/[0.04] px-3 py-1 font-mono text-xs font-medium text-ink-2 transition-colors hover:border-edge-strong"
+      data-particle-avoid
+      className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-edge bg-fg/[0.04] px-3.5 py-1 font-mono text-xs font-medium text-ink-2 transition-colors hover:border-edge-strong"
       title={`${count.toLocaleString()} total portfolio visits`}
     >
-      <Eye className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
+      <Eye className="h-3.5 w-3.5 text-signal" aria-hidden="true" />
       <span>{count.toLocaleString()} visits</span>
     </div>
   );
