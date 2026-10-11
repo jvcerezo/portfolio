@@ -313,3 +313,65 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Neural trace: labels get an outline in the page background colour so
+   connection curves never cut through the text. */
+.neural-label {
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+/* Neural trace: a signal dot travelling along a synapse (offset-path is set
+   inline per path; duration and delay come from the replay timeline). */
+.neural-pulse {
+  offset-rotate: 0deg;
+  animation-name: neural-pulse;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
+
+@keyframes neural-pulse {
+  0% { offset-distance: 0%; opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neural-pulse { display: none; }
+}
+
+/* Architecture diagrams: a signal runs along the rail and each stage dot
+   lights up as it passes. Plays three times, replays on hover. */
+.arch-pulse {
+  left: 0.5rem;
+  animation-name: arch-pulse;
+  animation-timing-function: linear;
+  animation-iteration-count: 3;
+  animation-fill-mode: both;
+}
+
+@keyframes arch-pulse {
+  0% { left: 0.25rem; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { left: calc(100% - 0.75rem); opacity: 0; }
+}
+
+.arch-stop {
+  animation-name: arch-stop;
+  animation-iteration-count: 3;
+  animation-timing-function: ease-out;
+}
+
+@keyframes arch-stop {
+  0%, 12% { border-color: rgb(var(--c-signal)); box-shadow: 0 0 8px rgb(var(--c-signal) / 0.8); }
+  30%, 100% { box-shadow: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arch-pulse { display: none; }
+  .arch-stop { animation: none; }
+}

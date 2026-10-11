@@ -31,6 +31,12 @@ export interface NeuralNode {
     details?: string;
     sourceLabel?: string;
     formula?: string;
+    /** Corpus nodes: the full chunk text that was scored. */
+    content?: string;
+    /** Corpus nodes: how many points each query word earned, and where it matched. */
+    contributions?: { token: string; points: number; via: string[] }[];
+    /** Corpus nodes: extra points from a named-entity match (e.g. "billease"). */
+    entityBoost?: number;
   };
 }
 
@@ -452,23 +458,27 @@ export function generateNeuralTrace(
     const chunkTokens = tokenize(`${chunk.title} ${chunk.content} ${chunk.keywords.join(" ")}`, false);
     const chunkSet = new Set(chunkTokens);
     const matchedTokens: string[] = [];
+    const contributions: { token: string; points: number; via: string[] }[] = [];
 
     for (const q of filteredTokens) {
-      let matched = false;
+      let points = 0;
+      const via: string[] = [];
       if (chunk.keywords.some((k) => k.toLowerCase() === q || k.toLowerCase().includes(q))) {
-        score += 3.5;
-        matched = true;
+        points += 3.5;
+        via.push("keyword");
       }
       if (chunk.title.toLowerCase().includes(q)) {
-        score += 2.5;
-        matched = true;
+        points += 2.5;
+        via.push("title");
       }
       if (chunkSet.has(q)) {
-        score += 1.2;
-        matched = true;
+        points += 1.2;
+        via.push("text");
       }
-      if (matched && !matchedTokens.includes(q)) {
-        matchedTokens.push(q);
+      if (points > 0) {
+        score += points;
+        if (!matchedTokens.includes(q)) matchedTokens.push(q);
+        contributions.push({ token: q, points, via });
       }
     }
 
@@ -485,7 +495,7 @@ export function generateNeuralTrace(
     if ((qLower.includes("stack") || qLower.includes("skills") || qLower.includes("languages")) && chunk.id === "skills_matrix") { score += 4; entityBoost += 4; }
     if ((qLower.includes("who is jet") || qLower.includes("about jet") || qLower.includes("bio") || qLower.includes("summary")) && chunk.id === "bio_overview") { score += 6; entityBoost += 6; }
 
-    return { chunk, score, entityBoost, matchedTokens };
+    return { chunk, score, entityBoost, matchedTokens, contributions };
   });
 
   const sortedResults = [...allChunkScores].sort((a, b) => b.score - a.score);
@@ -657,7 +667,7 @@ export function generateNeuralTrace(
   });
 
   // --- LAYER 2: Knowledge Corpus Chunks ---
-  const layer2Nodes: NeuralNode[] = allChunkScores.map(({ chunk, score, entityBoost, matchedTokens }) => {
+  const layer2Nodes: NeuralNode[] = allChunkScores.map(({ chunk, score, entityBoost, matchedTokens, contributions }) => {
     const isCorpusSuppressed = isGuardrailTriggered || isGreeting;
     const effectiveScore = isCorpusSuppressed ? 0 : score;
     const activation = isCorpusSuppressed ? 0.03 : Math.min(1.0, Math.max(0.04, effectiveScore / 9.0));
@@ -677,6 +687,9 @@ export function generateNeuralTrace(
         matchedKeywords: matchedTokens,
         formula: `BM25 Term Match + Entity Boost (+${entityBoost}) = ${effectiveScore.toFixed(1)} pts`,
         details: chunk.content.slice(0, 140) + "...",
+        content: chunk.content,
+        contributions: isCorpusSuppressed ? [] : contributions,
+        entityBoost: isCorpusSuppressed ? 0 : entityBoost,
       },
     };
   });
