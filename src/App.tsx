@@ -876,7 +876,7 @@ function App() {
                         </header>
 
                         {/* Content on Right */}
-                        <div className="z-10 sm:col-span-6 space-y-2">
+                        <div className="z-10 min-w-0 sm:col-span-6 space-y-2">
                           <div className="flex items-start gap-3">
                             <CompanyLogo company={job.company} className="h-7 w-7 mt-0.5 shrink-0 rounded-md" />
                             <div className="min-w-0 flex-1">
@@ -979,7 +979,7 @@ function App() {
                           {project.year}
                         </div>
 
-                        <div className="z-10 sm:col-span-6 space-y-2">
+                        <div className="z-10 min-w-0 sm:col-span-6 space-y-2">
                           <h3 className="font-display font-semibold text-base sm:text-lg leading-snug text-ink-1">
                             {project.link ? (
                               <a
