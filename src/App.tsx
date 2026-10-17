@@ -134,6 +134,16 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
+    name: "Symphony",
+    tagline: "Minimalist music player with listen-together Jam",
+    year: "2026",
+    description:
+      "Cross-platform music player for Windows, Android, macOS, and the web from one Flutter codebase. Imports playlists from Spotify, YouTube, and Apple Music and plays full songs resolved on the user's own device, with no ads and no central server. Offline downloads, synced lyrics, a Discord bot for voice channels, and Jam: listen together on the same Wi-Fi, kept in sync by clock-offset estimation and drift correction.",
+    tech: ["Flutter", "Dart", "Riverpod", "just_audio", "yt-dlp", "WebSockets", "Docker", "GitHub Actions"],
+    link: "https://symphony.jettimothycerezo.dev",
+    badge: "Live",
+  },
+  {
     name: "Sandalan",
     tagline: "Filipino adulting and personal finance app",
     year: "2024 — 2025",
@@ -202,16 +212,6 @@ const PROJECTS: Project[] = [
       "Full-stack appointment scheduling and electronic medical record management system with automated status tracking for a local dental clinic.",
     tech: ["React", "Node.js", "MongoDB", "Tailwind CSS"],
     link: "https://mdcas-fe.vercel.app",
-    badge: null,
-  },
-  {
-    name: "Diet Plan Calculator",
-    tagline: "Personalized nutrition targets and macro planner",
-    year: "2023",
-    description:
-      "Health application calculating customized macronutrient breakdowns, calorie expenditures, and meal targets based on metabolic activity.",
-    tech: ["React", "Node.js", "Express", "MERN"],
-    link: "https://diet-plan-calculator.vercel.app",
     badge: null,
   },
 ];
