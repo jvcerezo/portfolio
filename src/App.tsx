@@ -138,8 +138,8 @@ const PROJECTS: Project[] = [
     tagline: "Minimalist music player with listen-together Jam",
     year: "2026",
     description:
-      "Cross-platform music player for Windows, Android, macOS, and the web from one Flutter codebase. Imports playlists from Spotify, YouTube, and Apple Music and plays full songs resolved on the user's own device, with no ads and no central server. Offline downloads, synced lyrics, a Discord bot for voice channels, and Jam: listen together on the same Wi-Fi, kept in sync by clock-offset estimation and drift correction.",
-    tech: ["Flutter", "Dart", "Riverpod", "just_audio", "yt-dlp", "WebSockets", "Docker", "GitHub Actions"],
+      "Free, ad-free music player for Windows, Android, and macOS from one Flutter codebase. Imports playlists from a pasted link and plays full songs entirely on the user's own device, with no account and no central server. Offline downloads, synced lyrics, a Discord bot for voice channels, and Jam: listen together on the same Wi-Fi, kept in sync by clock-offset estimation and drift correction.",
+    tech: ["Flutter", "Dart", "Riverpod", "just_audio", "WebSockets", "Docker", "GitHub Actions"],
     link: "https://symphony.jettimothycerezo.dev",
     badge: "Live",
   },
