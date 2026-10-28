@@ -1,5 +1,18 @@
 {
+  "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "cseasy.jettimothycerezo.dev" }],
+      "destination": "/privacy",
+      "permanent": false
+    }
+  ],
   "rewrites": [
+    {
+      "source": "/privacy",
+      "has": [{ "type": "host", "value": "cseasy.jettimothycerezo.dev" }],
+      "destination": "/cseasy/privacy.html"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
